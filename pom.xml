@@ -11,7 +11,6 @@
 	<groupId>com.artdevs</groupId>
 	<artifactId>ArtDevs_Server</artifactId>
 	<version>1.0.1</version>
-	<packaging>war</packaging>
 	<name>ArtDevs_Server</name>
 	<description>project </description>
 	<properties>
