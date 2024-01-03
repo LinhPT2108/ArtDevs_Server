@@ -1,4 +1,4 @@
-package com.artdevs.controller;
+package com.artdevs.restcontroller;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import com.artdevs.domain.entities.user.Role;
 import com.artdevs.repositories.user.RoleRepository;
 
 @RestController
-public class RoleController {
+public class RoleRestController {
 	
 	@Autowired RoleRepository roleRepository;
 	
