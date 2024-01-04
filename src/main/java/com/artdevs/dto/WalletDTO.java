@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class WalletDTO {
-    
+
     private int id;
 
     private long surplus;

@@ -1,6 +1,6 @@
 package com.artdevs.dto;
 
-import java.util.Date;
+import com.google.protobuf.Timestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,5 +21,5 @@ public class LogDTO {
 
     private String tableName;
 
-    private Date timeLog;
+    private Timestamp timeLog;
 }

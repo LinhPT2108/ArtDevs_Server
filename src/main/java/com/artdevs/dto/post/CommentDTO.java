@@ -1,6 +1,6 @@
 package com.artdevs.dto.post;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,5 +22,5 @@ public class CommentDTO {
 
     private long Count;
 
-    private Date timeComment;
+    private Timestamp timeComment;
 }

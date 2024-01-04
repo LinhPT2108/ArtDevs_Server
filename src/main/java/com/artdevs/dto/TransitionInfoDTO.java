@@ -1,6 +1,6 @@
 package com.artdevs.dto;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,5 +18,5 @@ public class TransitionInfoDTO {
 
     private long price_match;
 
-    private Date timeTransiton;
+    private Timestamp timeTransiton;
 }

@@ -1,6 +1,6 @@
 package com.artdevs.dto.message;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,5 +19,5 @@ public class MessageDTO {
 
     private String subject;
 
-    private Date timeMessage;
+    private Timestamp timeMessage;
 }
