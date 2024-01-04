@@ -1,5 +1,7 @@
 package com.artdevs.domain.entities.user;
 
+import org.hibernate.annotations.Nationalized;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,18 +21,19 @@ public class Demand {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
+	@Nationalized
 	@Column
 	private String description;
-	
+
 	@Column
 	private String desiredTime;
-	
+
 	@ManyToOne
-	@JoinColumn(name="userId")
+	@JoinColumn(name = "userId")
 	private User user;
-	
+
 	@ManyToOne
-	@JoinColumn(name="programinglanguageId")
+	@JoinColumn(name = "programinglanguageId")
 	private ProgramingLanguage language;
 }

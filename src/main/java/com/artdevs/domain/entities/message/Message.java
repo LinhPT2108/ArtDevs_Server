@@ -2,6 +2,8 @@ package com.artdevs.domain.entities.message;
 
 import java.util.Date;
 
+import org.hibernate.annotations.Nationalized;
+
 import com.artdevs.domain.entities.user.User;
 
 import jakarta.persistence.Column;
@@ -22,28 +24,29 @@ import lombok.NoArgsConstructor;
 public class Message {
 	@Id
 	private String messageId;
-	
+
+	@Nationalized
 	@Column
 	private String content;
-	
+
+	@Nationalized
 	@Column
 	private String subject;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timeMessage;
-	
+
 	@ManyToOne
-	@JoinColumn(name="realationshipId")
+	@JoinColumn(name = "realationshipId")
 	private RelationShip relationShipId;
-	
+
 	@ManyToOne
-	@JoinColumn(name="userForm")
+	@JoinColumn(name = "userForm")
 	private User formUserId;
-	
+
 	@ManyToOne
-	@JoinColumn(name="userTo")
+	@JoinColumn(name = "userTo")
 	private User toUserId;
-	
-	
+
 }

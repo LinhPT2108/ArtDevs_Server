@@ -1,5 +1,7 @@
 package com.artdevs.domain.entities.user;
 
+import org.hibernate.annotations.Nationalized;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,6 +29,7 @@ public class Picture {
 	@Column
 	private String cloudinaryPublicId;
 
+	@Nationalized
 	@Size(max = 255, message = "Description must not exceed 255 characters")
 	@Column
 	private String description;
@@ -34,9 +37,9 @@ public class Picture {
 	@NotBlank(message = "Image URL must not be blank")
 	@Column
 	private String imageUrl;
-	
+
 	@ManyToOne
-	@JoinColumn(name="userId")
+	@JoinColumn(name = "userId")
 	private User user;
 
 }

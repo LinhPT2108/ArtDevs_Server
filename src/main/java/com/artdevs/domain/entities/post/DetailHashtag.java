@@ -2,6 +2,8 @@ package com.artdevs.domain.entities.post;
 
 import java.util.List;
 
+import org.hibernate.annotations.Nationalized;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,10 +22,11 @@ public class DetailHashtag {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
+	@Nationalized
 	@Column
 	private String hashtagText;
-	
+
 	@OneToMany(mappedBy = "HashtagDetail")
-	private List<HashTag>  ListHashtagOfDetail;
+	private List<HashTag> ListHashtagOfDetail;
 }

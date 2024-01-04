@@ -2,6 +2,8 @@ package com.artdevs.dto.post;
 
 import java.sql.Timestamp;
 
+import org.hibernate.annotations.Nationalized;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,7 @@ public class CommentDTO {
 
     private long id;
 
+    @Nationalized
     private String content;
 
     private String imageUrl;
