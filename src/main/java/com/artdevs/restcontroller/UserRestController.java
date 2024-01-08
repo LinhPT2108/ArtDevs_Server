@@ -20,16 +20,16 @@ import com.artdevs.utils.Path;
 @RestController
 @RequestMapping(Path.path_api)
 public class UserRestController {
-	@Autowired 
+	@Autowired
 	UserRepository userRepository;
-	
+
 	@PostMapping("/user")
-	public ResponseEntity<User> postUser(@RequestBody UserDTO userDTO){
+	public ResponseEntity<User> postUser(@RequestBody UserDTO userDTO) {
 		return ResponseEntity.ok(userRepository.save(UserMapper.convertToUser(userDTO)));
 	}
-	
+
 	@GetMapping("/user")
-	public ResponseEntity<List<User>> getUser(){
+	public ResponseEntity<List<User>> getUser() {
 		return ResponseEntity.ok(userRepository.findAll());
 	}
-	}
+}
