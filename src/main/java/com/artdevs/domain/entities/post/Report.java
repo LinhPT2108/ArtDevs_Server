@@ -1,5 +1,7 @@
 package com.artdevs.domain.entities.post;
 
+import org.hibernate.annotations.Nationalized;
+
 import com.artdevs.domain.entities.user.User;
 
 import jakarta.persistence.Column;
@@ -21,18 +23,19 @@ public class Report {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
+	@Nationalized
 	@Column
 	private String reportDetail;
-	
+
 	@Column
 	private int count;
-	
+
 	@ManyToOne
-	@JoinColumn(name="userId")
+	@JoinColumn(name = "userId")
 	private User userReportId;
-	
+
 	@ManyToOne
-	@JoinColumn(name="postId")
+	@JoinColumn(name = "postId")
 	private Post postReportId;
 }

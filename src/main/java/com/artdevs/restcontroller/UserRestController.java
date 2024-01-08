@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.UserDTO;
 import com.artdevs.mapper.UserMapper;
 import com.artdevs.repositories.user.UserRepository;
+import com.artdevs.services.UserService;
 import com.artdevs.utils.Path;
 
 @RestController
@@ -22,6 +22,9 @@ import com.artdevs.utils.Path;
 public class UserRestController {
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	UserService userService;
 
 	@PostMapping("/user")
 	public ResponseEntity<User> postUser(@RequestBody UserDTO userDTO) {

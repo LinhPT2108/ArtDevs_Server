@@ -2,6 +2,8 @@ package com.artdevs.domain.entities.user;
 
 import java.util.List;
 
+import org.hibernate.annotations.Nationalized;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,13 +22,14 @@ public class ProgramingLanguage {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
+	@Nationalized
 	@Column
 	private String LanguageName;
-	
+
 	@OneToMany(mappedBy = "language")
 	private List<Demand> DemandLanguage;
-	
+
 	@OneToMany(mappedBy = "language")
 	private List<Skill> SkillLanguage;
 }

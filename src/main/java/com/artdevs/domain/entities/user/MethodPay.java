@@ -1,5 +1,7 @@
 package com.artdevs.domain.entities.user;
 
+import org.hibernate.annotations.Nationalized;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,15 +21,16 @@ public class MethodPay {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
+	@Nationalized
 	@Column
 	private String payName;
-	
+
 	@ManyToOne
-	@JoinColumn(name="userId")
+	@JoinColumn(name = "userId")
 	private User user;
-	
+
 	@ManyToOne
-	@JoinColumn(name="walletId")
+	@JoinColumn(name = "walletId")
 	private Wallet wallet;
 }

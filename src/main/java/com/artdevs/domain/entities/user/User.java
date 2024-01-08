@@ -2,6 +2,8 @@ package com.artdevs.domain.entities.user;
 
 import java.util.List;
 
+import org.hibernate.annotations.Nationalized;
+
 import com.artdevs.domain.entities.message.Message;
 import com.artdevs.domain.entities.message.RelationShip;
 import com.artdevs.domain.entities.post.Comment;
@@ -12,16 +14,11 @@ import com.artdevs.domain.entities.post.Share;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,18 +38,22 @@ public class User {
 	@Column
 	private boolean isAccountNonLocked;
 
+	@Nationalized
 	@Column
 	private String address;
 
 	@Column
 	private String BackgroundImageUrl;
 
+	@Nationalized
 	@Column
 	private String city;
 
+	@Nationalized
 	@Column
 	private String district;
 
+	@Nationalized
 	@Column
 	private String ward;
 
@@ -68,12 +69,15 @@ public class User {
 	@Column
 	private boolean isEnabled;
 
+	@Nationalized
 	@Column
 	private String firstName;
 
+	@Nationalized
 	@Column
 	private String lastName;
 
+	@Nationalized
 	@Column
 	private String middleName;
 
@@ -86,6 +90,7 @@ public class User {
 	@Column
 	private String profilePicUrl;
 
+	@Nationalized
 	@Column
 	private String username;
 
@@ -99,8 +104,8 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private List<Log> userLog;
 
-//	@OneToMany(mappedBy = "user")
-//	private List<Wallet> userWallet;
+	// @OneToMany(mappedBy = "user")
+	// private List<Wallet> userWallet;
 
 	@OneToMany(mappedBy = "user")
 	private List<Demand> userDemand;
