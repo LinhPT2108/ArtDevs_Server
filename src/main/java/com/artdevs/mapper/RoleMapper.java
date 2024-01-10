@@ -3,7 +3,7 @@ package com.artdevs.mapper;
 import org.modelmapper.ModelMapper;
 
 import com.artdevs.domain.entities.user.Role;
-import com.artdevs.dto.RoleDTO;
+import com.artdevs.dto.user.RoleDTO;
 
 public class RoleMapper {
     private static final ModelMapper modelMapper = new ModelMapper();

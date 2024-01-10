@@ -3,7 +3,7 @@ package com.artdevs.mapper;
 import org.modelmapper.ModelMapper;
 
 import com.artdevs.domain.entities.user.ProgramingLanguage;
-import com.artdevs.dto.ProgramingLanguageDTO;
+import com.artdevs.dto.user.ProgramingLanguageDTO;
 
 public class ProgramingLanguageMapper {
     private static final ModelMapper modelMapper = new ModelMapper();

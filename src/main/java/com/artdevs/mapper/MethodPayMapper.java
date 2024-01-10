@@ -3,7 +3,7 @@ package com.artdevs.mapper;
 import org.modelmapper.ModelMapper;
 
 import com.artdevs.domain.entities.user.MethodPay;
-import com.artdevs.dto.MethodPayDTO;
+import com.artdevs.dto.transition.MethodPayDTO;
 
 public class MethodPayMapper {
     private static final ModelMapper modelMapper = new ModelMapper();

@@ -3,7 +3,7 @@ package com.artdevs.mapper;
 import org.modelmapper.ModelMapper;
 
 import com.artdevs.domain.entities.user.Wallet;
-import com.artdevs.dto.WalletDTO;
+import com.artdevs.dto.transition.WalletDTO;
 
 public class WalletMapper {
     private static final ModelMapper modelMapper = new ModelMapper();

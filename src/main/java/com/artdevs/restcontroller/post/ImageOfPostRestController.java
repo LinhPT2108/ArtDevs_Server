@@ -14,21 +14,22 @@ import com.artdevs.domain.entities.post.ImageOfPost;
 import com.artdevs.dto.post.ImageOfPostDTO;
 import com.artdevs.mapper.post.ImageOfPostMapper;
 import com.artdevs.repositories.post.ImageofpostRepository;
+import com.artdevs.services.impl.post.ImageOfPostServiceImpl;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class ImageOfPostRestController {
     @Autowired
-    ImageofpostRepository imageofpostRepository;
+    ImageOfPostServiceImpl imageofpostRepositoryServiceImpl;
 
     @PostMapping("/imageofpost")
     public ResponseEntity<ImageOfPost> postImageOfPost(@RequestBody ImageOfPostDTO imageOfPostDTO) {
-        return ResponseEntity.ok(imageofpostRepository.save(ImageOfPostMapper.convertToImageOfPost(imageOfPostDTO)));
+        return ResponseEntity.ok(imageofpostRepositoryServiceImpl.saveImageOfPost(ImageOfPostMapper.convertToImageOfPost(imageOfPostDTO)));
     }
 
     @GetMapping("/imageofpost")
     public ResponseEntity<List<ImageOfPost>> getImageOfPost() {
-        return ResponseEntity.ok(imageofpostRepository.findAll());
+        return ResponseEntity.ok(imageofpostRepositoryServiceImpl.findAll());
     }
 }

@@ -11,24 +11,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artdevs.domain.entities.user.Picture;
-import com.artdevs.dto.PictureDTO;
+import com.artdevs.dto.user.PictureDTO;
 import com.artdevs.mapper.PictureMapper;
 import com.artdevs.repositories.user.PictureRepository;
+import com.artdevs.services.impl.user.PictureServiceImpl;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class PictureRestController {
     @Autowired
-    PictureRepository pictureRepository;
+    PictureServiceImpl pictureServiceImpl;
 
     @PostMapping("/picture")
     public ResponseEntity<Picture> postPicture(@RequestBody PictureDTO pictureDTO) {
-        return ResponseEntity.ok(pictureRepository.save(PictureMapper.convertToPicture(pictureDTO)));
+        return ResponseEntity.ok(pictureServiceImpl.savePicture(PictureMapper.convertToPicture(pictureDTO)));
     }
 
     @GetMapping("/picture")
     public ResponseEntity<List<Picture>> getPicture() {
-        return ResponseEntity.ok(pictureRepository.findAll());
+        return ResponseEntity.ok(pictureServiceImpl.findAll());
     }
 }

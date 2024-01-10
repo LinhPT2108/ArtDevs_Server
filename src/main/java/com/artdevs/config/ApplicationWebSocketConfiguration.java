@@ -7,11 +7,11 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
-
-@Configuration
-@EnableWebSocketMessageBroker
-@Order(Ordered.HIGHEST_PRECEDENCE + 99)
-public class ApplicationWebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
+//
+//@Configuration
+//@EnableWebSocketMessageBroker
+//@Order(Ordered.HIGHEST_PRECEDENCE + 99)implements WebSocketMessageBrokerConfigurer 
+public class ApplicationWebSocketConfiguration {
 //    private final UserService userService;
 //    private final UserValidationService userValidation;
 //
@@ -24,27 +24,19 @@ public class ApplicationWebSocketConfiguration implements WebSocketMessageBroker
     /**
      * Register Stomp endpoints: the url to open the WebSocket connection.
      */
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        // Register the "/socket" endpoint, enabling the SockJS protocol.
-        // SockJS is used (both client and server side) to allow alternative
-        // messaging options if WebSocket is not available.
-        registry.addEndpoint("/socket")
-                .setAllowedOrigins("*")
-                .withSockJS();
-    }
-
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
-//    // Enable a simple memory-based message broker to send messages to the
-//    // client on destinations prefixed with "/app".
-//    // Simple message broker handles subscription requests from clients, stores
-//    // them in memory, and broadcasts messages to connected clients with
-//    // matching destinations.
-        registry.setApplicationDestinationPrefixes("/app")
-                .setUserDestinationPrefix("/user")
-                .enableSimpleBroker("/chat", "/topic", "/queue");
-    }
+//    @Override
+//    public void registerStompEndpoints(StompEndpointRegistry registry) {
+//        registry.addEndpoint("/socket")
+//                .setAllowedOrigins("*")
+//                .withSockJS();
+//    }
+//
+//    @Override
+//    public void configureMessageBroker(MessageBrokerRegistry registry) {
+//        registry.setApplicationDestinationPrefixes("/app")
+//                .setUserDestinationPrefix("/user")
+//                .enableSimpleBroker("/chat", "/topic", "/queue");
+//    }
 
 //    @Override
 //    public void configureClientInboundChannel(ChannelRegistration registration) {

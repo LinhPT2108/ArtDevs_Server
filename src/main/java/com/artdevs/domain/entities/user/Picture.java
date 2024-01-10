@@ -41,5 +41,9 @@ public class Picture {
 	@ManyToOne
 	@JoinColumn(name = "userId")
 	private User user;
+	
+	@ManyToOne
+	@JoinColumn(name = "positionPicture")
+	private PositionOfPicture positionOfPicture;
 
 }

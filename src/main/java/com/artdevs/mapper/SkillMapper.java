@@ -3,7 +3,7 @@ package com.artdevs.mapper;
 import org.modelmapper.ModelMapper;
 
 import com.artdevs.domain.entities.user.Skill;
-import com.artdevs.dto.SkillDTO;
+import com.artdevs.dto.user.SkillDTO;
 
 public class SkillMapper {
     private static final ModelMapper modelMapper = new ModelMapper();

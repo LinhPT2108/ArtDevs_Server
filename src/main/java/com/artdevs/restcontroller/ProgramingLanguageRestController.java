@@ -11,28 +11,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artdevs.domain.entities.user.ProgramingLanguage;
-import com.artdevs.dto.ProgramingLanguageDTO;
+import com.artdevs.dto.user.ProgramingLanguageDTO;
 import com.artdevs.mapper.ProgramingLanguageMapper;
 import com.artdevs.repositories.user.PrograminglanguageRepository;
+import com.artdevs.services.impl.user.ProgramingLanguageServiceImpl;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class ProgramingLanguageRestController {
     @Autowired
-    PrograminglanguageRepository programinglanguageRepository;
+    ProgramingLanguageServiceImpl programingLanguageServiceImpl;
 
     @PostMapping("/programingLanguage")
     public ResponseEntity<ProgramingLanguage> postProgramingLanguage(
             @RequestBody ProgramingLanguageDTO programingLanguageDTO) {
         return ResponseEntity
-                .ok(programinglanguageRepository
-                        .save(ProgramingLanguageMapper
+                .ok(programingLanguageServiceImpl
+                        .saveProgramingLanguage(ProgramingLanguageMapper
                                 .convertToProgramingLanguage(programingLanguageDTO)));
     }
 
     @GetMapping("/programingLanguage")
     public ResponseEntity<List<ProgramingLanguage>> getProgramingLanguage() {
-        return ResponseEntity.ok(programinglanguageRepository.findAll());
+        return ResponseEntity.ok(programingLanguageServiceImpl.findAll());
     }
 }

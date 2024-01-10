@@ -11,24 +11,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artdevs.domain.entities.user.Skill;
-import com.artdevs.dto.SkillDTO;
+import com.artdevs.dto.user.SkillDTO;
 import com.artdevs.mapper.SkillMapper;
 import com.artdevs.repositories.user.SkillRepository;
+import com.artdevs.services.impl.user.SkillServiceImpl;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class SkillRestController {
     @Autowired
-    SkillRepository skillRepository;
+    SkillServiceImpl skillServiceImpl;
 
     @PostMapping("/skill")
     public ResponseEntity<Skill> postSkill(@RequestBody SkillDTO skillDTO) {
-        return ResponseEntity.ok(skillRepository.save(SkillMapper.convertToSkill(skillDTO)));
+        return ResponseEntity.ok(skillServiceImpl.saveSkill(SkillMapper.convertToSkill(skillDTO)));
     }
 
     @GetMapping("/skill")
     public ResponseEntity<List<Skill>> getSkill() {
-        return ResponseEntity.ok(skillRepository.findAll());
+        return ResponseEntity.ok(skillServiceImpl.findAll());
     }
 }

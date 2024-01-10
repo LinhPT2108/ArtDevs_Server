@@ -11,27 +11,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artdevs.domain.entities.user.TransitionInfo;
-import com.artdevs.dto.TransitionInfoDTO;
+import com.artdevs.dto.transition.TransitionInfoDTO;
 import com.artdevs.mapper.TransitionInfoMapper;
 import com.artdevs.repositories.user.TransitioninfoRepository;
+import com.artdevs.services.impl.transition.TransitionInfoServiceImpl;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class TransitionInfoRestController {
     @Autowired
-    TransitioninfoRepository transitioninfoRepository;
+    TransitionInfoServiceImpl transitionInfoServiceImpl;
 
     @PostMapping("/transitionInfo")
     public ResponseEntity<TransitionInfo> postTransitionInfo(@RequestBody TransitionInfoDTO transitionInfoDTO) {
         return ResponseEntity
-                .ok(transitioninfoRepository
-                        .save(TransitionInfoMapper
+                .ok(transitionInfoServiceImpl
+                        .saveTransitionInfo(TransitionInfoMapper
                                 .convertToTransitionInfo(transitionInfoDTO)));
     }
 
     @GetMapping("/transitionInfo")
     public ResponseEntity<List<TransitionInfo>> getTransitionInfo() {
-        return ResponseEntity.ok(transitioninfoRepository.findAll());
+        return ResponseEntity.ok(transitionInfoServiceImpl.findAll());
     }
 }

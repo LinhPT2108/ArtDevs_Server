@@ -14,22 +14,23 @@ import com.artdevs.domain.entities.post.DetailHashtag;
 import com.artdevs.dto.post.DetailHashtagDTO;
 import com.artdevs.mapper.post.DetailHashTagMapper;
 import com.artdevs.repositories.post.DetailHashtagRepository;
+import com.artdevs.services.impl.post.DetailHashTagServiceImpl;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class DetailHashTagRestController {
     @Autowired
-    DetailHashtagRepository detailHashtagRepository;
+    DetailHashTagServiceImpl detailHashTagServiceImpl;
 
     @PostMapping("/detailhashtag")
     public ResponseEntity<DetailHashtag> postDetailHashTag(@RequestBody DetailHashtagDTO detailHashtagDTO) {
         return ResponseEntity
-                .ok(detailHashtagRepository.save(DetailHashTagMapper.convertTodDetailHashtag(detailHashtagDTO)));
+                .ok(detailHashTagServiceImpl.saveDetailHashtag(DetailHashTagMapper.convertTodDetailHashtag(detailHashtagDTO)));
     }
 
     @GetMapping("/detailhashtag")
     public ResponseEntity<List<DetailHashtag>> getDetailHashTag() {
-        return ResponseEntity.ok(detailHashtagRepository.findAll());
+        return ResponseEntity.ok(detailHashTagServiceImpl.findAll());
     }
 }

@@ -1,6 +1,7 @@
 package com.artdevs.domain.entities.message;
 
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.annotations.Nationalized;
 
@@ -11,6 +12,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
@@ -48,5 +50,8 @@ public class Message {
 	@ManyToOne
 	@JoinColumn(name = "userTo")
 	private User toUserId;
+	
+	@OneToMany(mappedBy = "message")
+	private List<PictureOfMessage> pictureOfMessages;
 
 }
