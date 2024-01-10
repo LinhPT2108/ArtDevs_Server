@@ -19,4 +19,8 @@ public class ReportDTO {
     private String reportDetail;
 
     private int count;
+
+    private String username;
+
+    private String postId;
 }

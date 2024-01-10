@@ -21,4 +21,6 @@ public class PictureDTO {
     private String description;
 
     private String imageUrl;
+
+    private String userId;
 }

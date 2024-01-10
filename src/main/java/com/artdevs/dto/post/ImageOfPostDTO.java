@@ -14,4 +14,6 @@ public class ImageOfPostDTO {
     private int id;
 
     private String imageOfPostUrl;
+
+    private String postImage;
 }

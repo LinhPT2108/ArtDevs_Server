@@ -1,9 +1,11 @@
 package com.artdevs.dto.post;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 import org.hibernate.annotations.Nationalized;
 
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,5 +27,13 @@ public class CommentDTO {
 
     private long Count;
 
-    private Timestamp timeComment;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timeComment;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timeUserId;
+
+    private String commentPostId;
+
+    private String username;
 }

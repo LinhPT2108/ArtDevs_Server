@@ -10,6 +10,7 @@ public class LogMapper {
 
     public static LogDTO convertToLogDTO(Log log) {
         LogDTO logDTO = modelMapper.map(log, LogDTO.class);
+        logDTO.setUsername(log.getUser().getUsername());
         return logDTO;
     }
 

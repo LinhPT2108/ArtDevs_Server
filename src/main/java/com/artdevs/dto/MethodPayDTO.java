@@ -18,4 +18,7 @@ public class MethodPayDTO {
     @Nationalized
     private String payName;
 
+    private int walletId;
+
+    private String username;
 }

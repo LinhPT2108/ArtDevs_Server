@@ -1,6 +1,10 @@
 package com.artdevs.dto.post;
 
+import java.util.List;
+
 import org.hibernate.annotations.Nationalized;
+
+import com.artdevs.domain.entities.post.HashTag;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,4 +21,6 @@ public class DetailHashtagDTO {
 
     @Nationalized
     private String hashtagText;
+
+    private List<HashTag> listHashTag;
 }

@@ -10,6 +10,8 @@ public class LikeMapper {
 
     public static LikeDTO convertToLikesDTO(Likes likes) {
         LikeDTO likeDTO = modelMapper.map(likes, LikeDTO.class);
+        likeDTO.setPostLikeId(likes.getPostLikeId().getPostId());
+        likeDTO.setUsername(likes.getUserLikeId().getUsername());
         return likeDTO;
     }
 

@@ -14,7 +14,6 @@ import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.UserDTO;
 import com.artdevs.mapper.UserMapper;
 import com.artdevs.repositories.user.UserRepository;
-import com.artdevs.services.UserService;
 import com.artdevs.utils.Path;
 
 @RestController
@@ -22,9 +21,6 @@ import com.artdevs.utils.Path;
 public class UserRestController {
 	@Autowired
 	UserRepository userRepository;
-
-	@Autowired
-	UserService userService;
 
 	@PostMapping("/user")
 	public ResponseEntity<User> postUser(@RequestBody UserDTO userDTO) {

@@ -21,4 +21,8 @@ public class DemandDTO {
 
     private String desiredTime;
 
+    private String username;
+
+    private String programingLanguage;
+
 }
