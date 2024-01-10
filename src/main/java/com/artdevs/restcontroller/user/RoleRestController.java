@@ -1,4 +1,4 @@
-package com.artdevs.restcontroller;
+package com.artdevs.restcontroller.user;
 
 import java.util.List;
 

@@ -1,6 +1,10 @@
 package com.artdevs.dto.post;
 
 import java.util.Date;
+import java.util.List;
+
+import com.artdevs.domain.entities.post.Post;
+import com.artdevs.domain.entities.user.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,4 +27,8 @@ public class CommentDTO {
     private long Count;
 
     private Date timeComment;
+    
+    private String UserID;
+    
+    private String PostID;
 }

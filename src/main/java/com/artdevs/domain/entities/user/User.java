@@ -1,6 +1,12 @@
 package com.artdevs.domain.entities.user;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.artdevs.domain.entities.message.Message;
 import com.artdevs.domain.entities.message.RelationShip;
@@ -31,7 +37,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class User {
+public class User implements UserDetails {
 	@Id
 	private String userId;
 
@@ -88,6 +94,7 @@ public class User {
 
 	@Column
 	private String username;
+	
 
 	@ManyToOne
 	@JoinColumn(name = "userRole")
@@ -146,4 +153,41 @@ public class User {
 
 	@OneToMany(mappedBy = "userReportId")
 	private List<Comment> listComment;
+	@Override
+	public String getUsername() {
+		return this.email;
+	}
+	@Override
+	public String getPassword() {
+		return this.password;
+	}
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return this.isEnabled;
+	}
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority(this.role.getRoleName()));
+		return List.of(new SimpleGrantedAuthority(authorities.toString()));
+	}
+
 }
