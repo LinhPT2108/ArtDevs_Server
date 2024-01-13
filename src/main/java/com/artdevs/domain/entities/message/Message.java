@@ -1,6 +1,7 @@
 package com.artdevs.domain.entities.message;
 
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.annotations.Nationalized;
 
@@ -11,16 +12,20 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class Message {
 	@Id
 	private String messageId;
@@ -48,5 +53,15 @@ public class Message {
 	@ManyToOne
 	@JoinColumn(name = "userTo")
 	private User toUserId;
+	
+	@OneToMany(mappedBy = "message")
+	private List<PictureOfMessage> pictureOfMessages;
 
+	@Override
+	public String toString() {
+		return "Message [messageId=" + messageId + ", content=" + content + ", subject=" + subject + ", timeMessage="
+				+ timeMessage + "]";
+	}
+
+	
 }

@@ -11,24 +11,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artdevs.domain.entities.user.Wallet;
-import com.artdevs.dto.WalletDTO;
+import com.artdevs.dto.transition.WalletDTO;
 import com.artdevs.mapper.WalletMapper;
 import com.artdevs.repositories.user.WalletRepository;
+import com.artdevs.services.impl.transition.WalletServiceImpl;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class WalletRestController {
     @Autowired
-    WalletRepository walletRepository;
+    WalletServiceImpl walletServiceImpl;
 
     @PostMapping("/wallet")
     public ResponseEntity<Wallet> postWallet(@RequestBody WalletDTO walletDTO) {
-        return ResponseEntity.ok(walletRepository.save(WalletMapper.convertToWallet(walletDTO)));
+        return ResponseEntity.ok(walletServiceImpl.saveWallet(WalletMapper.convertToWallet(walletDTO)));
     }
 
     @GetMapping("/wallet")
     public ResponseEntity<List<Wallet>> getWallet() {
-        return ResponseEntity.ok(walletRepository.findAll());
+        return ResponseEntity.ok(walletServiceImpl.findAll());
     }
 }

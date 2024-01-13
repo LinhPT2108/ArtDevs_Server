@@ -3,7 +3,7 @@ package com.artdevs.mapper;
 import org.modelmapper.ModelMapper;
 
 import com.artdevs.domain.entities.user.Picture;
-import com.artdevs.dto.PictureDTO;
+import com.artdevs.dto.user.PictureDTO;
 
 public class PictureMapper {
     private static final ModelMapper modelMapper = new ModelMapper();

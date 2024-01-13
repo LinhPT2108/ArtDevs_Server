@@ -3,7 +3,7 @@ package com.artdevs.mapper;
 import org.modelmapper.ModelMapper;
 
 import com.artdevs.domain.entities.user.TransitionInfo;
-import com.artdevs.dto.TransitionInfoDTO;
+import com.artdevs.dto.transition.TransitionInfoDTO;
 
 public class TransitionInfoMapper {
 

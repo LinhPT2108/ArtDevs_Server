@@ -14,21 +14,22 @@ import com.artdevs.domain.entities.post.TypePost;
 import com.artdevs.dto.post.TypePostDTO;
 import com.artdevs.mapper.post.TypePostMapper;
 import com.artdevs.repositories.post.TypepostRepository;
+import com.artdevs.services.impl.post.TypePostServiceImpl;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class TypePostRestController {
     @Autowired
-    TypepostRepository typepostRepository;
+    TypePostServiceImpl typepostRepositoryServiceImpl;
 
     @PostMapping("/typepost")
     public ResponseEntity<TypePost> postTypePost(@RequestBody TypePostDTO typePostDTO) {
-        return ResponseEntity.ok(typepostRepository.save(TypePostMapper.convertToTypePost(typePostDTO)));
+        return ResponseEntity.ok(typepostRepositoryServiceImpl.saveTypePost(TypePostMapper.convertToTypePost(typePostDTO)));
     }
 
     @GetMapping("/typepost")
     public ResponseEntity<List<TypePost>> getTypePost() {
-        return ResponseEntity.ok(typepostRepository.findAll());
+        return ResponseEntity.ok(typepostRepositoryServiceImpl.findAll());
     }
 }

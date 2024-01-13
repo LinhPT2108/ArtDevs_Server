@@ -3,7 +3,7 @@ package com.artdevs.mapper;
 import org.modelmapper.ModelMapper;
 
 import com.artdevs.domain.entities.user.Demand;
-import com.artdevs.dto.DemandDTO;
+import com.artdevs.dto.user.DemandDTO;
 
 public class DemandMapper {
     private static final ModelMapper modelMapper = new ModelMapper();

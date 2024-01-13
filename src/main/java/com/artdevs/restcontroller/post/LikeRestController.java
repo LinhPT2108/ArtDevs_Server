@@ -14,21 +14,22 @@ import com.artdevs.domain.entities.post.Likes;
 import com.artdevs.dto.post.LikeDTO;
 import com.artdevs.mapper.post.LikeMapper;
 import com.artdevs.repositories.post.LikesRepository;
+import com.artdevs.services.impl.post.LikeServiceImpl;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class LikeRestController {
     @Autowired
-    LikesRepository likeRepository;
+    LikeServiceImpl likeServiceImpl;
 
     @PostMapping("/like")
     public ResponseEntity<Likes> postLikes(@RequestBody LikeDTO likeDTO) {
-        return ResponseEntity.ok(likeRepository.save(LikeMapper.convertToLikes(likeDTO)));
+        return ResponseEntity.ok(likeServiceImpl.saveLikes(LikeMapper.convertToLikes(likeDTO)));
     }
 
     @GetMapping("/like")
     public ResponseEntity<List<Likes>> getLikes() {
-        return ResponseEntity.ok(likeRepository.findAll());
+        return ResponseEntity.ok(likeServiceImpl.findAll());
     }
 }

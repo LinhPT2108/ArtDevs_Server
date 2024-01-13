@@ -3,7 +3,7 @@ package com.artdevs.mapper;
 import org.modelmapper.ModelMapper;
 
 import com.artdevs.domain.entities.user.Log;
-import com.artdevs.dto.LogDTO;
+import com.artdevs.dto.user.LogDTO;
 
 public class LogMapper {
     private static final ModelMapper modelMapper = new ModelMapper();

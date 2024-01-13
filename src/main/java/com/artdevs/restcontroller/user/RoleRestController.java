@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artdevs.domain.entities.user.Role;
-import com.artdevs.dto.RoleDTO;
+import com.artdevs.dto.user.RoleDTO;
 import com.artdevs.mapper.RoleMapper;
 import com.artdevs.repositories.user.RoleRepository;
+import com.artdevs.services.impl.transition.RoleServiceImpl;
 import com.artdevs.utils.Path;
 
 @RestController
@@ -21,15 +22,15 @@ import com.artdevs.utils.Path;
 public class RoleRestController {
 
 	@Autowired
-	RoleRepository roleRepository;
+	RoleServiceImpl roleServiceImpl;
 
 	@GetMapping("/role")
 	public ResponseEntity<List<Role>> getRole() {
-		return ResponseEntity.ok(roleRepository.findAll());
+		return ResponseEntity.ok(roleServiceImpl.findAll());
 	}
 
 	@PostMapping("/role")
 	public ResponseEntity<Role> postRole(@RequestBody RoleDTO roleDTO) {
-		return ResponseEntity.ok(roleRepository.save(RoleMapper.convertToRole(roleDTO)));
+		return ResponseEntity.ok(roleServiceImpl.saveRole(RoleMapper.convertToRole(roleDTO)));
 	}
 }

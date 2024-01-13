@@ -11,24 +11,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artdevs.domain.entities.user.Log;
-import com.artdevs.dto.LogDTO;
+import com.artdevs.dto.user.LogDTO;
 import com.artdevs.mapper.LogMapper;
 import com.artdevs.repositories.user.LogRepository;
+import com.artdevs.services.impl.user.LogServiceImpl;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class LogRestController {
     @Autowired
-    LogRepository logRepository;
+    LogServiceImpl logServiceImpl;
 
     @PostMapping("/log")
     public ResponseEntity<Log> postLog(@RequestBody LogDTO logDTO) {
-        return ResponseEntity.ok(logRepository.save(LogMapper.convertToLog(logDTO)));
+        return ResponseEntity.ok(logServiceImpl.saveLog(LogMapper.convertToLog(logDTO)));
     }
 
     @GetMapping("/log")
     public ResponseEntity<List<Log>> getLog() {
-        return ResponseEntity.ok(logRepository.findAll());
+        return ResponseEntity.ok(logServiceImpl.findAll());
     }
 }

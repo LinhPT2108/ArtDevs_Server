@@ -30,11 +30,12 @@ public class RelationShip {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Nationalized
+
 	@Column
 
 	private Boolean status;
 	
+
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column

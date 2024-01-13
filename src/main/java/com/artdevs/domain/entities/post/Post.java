@@ -41,6 +41,9 @@ public class Post {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timelineUserId;
+	
+	@Column
+	private boolean isDel;
 
 	@ManyToOne
 	@JoinColumn(name = "userId")
@@ -67,4 +70,8 @@ public class Post {
 
 	@OneToMany(mappedBy = "postHashtag")
 	private List<HashTag> listHashtag;
+	
+
+	@OneToMany(mappedBy = "post")
+	private List<PrivacyPostDetail> privacyPostDetails;
 }
