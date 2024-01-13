@@ -7,11 +7,11 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
-//
-//@Configuration
-//@EnableWebSocketMessageBroker
-//@Order(Ordered.HIGHEST_PRECEDENCE + 99)implements WebSocketMessageBrokerConfigurer 
-public class ApplicationWebSocketConfiguration {
+
+@Configuration
+@EnableWebSocketMessageBroker
+@Order(Ordered.HIGHEST_PRECEDENCE + 99)
+public class ApplicationWebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
 //    private final UserService userService;
 //    private final UserValidationService userValidation;
 //
@@ -24,19 +24,19 @@ public class ApplicationWebSocketConfiguration {
     /**
      * Register Stomp endpoints: the url to open the WebSocket connection.
      */
-//    @Override
-//    public void registerStompEndpoints(StompEndpointRegistry registry) {
-//        registry.addEndpoint("/socket")
-//                .setAllowedOrigins("*")
-//                .withSockJS();
-//    }
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws")
+                .setAllowedOrigins("http://localhost:8080","http://localhost:3000")
+                .withSockJS();
+    }
 //
-//    @Override
-//    public void configureMessageBroker(MessageBrokerRegistry registry) {
-//        registry.setApplicationDestinationPrefixes("/app")
-//                .setUserDestinationPrefix("/user")
-//                .enableSimpleBroker("/chat", "/topic", "/queue");
-//    }
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+    	 registry.setApplicationDestinationPrefixes("/app")
+         			.setUserDestinationPrefix("/user")
+         			.enableSimpleBroker("/chat", "/topic", "/queue");
+    }
 
 //    @Override
 //    public void configureClientInboundChannel(ChannelRegistration registration) {

@@ -23,7 +23,7 @@ import com.artdevs.utils.Path;
 public class UserRestController {
 
 	@Autowired
-	UserServiceImpl userServiceImpl;
+	UserService userServiceImpl;
 
 	@PostMapping("/user")
 	public ResponseEntity<User> postUser(@RequestBody UserDTO userDTO) {

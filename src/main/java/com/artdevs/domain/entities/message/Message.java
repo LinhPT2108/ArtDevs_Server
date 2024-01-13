@@ -17,12 +17,15 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class Message {
 	@Id
 	private String messageId;
@@ -54,4 +57,11 @@ public class Message {
 	@OneToMany(mappedBy = "message")
 	private List<PictureOfMessage> pictureOfMessages;
 
+	@Override
+	public String toString() {
+		return "Message [messageId=" + messageId + ", content=" + content + ", subject=" + subject + ", timeMessage="
+				+ timeMessage + "]";
+	}
+
+	
 }
