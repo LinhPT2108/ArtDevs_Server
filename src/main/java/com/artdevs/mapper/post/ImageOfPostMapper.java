@@ -10,6 +10,7 @@ public class ImageOfPostMapper {
 
     public static ImageOfPostDTO convertToImageOfPostDTO(ImageOfPost imageOfPost) {
         ImageOfPostDTO imageOfPostDTO = modelMapper.map(imageOfPost, ImageOfPostDTO.class);
+        imageOfPostDTO.setPostImage(imageOfPost.getPostImage().getPostId());
         return imageOfPostDTO;
     }
 

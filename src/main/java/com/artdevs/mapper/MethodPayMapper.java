@@ -10,6 +10,8 @@ public class MethodPayMapper {
 
     public static MethodPayDTO convertToMethodPayDTO(MethodPay methodPay) {
         MethodPayDTO methodPayDTO = modelMapper.map(methodPay, MethodPayDTO.class);
+        methodPayDTO.setWalletId(methodPay.getWallet().getId());
+        methodPayDTO.setUsername(methodPay.getUser().getUsername());
         return methodPayDTO;
     }
 

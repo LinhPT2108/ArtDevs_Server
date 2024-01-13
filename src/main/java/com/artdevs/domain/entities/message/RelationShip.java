@@ -3,6 +3,8 @@ package com.artdevs.domain.entities.message;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.annotations.Nationalized;
+
 import com.artdevs.domain.entities.user.User;
 
 import jakarta.persistence.Column;
@@ -27,27 +29,30 @@ public class RelationShip {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
+	@Nationalized
 	@Column
+
 	private Boolean status;
 	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timeRelation;
-	
+
 	@ManyToOne
-	@JoinColumn(name="userAction")
+	@JoinColumn(name = "userAction")
 	private User actionUser;
-	
+
 	@ManyToOne
-	@JoinColumn(name="userRelation1")
+	@JoinColumn(name = "userRelation1")
 	private User userOneId;
-	
+
 	@ManyToOne
-	@JoinColumn(name="userRelation2")
+	@JoinColumn(name = "userRelation2")
 	private User userTwoId;
-	
+
 	@OneToMany(mappedBy = "relationShipId")
 	private List<Message> relationMessage;
-	
+
 }

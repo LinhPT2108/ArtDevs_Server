@@ -1,5 +1,6 @@
 package com.artdevs.dto;
 
+
 import java.util.List;
 
 import com.artdevs.domain.entities.message.Message;
@@ -16,6 +17,7 @@ import com.artdevs.domain.entities.user.Skill;
 import com.artdevs.domain.entities.user.TransitionInfo;
 
 import jakarta.persistence.OneToMany;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,14 +34,18 @@ public class UserDTO {
 
 	private boolean isAccountNonLocked;
 
+	@Nationalized
 	private String address;
 
 	private String BackgroundImageUrl;
 
+	@Nationalized
 	private String city;
 
+	@Nationalized
 	private String district;
 
+	@Nationalized
 	private String ward;
 
 	private boolean isCreadentialsNonExprired;
@@ -50,10 +56,13 @@ public class UserDTO {
 
 	private boolean isEnabled;
 
+	@Nationalized
 	private String firstName;
 
+	@Nationalized
 	private String lastName;
 
+	@Nationalized
 	private String middleName;
 
 	private String isOnline;
@@ -62,6 +71,7 @@ public class UserDTO {
 
 	private String profilePicUrl;
 
+	@Nationalized
 	private String username;
 	
 	private Role role;

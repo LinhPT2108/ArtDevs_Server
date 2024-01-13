@@ -2,6 +2,8 @@ package com.artdevs.domain.entities.post;
 
 import java.util.List;
 
+import org.hibernate.annotations.Nationalized;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,10 +22,11 @@ public class TypePost {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
+	@Nationalized
 	@Column
 	private String typePostName;
-	
+
 	@OneToMany(mappedBy = "postType")
-	private List<Post>  ListPostOfType;
+	private List<Post> ListPostOfType;
 }

@@ -15,8 +15,10 @@ public class CommentMapper {
 
     public static CommentDTO convertToCommentDTO(Comment comment) {
         CommentDTO commentDTO = modelMapper.map(comment, CommentDTO.class);
+
         commentDTO.setPostID(comment.getPostCommentId().getPostId());
         commentDTO.setUserID(comment.getUserReportId().getUserId());
+
         return commentDTO;
     }
 

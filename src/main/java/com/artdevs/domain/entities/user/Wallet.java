@@ -20,14 +20,14 @@ public class Wallet {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@Column
 	private long surplus;
-	
-	
+
 	@OneToMany(mappedBy = "wallet")
 	private List<MethodPay> walletMethodPay;
-	
+
 	@OneToMany(mappedBy = "walletOfUser")
 	private List<TransitionInfo> trainsition;
+
 }

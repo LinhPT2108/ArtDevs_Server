@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 
 import com.artdevs.domain.entities.message.Message;
 import com.artdevs.domain.entities.message.RelationShip;
@@ -46,18 +48,22 @@ public class User implements UserDetails {
 	@Column
 	private boolean isAccountNonLocked;
 
+	@Nationalized
 	@Column
 	private String address;
 
 	@Column
 	private String BackgroundImageUrl;
 
+	@Nationalized
 	@Column
 	private String city;
 
+	@Nationalized
 	@Column
 	private String district;
 
+	@Nationalized
 	@Column
 	private String ward;
 
@@ -73,12 +79,15 @@ public class User implements UserDetails {
 	@Column
 	private boolean isEnabled;
 
+	@Nationalized
 	@Column
 	private String firstName;
 
+	@Nationalized
 	@Column
 	private String lastName;
 
+	@Nationalized
 	@Column
 	private String middleName;
 
@@ -91,6 +100,7 @@ public class User implements UserDetails {
 	@Column
 	private String profilePicUrl;
 
+	@Nationalized
 	@Column
 	private String username;
 	
@@ -105,8 +115,8 @@ public class User implements UserDetails {
 	@OneToMany(mappedBy = "user")
 	private List<Log> userLog;
 
-//	@OneToMany(mappedBy = "user")
-//	private List<Wallet> userWallet;
+	// @OneToMany(mappedBy = "user")
+	// private List<Wallet> userWallet;
 
 	@OneToMany(mappedBy = "user")
 	private List<Demand> userDemand;

@@ -3,6 +3,8 @@ package com.artdevs.domain.entities.post;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.annotations.Nationalized;
+
 import com.artdevs.domain.entities.user.User;
 
 import jakarta.persistence.Column;
@@ -24,44 +26,45 @@ import lombok.NoArgsConstructor;
 public class Post {
 	@Id
 	private String postId;
-	
+
 	@Column
 	private String imageUrl;
-	
+
+	@Nationalized
 	@Column
 	private String content;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date time;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timelineUserId;
-	
+
 	@ManyToOne
-	@JoinColumn(name="userId")
+	@JoinColumn(name = "userId")
 	private User user;
-	
+
 	@OneToMany(mappedBy = "postLikeId")
 	private List<Likes> listLikePost;
-	
+
 	@OneToMany(mappedBy = "postShareId")
 	private List<Share> listSharePost;
-	
+
 	@OneToMany(mappedBy = "postReportId")
 	private List<Report> listReportPost;
-	
+
 	@OneToMany(mappedBy = "postCommentId")
 	private List<Comment> listCommentPost;
-	
+
 	@OneToMany(mappedBy = "postImage")
 	private List<ImageOfPost> listImage;
-	
+
 	@ManyToOne
-	@JoinColumn(name="typepostId")
+	@JoinColumn(name = "typepostId")
 	private TypePost postType;
-	
+
 	@OneToMany(mappedBy = "postHashtag")
-	private List<HashTag>  listHashtag;
+	private List<HashTag> listHashtag;
 }
