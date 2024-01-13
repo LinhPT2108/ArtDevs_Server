@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
+import org.hibernate.annotations.Nationalized;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 
 import com.artdevs.domain.entities.message.Message;
 import com.artdevs.domain.entities.message.RelationShip;
@@ -17,16 +16,18 @@ import com.artdevs.domain.entities.post.Likes;
 import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.post.Report;
 import com.artdevs.domain.entities.post.Share;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,6 +38,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class User implements UserDetails {
 	
 	@Id
@@ -105,7 +107,7 @@ public class User implements UserDetails {
 	private String username;
 	
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userRole")
 	private Role role;
 
@@ -118,12 +120,15 @@ public class User implements UserDetails {
 	// @OneToMany(mappedBy = "user")
 	// private List<Wallet> userWallet;
 
+
 	@OneToMany(mappedBy = "user")
 	private List<Demand> userDemand;
-
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Skill> userSkill;
-
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<MethodPay> userMethod;
 

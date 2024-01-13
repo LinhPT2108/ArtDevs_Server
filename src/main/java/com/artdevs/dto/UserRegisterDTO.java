@@ -14,6 +14,7 @@ import com.artdevs.domain.entities.user.MethodPay;
 import com.artdevs.domain.entities.user.Role;
 import com.artdevs.domain.entities.user.Skill;
 import com.artdevs.domain.entities.user.TransitionInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class UserRegisterDTO {
 
 	private String userId;

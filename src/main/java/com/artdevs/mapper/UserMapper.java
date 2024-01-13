@@ -75,13 +75,19 @@ public class UserMapper {
 		registerDTO.setListDemandOfUser(getDemand(user));
 		return registerDTO;
 	}
-	
-	public static User RegisterDTOconvertToUser(UserRegisterDTO RegisterDTO,PrograminglanguageRepository progamingrepository,UserRepository userrep) {
+	public static User RegisterDTOconvertToUser(UserRegisterDTO RegisterDTO) {
 		User user = modelMapper.map(RegisterDTO, User.class);
 		user.setUserSkill(null);
 		user.setUserDemand(null);
 		return user;
 	}
+	
+//	public static User RegisterDTOconvertToUser2(UserRegisterDTO RegisterDTO,SkillRepository skillrep ,UserRepository userrep) {
+//		User user = modelMapper.map(RegisterDTO, User.class);
+//		user.setUserSkill(setSkill(RegisterDTO,skillrep,userrep));
+//		user.setUserDemand(null);
+//		return user;
+//	}
 	
 	private static List<String> getSkill(User user) {
 		return user.getUserSkill().stream().map(Skill -> Skill.getLanguage().getLanguageName())
@@ -93,15 +99,8 @@ public class UserMapper {
 				.collect(Collectors.toList());
 	}
 	
-//	private static List<Skill> setSkill(UserRegisterDTO RegisterDTO,PrograminglanguageRepository progamingrepository,UserRepository userrep) {
-//		List<Skill> listSkill = new ArrayList<>();
-//		Skill newskill = new Skill();
-//		for (String skillname : RegisterDTO.getListSkillOfUser()) {
-//			newskill.setUser(userrep.getById(RegisterDTO.getUserId()));
-//			newskill.setLanguage(progamingrepository.findByLanguageName(skillname));
-//			listSkill.add(newskill);
-//		}
-//		System.out.println(listSkill.size());
+//	private static List<Skill> setSkill(UserRegisterDTO RegisterDTO,SkillRepository skillrep ,UserRepository userrep) {
+//		List<Skill> listSkill = skillrep.findByUser(userrep.getById(RegisterDTO.getUserId()));
 //		return listSkill;
 //	}
 	

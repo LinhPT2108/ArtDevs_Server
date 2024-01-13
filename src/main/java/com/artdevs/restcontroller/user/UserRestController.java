@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.artdevs.domain.entities.user.Demand;
+import com.artdevs.domain.entities.user.Skill;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.UserDTO;
 import com.artdevs.dto.UserRegisterDTO;
 import com.artdevs.mapper.UserMapper;
+import com.artdevs.repositories.user.DemandRepository;
 import com.artdevs.repositories.user.PrograminglanguageRepository;
 import com.artdevs.repositories.user.SkillRepository;
 import com.artdevs.repositories.user.UserRepository;
@@ -27,6 +30,8 @@ public class UserRestController {
 	@Autowired 
 	UserRepository userRepository;
 	@Autowired SkillRepository skillrep;
+	
+	@Autowired DemandRepository demandrepositories;
 	
 	@Autowired PrograminglanguageRepository programingrepositories;
 	
@@ -47,7 +52,22 @@ public class UserRestController {
 	
 	@PostMapping("/register")
 	public ResponseEntity<User> RegisterUser(@RequestBody UserRegisterDTO RegisterDTO){
-		return ResponseEntity.ok(userRepository.save(UserMapper.RegisterDTOconvertToUser(RegisterDTO,programingrepositories,userRepository)));
+		User user = userRepository.save(UserMapper.RegisterDTOconvertToUser(RegisterDTO));
+		for (String skillname : RegisterDTO.getListSkillOfUser()) {
+			Skill skill = new Skill();
+			skill.setUser(user);
+			skill.setLanguage(programingrepositories.findByLanguageName(skillname));
+			skillrep.save(skill);
+		}
+		for (String demandname : RegisterDTO.getListDemandOfUser()) {
+			Demand demand = new Demand();
+			demand.setUser(user);
+			demand.setLanguage(programingrepositories.findByLanguageName(demandname));
+			demandrepositories.save(demand);
+		}
+//		 System.out.println(demandrepositories.findByUser(user));
+//		 user.setUserSkill(skillrep.findByUser(user));
+		return ResponseEntity.ok(user);
 	}
 	
 	@GetMapping("/register/{userid}")
