@@ -29,7 +29,7 @@ public class RelationShip {
 	private int id;
 	
 	@Column
-	private String status;
+	private Boolean status;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column

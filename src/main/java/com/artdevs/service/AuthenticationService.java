@@ -40,7 +40,7 @@ public class AuthenticationService {
 //		System.out.println(user.getEmail());
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword() ));
 		
-		UserDTO userdto = UserMapper.convertToUserDTO(user);
+		UserDTO userdto = UserMapper.UserConvertToUserDTO(user);
 		Role role = null;
 		if(user!=null) {
 			role = rolerep.findByUserRole(user);
