@@ -1,5 +1,6 @@
 package com.artdevs.domain.entities.user;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.annotations.Nationalized;
@@ -38,7 +39,16 @@ public class User {
 
 	@Column
 	private boolean isAccountNonLocked;
+	
+	@Column
+	private boolean gender;
+	
+	@Column
+	private String phoneNumber;
 
+	@Column
+	private Date birthday;
+	
 	@Nationalized
 	@Column
 	private String address;

@@ -13,22 +13,22 @@ import org.springframework.web.bind.annotation.RestController;
 import com.artdevs.domain.entities.post.Comment;
 import com.artdevs.dto.post.CommentDTO;
 import com.artdevs.mapper.post.CommentMapper;
-import com.artdevs.services.impl.post.CommentServiceImpl;
+import com.artdevs.services.CommentService;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class CommentRestController {
     @Autowired
-    CommentServiceImpl commentServiceImpl;
+    CommentService commentService;
 
     @PostMapping("/comment")
     public ResponseEntity<Comment> postComment(@RequestBody CommentDTO commentDTO) {
-        return ResponseEntity.ok(commentServiceImpl.saveComment(CommentMapper.convertToComment(commentDTO)));
+        return ResponseEntity.ok(commentService.saveComment(CommentMapper.convertToComment(commentDTO)));
     }
 
     @GetMapping("/comment")
     public ResponseEntity<List<Comment>> getCommnet() {
-        return ResponseEntity.ok(commentServiceImpl.findAll());
+        return ResponseEntity.ok(commentService.findAll());
     }
 }

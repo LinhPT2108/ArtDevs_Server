@@ -15,7 +15,6 @@ import com.artdevs.dto.user.UserDTO;
 import com.artdevs.mapper.UserMapper;
 import com.artdevs.repositories.user.UserRepository;
 import com.artdevs.services.UserService;
-import com.artdevs.services.impl.user.UserServiceImpl;
 import com.artdevs.utils.Path;
 
 @RestController
@@ -23,15 +22,15 @@ import com.artdevs.utils.Path;
 public class UserRestController {
 
 	@Autowired
-	UserService userServiceImpl;
+	UserService userService;
 
 	@PostMapping("/user")
 	public ResponseEntity<User> postUser(@RequestBody UserDTO userDTO) {
-		return ResponseEntity.ok(userServiceImpl.saveUser(UserMapper.convertToUser(userDTO)));
+		return ResponseEntity.ok(userService.saveUser(UserMapper.convertToUser(userDTO)));
 	}
 
 	@GetMapping("/user")
 	public ResponseEntity<List<User>> getUser() {
-		return ResponseEntity.ok(userServiceImpl.findAll());
+		return ResponseEntity.ok(userService.findAll());
 	}
 }
