@@ -14,4 +14,8 @@ public class HashTagDTO {
     private int id;
 
     private int count;
+
+    private String postHashtag;
+
+    private int HashtagDetail;
 }

@@ -10,6 +10,8 @@ public class DemandMapper {
 
     public static DemandDTO convertToDemandDTO(Demand demand) {
         DemandDTO demandDTO = modelMapper.map(demand, DemandDTO.class);
+        demandDTO.setUsername(demand.getUser().getUsername());
+        demandDTO.setProgramingLanguage(demand.getLanguage().getLanguageName());
         return demandDTO;
     }
 

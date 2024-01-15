@@ -31,7 +31,10 @@ public class RelationShip {
 	private int id;
 
 	@Column
-	private int status;
+
+	private Boolean status;
+	
+
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column

@@ -10,6 +10,7 @@ public class PictureMapper {
 
     public static PictureDTO convertToPictureDTO(Picture picture) {
         PictureDTO pictureDTO = modelMapper.map(picture, PictureDTO.class);
+        pictureDTO.setUserId(picture.getUser().getUserId());
         return pictureDTO;
     }
 

@@ -14,4 +14,8 @@ public class ShareDTO {
     private long id;
 
     private long count;
+
+    private String username;
+
+    private String postId;
 }

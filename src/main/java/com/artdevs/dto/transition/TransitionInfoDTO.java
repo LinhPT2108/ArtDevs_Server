@@ -1,7 +1,9 @@
 package com.artdevs.dto.transition;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,5 +20,12 @@ public class TransitionInfoDTO {
 
     private long price_match;
 
-    private Timestamp timeTransiton;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timeTransiton;
+
+    private String userId1;
+
+    private String userId2;
+
+    private int listWallet;
 }

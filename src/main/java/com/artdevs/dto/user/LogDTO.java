@@ -1,7 +1,9 @@
 package com.artdevs.dto.user;
 
-import com.google.protobuf.Timestamp;
+import java.util.Date;
 
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,5 +23,8 @@ public class LogDTO {
 
     private String tableName;
 
-    private Timestamp timeLog;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timeLog;
+
+    private String username;
 }

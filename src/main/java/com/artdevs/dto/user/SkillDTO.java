@@ -17,4 +17,8 @@ public class SkillDTO {
 
     @Nationalized
     private String description;
+
+    private String userId;
+
+    private String languageName;
 }

@@ -17,4 +17,7 @@ public class MethodPayDTO {
 
     private String payName;
 
+    private int walletId;
+
+    private String username;
 }

@@ -10,6 +10,8 @@ public class SkillMapper {
 
     public static SkillDTO convertToSkillDTO(Skill skill) {
         SkillDTO skillDTO = modelMapper.map(skill, SkillDTO.class);
+        skillDTO.setLanguageName(skill.getLanguage().getLanguageName());
+        skillDTO.setUserId(skill.getUser().getUserId());
         return skillDTO;
     }
 

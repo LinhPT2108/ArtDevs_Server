@@ -10,6 +10,8 @@ public class ReportMapper {
 
     public static ReportDTO convertToReprotDTO(Report report) {
         ReportDTO reportDTO = modelMapper.map(report, ReportDTO.class);
+        reportDTO.setPostId(report.getPostReportId().getPostId());
+        reportDTO.setUsername(report.getUserReportId().getUsername());
         return reportDTO;
     }
 

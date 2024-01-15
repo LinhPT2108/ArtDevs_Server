@@ -10,6 +10,8 @@ public class ShareMapper {
 
     public static ShareDTO convertToShareDTO(Share share) {
         ShareDTO shareDTO = modelMapper.map(share, ShareDTO.class);
+        shareDTO.setPostId(share.getPostShareId().getPostId());
+        shareDTO.setUsername(share.getUserShareId().getUsername());
         return shareDTO;
     }
 
