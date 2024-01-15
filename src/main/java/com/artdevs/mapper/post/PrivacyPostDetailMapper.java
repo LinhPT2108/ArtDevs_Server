@@ -9,14 +9,16 @@ import com.artdevs.dto.post.ReportDTO;
 
 public class PrivacyPostDetailMapper {
     private static final ModelMapper modelMapper = new ModelMapper();
-    
+
     public static PrivacyPostDetailDTO convertToReprotDTO(PrivacyPostDetail privacyPostDetail) {
-    	PrivacyPostDetailDTO privacyPostDetailDTO = modelMapper.map(privacyPostDetail, PrivacyPostDetailDTO.class);
+        PrivacyPostDetailDTO privacyPostDetailDTO = modelMapper.map(privacyPostDetail, PrivacyPostDetailDTO.class);
+        privacyPostDetailDTO.setPostId(privacyPostDetail.getPost().getPostId());
+        privacyPostDetailDTO.setPrivacyPostId(privacyPostDetail.getPrivacyPost().getId());
         return privacyPostDetailDTO;
     }
 
     public static PrivacyPostDetail convertToReport(PrivacyPostDetailDTO privacyPostDetailDTO) {
-    	PrivacyPostDetail privacyPostDetail = modelMapper.map(privacyPostDetailDTO, PrivacyPostDetail.class);
+        PrivacyPostDetail privacyPostDetail = modelMapper.map(privacyPostDetailDTO, PrivacyPostDetail.class);
         return privacyPostDetail;
     }
 

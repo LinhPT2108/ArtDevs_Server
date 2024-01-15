@@ -26,9 +26,10 @@ public class TypePostMapper {
     private static List<Post> getListPostOfType(TypePost typePost) {
         return typePost
                 .getListPostOfType().stream().map(post -> new Post(post.getPostId(), post.getImageUrl(),
-                        post.getContent(), post.getTime(), post.getTimelineUserId(), post.getUser(),
+                        post.getContent(), post.getTime(), post.getTimelineUserId(), false, post.getUser(),
                         post.getListLikePost(), post.getListSharePost(), post.getListReportPost(),
-                        post.getListCommentPost(), post.getListImage(), typePost, post.getListHashtag()))
+                        post.getListCommentPost(), post.getListImage(), typePost, post.getListHashtag(),
+                        post.getPrivacyPostDetails()))
                 .collect(Collectors.toList());
     }
 }
