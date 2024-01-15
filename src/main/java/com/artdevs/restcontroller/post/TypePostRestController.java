@@ -1,5 +1,6 @@
 package com.artdevs.restcontroller.post;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,22 @@ public class TypePostRestController {
     @Autowired
     TypePostServiceImpl typepostRepositoryServiceImpl;
 
+    @Autowired
+    TypepostRepository typepostRepository;
+
     @PostMapping("/typepost")
     public ResponseEntity<TypePost> postTypePost(@RequestBody TypePostDTO typePostDTO) {
-        return ResponseEntity.ok(typepostRepositoryServiceImpl.saveTypePost(TypePostMapper.convertToTypePost(typePostDTO)));
+        return ResponseEntity
+                .ok(typepostRepositoryServiceImpl.saveTypePost(TypePostMapper.convertToTypePost(typePostDTO)));
     }
 
     @GetMapping("/typepost")
-    public ResponseEntity<List<TypePost>> getTypePost() {
-        return ResponseEntity.ok(typepostRepositoryServiceImpl.findAll());
+    public ResponseEntity<List<TypePostDTO>> getTypePost() {
+        List<TypePostDTO> listTypePostDTO = new ArrayList<>();
+        List<TypePost> listTypePost = typepostRepository.findAll();
+        for (TypePost typePost : listTypePost) {
+            listTypePostDTO.add(TypePostMapper.convertToTypePostDTO(typePost));
+        }
+        return ResponseEntity.ok(listTypePostDTO);
     }
 }

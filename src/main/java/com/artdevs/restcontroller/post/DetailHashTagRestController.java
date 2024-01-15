@@ -1,5 +1,6 @@
 package com.artdevs.restcontroller.post;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +24,23 @@ public class DetailHashTagRestController {
     @Autowired
     DetailHashTagServiceImpl detailHashTagServiceImpl;
 
+    @Autowired
+    DetailHashtagRepository detailHashtagRepository;
+
     @PostMapping("/detailhashtag")
     public ResponseEntity<DetailHashtag> postDetailHashTag(@RequestBody DetailHashtagDTO detailHashtagDTO) {
         return ResponseEntity
-                .ok(detailHashTagServiceImpl.saveDetailHashtag(DetailHashTagMapper.convertTodDetailHashtag(detailHashtagDTO)));
+                .ok(detailHashTagServiceImpl
+                        .saveDetailHashtag(DetailHashTagMapper.convertTodDetailHashtag(detailHashtagDTO)));
     }
 
     @GetMapping("/detailhashtag")
-    public ResponseEntity<List<DetailHashtag>> getDetailHashTag() {
-        return ResponseEntity.ok(detailHashTagServiceImpl.findAll());
+    public ResponseEntity<List<DetailHashtagDTO>> getDetailHashTag() {
+        List<DetailHashtagDTO> listDetailHashtagDTO = new ArrayList<>();
+        List<DetailHashtag> listDetailHashtag = detailHashtagRepository.findAll();
+        for (DetailHashtag detail : listDetailHashtag) {
+            listDetailHashtagDTO.add(DetailHashTagMapper.convertToDetailHashTagDTO(detail));
+        }
+        return ResponseEntity.ok(listDetailHashtagDTO);
     }
 }

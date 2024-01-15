@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.hibernate.annotations.Nationalized;
 
-import com.artdevs.domain.entities.post.Post;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +20,6 @@ public class TypePostDTO {
     @Nationalized
     private String typePostName;
 
-    private List<Post> ListPostOfType;
+    private List<PostDTO> ListPostOfType;
 
 }

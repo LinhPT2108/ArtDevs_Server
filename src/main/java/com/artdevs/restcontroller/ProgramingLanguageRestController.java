@@ -1,5 +1,6 @@
 package com.artdevs.restcontroller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.artdevs.domain.entities.user.ProgramingLanguage;
 import com.artdevs.dto.user.ProgramingLanguageDTO;
 import com.artdevs.mapper.ProgramingLanguageMapper;
+import com.artdevs.repositories.user.PrograminglanguageRepository;
 import com.artdevs.services.impl.user.ProgramingLanguageServiceImpl;
 import com.artdevs.utils.Path;
 
@@ -21,6 +23,9 @@ import com.artdevs.utils.Path;
 public class ProgramingLanguageRestController {
     @Autowired
     ProgramingLanguageServiceImpl programingLanguageServiceImpl;
+
+    @Autowired
+    PrograminglanguageRepository programingRepositories;
 
     @PostMapping("/programingLanguage")
     public ResponseEntity<ProgramingLanguage> postProgramingLanguage(
@@ -32,7 +37,12 @@ public class ProgramingLanguageRestController {
     }
 
     @GetMapping("/programingLanguage")
-    public ResponseEntity<List<ProgramingLanguage>> getProgramingLanguage() {
-        return ResponseEntity.ok(programingLanguageServiceImpl.findAll());
+    public ResponseEntity<List<ProgramingLanguageDTO>> getProgramingLanguage() {
+        List<ProgramingLanguageDTO> listProgramingLanguageDTO = new ArrayList<>();
+        List<ProgramingLanguage> listProgramingLanguages = programingRepositories.findAll();
+        for (ProgramingLanguage language : listProgramingLanguages) {
+            listProgramingLanguageDTO.add(ProgramingLanguageMapper.convertToProgramingLanguageDTO(language));
+        }
+        return ResponseEntity.ok(listProgramingLanguageDTO);
     }
 }

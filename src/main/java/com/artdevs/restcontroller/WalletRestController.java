@@ -1,5 +1,6 @@
 package com.artdevs.restcontroller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.artdevs.domain.entities.user.Wallet;
 import com.artdevs.dto.transition.WalletDTO;
 import com.artdevs.mapper.WalletMapper;
+import com.artdevs.repositories.user.UserRepository;
 import com.artdevs.repositories.user.WalletRepository;
 import com.artdevs.services.impl.transition.WalletServiceImpl;
 import com.artdevs.utils.Path;
@@ -23,13 +25,25 @@ public class WalletRestController {
     @Autowired
     WalletServiceImpl walletServiceImpl;
 
+    @Autowired
+    WalletRepository walletRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
     @PostMapping("/wallet")
     public ResponseEntity<Wallet> postWallet(@RequestBody WalletDTO walletDTO) {
+
         return ResponseEntity.ok(walletServiceImpl.saveWallet(WalletMapper.convertToWallet(walletDTO)));
     }
 
     @GetMapping("/wallet")
-    public ResponseEntity<List<Wallet>> getWallet() {
-        return ResponseEntity.ok(walletServiceImpl.findAll());
+    public ResponseEntity<List<WalletDTO>> getWallet() {
+        List<WalletDTO> listWalletDTO = new ArrayList<>();
+        List<Wallet> listWallet = walletRepository.findAll();
+        for (Wallet wallet : listWallet) {
+            listWalletDTO.add(WalletMapper.convertToWalletDTO(wallet));
+        }
+        return ResponseEntity.ok(listWalletDTO);
     }
 }

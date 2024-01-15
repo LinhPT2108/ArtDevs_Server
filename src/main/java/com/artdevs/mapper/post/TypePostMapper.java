@@ -1,12 +1,13 @@
 package com.artdevs.mapper.post;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 
 import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.post.TypePost;
+import com.artdevs.dto.post.PostDTO;
 import com.artdevs.dto.post.TypePostDTO;
 
 public class TypePostMapper {
@@ -23,13 +24,12 @@ public class TypePostMapper {
         return typePost;
     }
 
-    private static List<Post> getListPostOfType(TypePost typePost) {
-        return typePost
-                .getListPostOfType().stream().map(post -> new Post(post.getPostId(), post.getImageUrl(),
-                        post.getContent(), post.getTime(), post.getTimelineUserId(), false, post.getUser(),
-                        post.getListLikePost(), post.getListSharePost(), post.getListReportPost(),
-                        post.getListCommentPost(), post.getListImage(), typePost, post.getListHashtag(),
-                        post.getPrivacyPostDetails()))
-                .collect(Collectors.toList());
+    private static List<PostDTO> getListPostOfType(TypePost typePost) {
+        List<PostDTO> postDTO = new ArrayList<>();
+        List<Post> posts = typePost.getListPostOfType();
+        for (Post post : posts) {
+            postDTO.add(PostMapper.convertoPostDTO(post));
+        }
+        return postDTO;
     }
 }
