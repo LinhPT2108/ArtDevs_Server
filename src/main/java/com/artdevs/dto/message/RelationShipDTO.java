@@ -1,9 +1,11 @@
 package com.artdevs.dto.message;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 import org.hibernate.annotations.Nationalized;
 
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,5 +23,6 @@ public class RelationShipDTO {
     @Nationalized
     private String status;
 
-    private Timestamp timeRelation;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timeRelation;
 }
