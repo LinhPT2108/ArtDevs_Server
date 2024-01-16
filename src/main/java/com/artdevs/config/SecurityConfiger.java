@@ -143,7 +143,8 @@ public class SecurityConfiger {
 		 */
 		@Bean
 		SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-			http.csrf(csrf -> csrf.disable()).authorizeHttpRequests((authz) -> authz
+			http.csrf(csrf -> csrf.disable())
+			.authorizeHttpRequests((authz) -> authz
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/*"),
 							AntPathRequestMatcher.antMatcher("/account/login"),
 							AntPathRequestMatcher.antMatcher("/product"), AntPathRequestMatcher.antMatcher("/product/**"),
@@ -200,7 +201,7 @@ public class SecurityConfiger {
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-wishlist"),
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-orders-by-user"),
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-best-seller"))
-					.hasAnyAuthority("admin")
+					.hasAnyAuthority("Admin")
 					.anyRequest().permitAll())
 
 //		        .formLogin(login -> login
@@ -208,8 +209,8 @@ public class SecurityConfiger {
 //		                .defaultSuccessUrl("/", false)
 //		                .permitAll()
 //		                )
-					.formLogin(login -> login.loginPage("/account/login").loginProcessingUrl("/account/login")
-	.usernameParameter("email").passwordParameter("password").defaultSuccessUrl("/", false))
+					.formLogin(login -> login.loginPage("/account/login").loginProcessingUrl("/api/login")
+	.usernameParameter("email").passwordParameter("password").defaultSuccessUrl("/login/success", true))
 					.logout(logout -> logout.logoutUrl("/account/logout").logoutSuccessUrl("/account/login")
 							.invalidateHttpSession(true).deleteCookies("JSESSIONID"))
 					.authenticationProvider(authenticationProvider)

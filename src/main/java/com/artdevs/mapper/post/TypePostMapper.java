@@ -14,7 +14,7 @@ public class TypePostMapper {
 
     public static TypePostDTO convertToTypePostDTO(TypePost typePost) {
         TypePostDTO typePostDTO = modelMapper.map(typePost, TypePostDTO.class);
-        typePostDTO.setListPostOfType(getListPostOfType(typePost));
+//        typePostDTO.setListPostOfType(getListPostOfType(typePost));
         return typePostDTO;
     }
 
@@ -23,12 +23,12 @@ public class TypePostMapper {
         return typePost;
     }
 
-    private static List<Post> getListPostOfType(TypePost typePost) {
-        return typePost
-                .getListPostOfType().stream().map(post -> new Post(post.getPostId(), post.getImageUrl(),
-                        post.getContent(), post.getTime(), post.getTimelineUserId(), post.getUser(),
-                        post.getListLikePost(), post.getListSharePost(), post.getListReportPost(),
-                        post.getListCommentPost(), post.getListImage(), typePost, post.getListHashtag()))
-                .collect(Collectors.toList());
-    }
+//    private static List<Post> getListPostOfType(TypePost typePost) {
+//        return typePost
+//                .getListPostOfType().stream().map(post -> new Post(post.getPostId(), post.getImageUrl(),
+//                        post.getContent(), post.getTime(), post.getTimelineUserId(), post.getUser(),
+//                        post.getListLikePost(), post.getListSharePost(), post.getListReportPost(),
+//                        post.getListCommentPost(), post.getListImage(), typePost, post.getListHashtag()))
+//                .collect(Collectors.toList());
+//    }
 }

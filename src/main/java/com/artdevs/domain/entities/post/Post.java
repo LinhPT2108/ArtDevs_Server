@@ -6,9 +6,12 @@ import java.util.List;
 import org.hibernate.annotations.Nationalized;
 
 import com.artdevs.domain.entities.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -17,18 +20,19 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Post {
 	@Id
 	private String postId;
-
-	@Column
-	private String imageUrl;
 
 	@Nationalized
 	@Column
@@ -45,33 +49,40 @@ public class Post {
 	@Column
 	private boolean isDel;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private User user;
-
-	@OneToMany(mappedBy = "postLikeId")
+	
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "postLikeId")
 	private List<Likes> listLikePost;
-
-	@OneToMany(mappedBy = "postShareId")
+	
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "postShareId")
 	private List<Share> listSharePost;
-
-	@OneToMany(mappedBy = "postReportId")
+	
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "postReportId")
 	private List<Report> listReportPost;
-
-	@OneToMany(mappedBy = "postCommentId")
+	
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "postCommentId")
 	private List<Comment> listCommentPost;
-
-	@OneToMany(mappedBy = "postImage")
+	
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "postImage")
 	private List<ImageOfPost> listImage;
-
-	@ManyToOne
+	
+	
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "typepostId")
 	private TypePost postType;
-
-	@OneToMany(mappedBy = "postHashtag")
+	
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "postHashtag")
 	private List<HashTag> listHashtag;
 	
-
-	@OneToMany(mappedBy = "post")
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "post")
 	private List<PrivacyPostDetail> privacyPostDetails;
 }

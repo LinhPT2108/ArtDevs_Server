@@ -24,7 +24,7 @@ public class CommentRestController {
 
     @PostMapping("/comment")
     public ResponseEntity<Comment> postComment(@RequestBody CommentDTO commentDTO) {
-        return ResponseEntity.ok(commentServiceImpl.saveComment(CommentMapper.convertToComment(commentDTO)));
+        return ResponseEntity.ok(commentServiceImpl.saveComment(CommentMapper.convertToEntity(commentDTO)));
     }
 
     @GetMapping("/comment")

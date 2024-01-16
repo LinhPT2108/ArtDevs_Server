@@ -13,7 +13,7 @@ import com.artdevs.config.auth.AuthenticationRequest;
 import com.artdevs.config.auth.AuthenticationResponse;
 import com.artdevs.domain.entities.user.Role;
 import com.artdevs.domain.entities.user.User;
-import com.artdevs.dto.UserDTO;
+import com.artdevs.dto.user.UserDTO;
 import com.artdevs.mapper.UserMapper;
 import com.artdevs.repositories.user.RoleRepository;
 import com.artdevs.repositories.user.UserRepository;
@@ -35,15 +35,17 @@ public class AuthenticationService {
 	private final AuthenticationManager authenticationManager;
 
 	public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
-//		System.out.println(authenticationRequest.getEmail());
-		User user = userrep.findByEmail(authenticationRequest.getEmail()).get();
-//		System.out.println(user.getEmail());
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword() ));
 		
+		User user = userrep.findByEmail(authenticationRequest.getEmail()).get();
+		
+		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword() ));
+	
 		UserDTO userdto = UserMapper.UserConvertToUserDTO(user);
+		
 		Role role = null;
 		if(user!=null) {
 			role = rolerep.findByUserRole(user);
+			System.out.println("role"+ role.getRoleName());
 		}
 		
 		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();

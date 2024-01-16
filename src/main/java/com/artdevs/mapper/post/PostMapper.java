@@ -16,7 +16,7 @@ import com.artdevs.dto.post.PostDTO;
 
 public class PostMapper {
 	private static final ModelMapper modelMapper = new ModelMapper();
-	private static PostDTO convertoDTO(Post post) {
+	public static PostDTO convertoDTO(Post post) {
 		PostDTO postdto = modelMapper.map(post, PostDTO.class);
 		postdto.setListCommentPost(getComment(post));
 		postdto.setListHashtag(getHashtag(post));

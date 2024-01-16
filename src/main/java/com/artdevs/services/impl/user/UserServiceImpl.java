@@ -23,6 +23,8 @@ public class UserServiceImpl implements UserService {
         Optional<User> userOptional = userRepository.findById(userId);
         return userOptional.orElse(null);
     }
+    
+  
 
     @Override
     public List<User> findAll() {

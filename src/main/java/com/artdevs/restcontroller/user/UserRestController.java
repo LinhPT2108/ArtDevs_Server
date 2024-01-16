@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.artdevs.domain.entities.user.Demand;
 import com.artdevs.domain.entities.user.Skill;
 import com.artdevs.domain.entities.user.User;
-import com.artdevs.dto.UserDTO;
 import com.artdevs.dto.UserRegisterDTO;
+import com.artdevs.dto.user.UserDTO;
 import com.artdevs.mapper.UserMapper;
 import com.artdevs.repositories.user.DemandRepository;
 import com.artdevs.repositories.user.PrograminglanguageRepository;
@@ -67,7 +67,9 @@ public class UserRestController {
 		}
 //		 System.out.println(demandrepositories.findByUser(user));
 //		 user.setUserSkill(skillrep.findByUser(user));
-		return ResponseEntity.ok(user);
+		
+
+ 		return ResponseEntity.ok(user);
 	}
 	
 	@GetMapping("/register/{userid}")
