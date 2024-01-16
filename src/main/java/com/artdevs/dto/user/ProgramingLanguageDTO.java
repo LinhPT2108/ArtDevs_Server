@@ -4,9 +4,6 @@ import java.util.List;
 
 import org.hibernate.annotations.Nationalized;
 
-import com.artdevs.domain.entities.user.Demand;
-import com.artdevs.domain.entities.user.Skill;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +20,7 @@ public class ProgramingLanguageDTO {
     @Nationalized
     private String LanguageName;
 
-    private List<Demand> listDemand;
+    private List<DemandDTO> listDemand;
 
-    private List<Skill> listSkills;
+    private List<SkillDTO> listSkills;
 }

@@ -1,5 +1,6 @@
 package com.artdevs.restcontroller.post;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,21 @@ public class HashTagRestController {
     @Autowired
     HashTagServiceImpl hashTagServiceImpl;
 
+    @Autowired
+    HashtagRepository hashtagRepository;
+
     @PostMapping("/hashtag")
     public ResponseEntity<HashTag> postHashTag(@RequestBody HashTagDTO hashTagDTO) {
         return ResponseEntity.ok(hashTagServiceImpl.saveHashTag(HashTagMapper.convertToHashTag(hashTagDTO)));
     }
 
     @GetMapping("/hashtag")
-    public ResponseEntity<List<HashTag>> getHashTag() {
-        return ResponseEntity.ok(hashTagServiceImpl.findAll());
+    public ResponseEntity<List<HashTagDTO>> getHashTag() {
+        List<HashTagDTO> listHashTagDTO = new ArrayList<>();
+        List<HashTag> lisHashTag = hashtagRepository.findAll();
+        for (HashTag hashTag : lisHashTag) {
+            listHashTagDTO.add(HashTagMapper.convertToHashTagDTO(hashTag));
+        }
+        return ResponseEntity.ok(listHashTagDTO);
     }
 }

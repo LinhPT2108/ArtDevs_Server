@@ -1,5 +1,6 @@
 package com.artdevs.restcontroller.post;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,21 @@ public class ShareRestController {
     @Autowired
     ShareServiceImpl shareServiceImpl;
 
+    @Autowired
+    ShareRepository shareRepository;
+
     @PostMapping("/share")
     public ResponseEntity<Share> postShare(@RequestBody ShareDTO shareDTO) {
         return ResponseEntity.ok(shareServiceImpl.saveShare(ShareMapper.convertToShare(shareDTO)));
     }
 
     @GetMapping("/share")
-    public ResponseEntity<List<Share>> getShare() {
-        return ResponseEntity.ok(shareServiceImpl.findAll());
+    public ResponseEntity<List<ShareDTO>> getShare() {
+        List<ShareDTO> listShareDTO = new ArrayList<>();
+        List<Share> listShare = shareRepository.findAll();
+        for (Share share : listShare) {
+            listShareDTO.add(ShareMapper.convertToShareDTO(share));
+        }
+        return ResponseEntity.ok(listShareDTO);
     }
 }

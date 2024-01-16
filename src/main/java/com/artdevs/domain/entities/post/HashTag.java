@@ -9,7 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,19 +18,21 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+
 public class HashTag {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@Column
 	private int count;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="postId")
+	@JoinColumn(name = "postId")
 	private Post postHashtag;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="detailhashtagId")
+	@JoinColumn(name = "detailhashtagId")
+
 	private DetailHashtag HashtagDetail;
 }

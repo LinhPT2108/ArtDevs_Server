@@ -1,5 +1,6 @@
 package com.artdevs.restcontroller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class ProgramingLanguageRestController {
     @Autowired
     ProgramingLanguageServiceImpl programingLanguageServiceImpl;
 
+    @Autowired
+    PrograminglanguageRepository programingRepositories;
+
     @PostMapping("/programingLanguage")
     public ResponseEntity<ProgramingLanguage> postProgramingLanguage(
             @RequestBody ProgramingLanguageDTO programingLanguageDTO) {
@@ -33,7 +37,12 @@ public class ProgramingLanguageRestController {
     }
 
     @GetMapping("/programingLanguage")
-    public ResponseEntity<List<ProgramingLanguage>> getProgramingLanguage() {
-        return ResponseEntity.ok(programingLanguageServiceImpl.findAll());
+    public ResponseEntity<List<ProgramingLanguageDTO>> getProgramingLanguage() {
+        List<ProgramingLanguageDTO> listProgramingLanguageDTO = new ArrayList<>();
+        List<ProgramingLanguage> listProgramingLanguages = programingRepositories.findAll();
+        for (ProgramingLanguage language : listProgramingLanguages) {
+            listProgramingLanguageDTO.add(ProgramingLanguageMapper.convertToProgramingLanguageDTO(language));
+        }
+        return ResponseEntity.ok(listProgramingLanguageDTO);
     }
 }

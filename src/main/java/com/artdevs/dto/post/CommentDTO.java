@@ -1,10 +1,6 @@
 package com.artdevs.dto.post;
 
 import java.util.Date;
-import java.util.List;
-
-import com.artdevs.domain.entities.post.Post;
-import com.artdevs.domain.entities.user.User;
 
 import org.hibernate.annotations.Nationalized;
 
@@ -33,14 +29,12 @@ public class CommentDTO {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeComment;
-    
-    private String UserID;
-    
-    private String PostID;
 
+    private String UserID;
+
+    private String PostID;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeUserId;
-
 
 }

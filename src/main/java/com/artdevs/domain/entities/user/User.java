@@ -17,9 +17,7 @@ import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.post.Report;
 import com.artdevs.domain.entities.post.Share;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,9 +38,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class User implements UserDetails {
-	
+
 	@Id
 	private String userId;
 
@@ -98,17 +96,15 @@ public class User implements UserDetails {
 	@Nationalized
 	@Column
 	private String username;
-	
-
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userRole")
 	private Role role;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Picture> userPicture;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Log> userLog;
@@ -117,14 +113,14 @@ public class User implements UserDetails {
 	// private List<Wallet> userWallet;
 
 
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Demand> userDemand;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Skill> userSkill;
-	
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
@@ -181,14 +177,17 @@ public class User implements UserDetails {
 	@JsonIgnore
 	@OneToMany(mappedBy = "userReportId")
 	private List<Comment> listComment;
+
 	@Override
 	public String getUsername() {
 		return this.email;
 	}
+
 	@Override
 	public String getPassword() {
 		return this.password;
 	}
+
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub
@@ -207,7 +206,7 @@ public class User implements UserDetails {
 		return true;
 	}
 
-	
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -219,6 +218,5 @@ public class User implements UserDetails {
 		// TODO Auto-generated method stub
 		return true;
 	}
-
 
 }

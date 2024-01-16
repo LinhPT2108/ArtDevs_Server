@@ -1,5 +1,6 @@
 package com.artdevs.restcontroller.post;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,21 @@ public class ReportRestController {
     @Autowired
     ReportServiceImpl reportServiceImpl;
 
+    @Autowired
+    ReportRepository reportRepository;
+
     @PostMapping("/report")
     public ResponseEntity<Report> postReport(@RequestBody ReportDTO reportDTO) {
         return ResponseEntity.ok(reportServiceImpl.saveReport(ReportMapper.convertToReport(reportDTO)));
     }
 
     @GetMapping("/report")
-    public ResponseEntity<List<Report>> getReport() {
-        return ResponseEntity.ok(reportServiceImpl.findAll());
+    public ResponseEntity<List<ReportDTO>> getReport() {
+        List<ReportDTO> listReportDTO = new ArrayList<>();
+        List<Report> listReport = reportRepository.findAll();
+        for (Report report : listReport) {
+            listReportDTO.add(ReportMapper.convertToReprotDTO(report));
+        }
+        return ResponseEntity.ok(listReportDTO);
     }
 }

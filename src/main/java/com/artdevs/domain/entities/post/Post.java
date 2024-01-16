@@ -7,7 +7,9 @@ import org.hibernate.annotations.Nationalized;
 
 import com.artdevs.domain.entities.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,6 +31,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Post {
 	@Id
@@ -45,13 +48,14 @@ public class Post {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timelineUserId;
-	
+
 	@Column
 	private boolean isDel;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private User user;
+
 	
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.EAGER,mappedBy = "postLikeId")
@@ -84,5 +88,7 @@ public class Post {
 	
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.EAGER,mappedBy = "post")
+
+
 	private List<PrivacyPostDetail> privacyPostDetails;
 }

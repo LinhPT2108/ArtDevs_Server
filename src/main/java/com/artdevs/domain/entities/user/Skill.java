@@ -18,7 +18,7 @@ import lombok.Setter;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter 
+@Getter
 @Setter
 public class Skill {
 	@Id

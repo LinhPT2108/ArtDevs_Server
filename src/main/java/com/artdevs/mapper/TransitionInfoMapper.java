@@ -11,8 +11,8 @@ public class TransitionInfoMapper {
 
     public static TransitionInfoDTO convertToTransitionInfoDTO(TransitionInfo transitionInfo) {
         TransitionInfoDTO transitionInfoDTO = modelMapper.map(transitionInfo, TransitionInfoDTO.class);
-        transitionInfoDTO.setUserId1(transitionInfo.getUser1().getUserId());
-        transitionInfoDTO.setUserId2(transitionInfo.getUser2().getUserId());
+        transitionInfoDTO.setUserId1(transitionInfo.getUser1().getUserId().toString());
+        transitionInfoDTO.setUserId2(transitionInfo.getUser2().getUserId().toString());
         transitionInfoDTO.setListWallet(transitionInfo.getWalletOfUser().getId());
         return transitionInfoDTO;
     }

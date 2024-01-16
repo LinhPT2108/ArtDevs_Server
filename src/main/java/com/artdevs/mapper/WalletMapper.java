@@ -1,13 +1,13 @@
 package com.artdevs.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 
 import com.artdevs.domain.entities.user.MethodPay;
-import com.artdevs.domain.entities.user.TransitionInfo;
 import com.artdevs.domain.entities.user.Wallet;
+import com.artdevs.dto.transition.MethodPayDTO;
 import com.artdevs.dto.transition.WalletDTO;
 
 public class WalletMapper {
@@ -15,8 +15,8 @@ public class WalletMapper {
 
     public static WalletDTO convertToWalletDTO(Wallet wallet) {
         WalletDTO walletDTO = modelMapper.map(wallet, WalletDTO.class);
-        wallet.setTrainsition(getListTransitionInfo(wallet));
-        wallet.setWalletMethodPay(getMethodPays(wallet));
+        // walletDTO.setListTransitionInfo(getListTransitionInfo(wallet));
+        walletDTO.setListMethodPay(getMethodPays(wallet));
         return walletDTO;
     }
 
@@ -25,16 +25,21 @@ public class WalletMapper {
         return wallet;
     }
 
-    private static List<TransitionInfo> getListTransitionInfo(Wallet wallet) {
-        return wallet.getTrainsition().stream()
-                .map(tran -> new TransitionInfo(tran.getId(), tran.getPrice_match(), tran.getTimeTransiton(),
-                        tran.getUser1(), tran.getUser2(), wallet))
-                .collect(Collectors.toList());
-    }
+    // private static List<TransitionInfoDTO> getListTransitionInfo(Wallet wallet) {
+    // List<TransitionInfoDTO> transitionInfoDTO = new ArrayList<>();
+    // List<TransitionInfo> transitionInfos = wallet.getTrainsition();
+    // for (TransitionInfo transitionInfo : transitionInfos) {
+    // transitionInfoDTO.add(TransitionInfoMapper.convertToTransitionInfoDTO(transitionInfo));
+    // }
+    // return transitionInfoDTO;
+    // }
 
-    private static List<MethodPay> getMethodPays(Wallet wallet) {
-        return wallet.getWalletMethodPay().stream().map(method -> new MethodPay(method.getId(), method.getPayName(),
-                method.getUser(), method.getWallet()))
-                .collect(Collectors.toList());
+    private static List<MethodPayDTO> getMethodPays(Wallet wallet) {
+        List<MethodPayDTO> methodPayDTO = new ArrayList<>();
+        List<MethodPay> methodPays = wallet.getWalletMethodPay();
+        for (MethodPay methodPay : methodPays) {
+            methodPayDTO.add(MethodPayMapper.convertToMethodPayDTO(methodPay));
+        }
+        return methodPayDTO;
     }
 }

@@ -13,7 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,7 +30,7 @@ public class TypePost {
 	@Nationalized
 	@Column
 	private String typePostName;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "postType")
 	private List<Post> ListPostOfType;

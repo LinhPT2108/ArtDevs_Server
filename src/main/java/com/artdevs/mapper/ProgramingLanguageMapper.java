@@ -1,7 +1,7 @@
 package com.artdevs.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 
@@ -26,16 +26,23 @@ public class ProgramingLanguageMapper {
         return programingLanguage;
     }
 
-    private static List<Demand> getListDemand(ProgramingLanguage language) {
-        return language.getDemandLanguage().stream()
-                .map(demand -> new Demand(demand.getId(), demand.getDescription(), demand.getDesiredTime(),
-                        demand.getUser(), demand.getLanguage()))
-                .collect(Collectors.toList());
+    private static List<DemandDTO> getListDemand(ProgramingLanguage language) {
+        List<DemandDTO> demandDTO = new ArrayList<>();
+        List<Demand> demands = language.getDemandLanguage();
+        for (Demand demand : demands) {
+            demandDTO.add(DemandMapper.convertToDemandDTO(demand));
+        }
+
+        return demandDTO;
     }
 
-    private static List<Skill> getListSkill(ProgramingLanguage language) {
-        return language.getSkillLanguage().stream()
-                .map(skill -> new Skill(skill.getId(), skill.getDescription(), skill.getUser(), skill.getLanguage()))
-                .collect(Collectors.toList());
+    private static List<SkillDTO> getListSkill(ProgramingLanguage language) {
+        List<SkillDTO> skillDTO = new ArrayList<>();
+        List<Skill> skills = language.getSkillLanguage();
+        for (Skill skill : skills) {
+            skillDTO.add(SkillMapper.convertToSkillDTO(skill));
+        }
+
+        return skillDTO;
     }
 }
