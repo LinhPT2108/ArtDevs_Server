@@ -15,21 +15,21 @@ import com.artdevs.domain.entities.user.MethodPay;
 import com.artdevs.dto.transition.MethodPayDTO;
 import com.artdevs.mapper.MethodPayMapper;
 import com.artdevs.repositories.user.MethodpayRepository;
-import com.artdevs.services.impl.transition.MethodPayServiceImpl;
+import com.artdevs.services.MethodPayService;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class MethodPayRestController {
     @Autowired
-    MethodPayServiceImpl methodPayServiceImpl;
+    MethodPayService methodPayService;
 
     @Autowired
     MethodpayRepository methodpayRepository;
 
     @PostMapping("/methodpay")
     public ResponseEntity<MethodPay> postMethodPay(@RequestBody MethodPayDTO methodPayDTO) {
-        return ResponseEntity.ok(methodPayServiceImpl.saveMethodPay(MethodPayMapper.convertToMethodPay(methodPayDTO)));
+        return ResponseEntity.ok(methodPayService.saveMethodPay(MethodPayMapper.convertToMethodPay(methodPayDTO)));
     }
 
     @GetMapping("/methodpay")

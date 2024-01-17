@@ -1,8 +1,5 @@
 package com.artdevs.mapper.post;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
@@ -14,8 +11,9 @@ public class CommentMapper {
 
  
 
-    public static CommentDTO convertToDTO(Comment comment) {
-        return modelMapper.map(comment, CommentDTO.class);
+        commentDTO.setPostID(comment.getPostCommentId().getPostId());
+
+        return commentDTO;
     }
 
     public static Comment convertToEntity(CommentDTO commentDTO) {
@@ -31,11 +29,12 @@ public class CommentMapper {
     public static List<Comment> convertListToEntity(List<CommentDTO> commentDTOs) {
         return modelMapper.map(commentDTOs, new TypeToken<List<Comment>>() {}.getType());
     }
-    
-//	private static List<User> getComment(Comment comment){
-//		return comment
-//				.getUserReportId().stream().map(u -> new User(cmt.getId(),cmt.getContent(),cmt.getImageUrl(),cmt.getCount()
-//				,cmt.getTimeComment(),cmt.getTimeComment(),cmt.getUserReportId(),post))
-//				.collect(Collectors.toList());
-//	}
+
+    // private static List<User> getComment(Comment comment){
+    // return comment
+    // .getUserReportId().stream().map(u -> new
+    // User(cmt.getId(),cmt.getContent(),cmt.getImageUrl(),cmt.getCount()
+    // ,cmt.getTimeComment(),cmt.getTimeComment(),cmt.getUserReportId(),post))
+    // .collect(Collectors.toList());
+    // }
 }

@@ -15,21 +15,21 @@ import com.artdevs.domain.entities.post.HashTag;
 import com.artdevs.dto.post.HashTagDTO;
 import com.artdevs.mapper.post.HashTagMapper;
 import com.artdevs.repositories.post.HashtagRepository;
-import com.artdevs.services.impl.post.HashTagServiceImpl;
+import com.artdevs.services.HashTagService;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class HashTagRestController {
     @Autowired
-    HashTagServiceImpl hashTagServiceImpl;
+    HashTagService hashTagService;
 
     @Autowired
     HashtagRepository hashtagRepository;
 
     @PostMapping("/hashtag")
     public ResponseEntity<HashTag> postHashTag(@RequestBody HashTagDTO hashTagDTO) {
-        return ResponseEntity.ok(hashTagServiceImpl.saveHashTag(HashTagMapper.convertToHashTag(hashTagDTO)));
+        return ResponseEntity.ok(hashTagService.saveHashTag(HashTagMapper.convertToHashTag(hashTagDTO)));
     }
 
     @GetMapping("/hashtag")

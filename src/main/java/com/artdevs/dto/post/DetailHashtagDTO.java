@@ -2,8 +2,6 @@ package com.artdevs.dto.post;
 
 import java.util.List;
 
-import org.hibernate.annotations.Nationalized;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,5 +17,5 @@ public class DetailHashtagDTO {
 
     private String hashtagText;
 
-    private List<HashTagDTO> listHashTag;
+    private List<HashTagDTO> ListHashtagOfDetail;
 }

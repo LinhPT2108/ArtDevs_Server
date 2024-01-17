@@ -15,21 +15,21 @@ import com.artdevs.domain.entities.post.Comment;
 import com.artdevs.dto.post.CommentDTO;
 import com.artdevs.mapper.post.CommentMapper;
 import com.artdevs.repositories.post.CommentRepository;
-import com.artdevs.services.impl.post.CommentServiceImpl;
+import com.artdevs.services.CommentService;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class CommentRestController {
     @Autowired
-    CommentServiceImpl commentServiceImpl;
+    CommentService commentService;
 
     @Autowired
     CommentRepository commentRepository;
 
     @PostMapping("/comment")
     public ResponseEntity<Comment> postComment(@RequestBody CommentDTO commentDTO) {
-        return ResponseEntity.ok(commentServiceImpl.saveComment(CommentMapper.convertToEntity(commentDTO)));
+        return ResponseEntity.ok(commentService.saveComment(CommentMapper.convertToComment(commentDTO)));
     }
 
     @GetMapping("/comment")

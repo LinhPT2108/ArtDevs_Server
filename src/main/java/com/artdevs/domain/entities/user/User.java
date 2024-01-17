@@ -44,7 +44,6 @@ public class User implements UserDetails {
 	@Id
 	private String userId;
 
-
 	@Nationalized
 	@Column
 	private String address;
@@ -64,13 +63,11 @@ public class User implements UserDetails {
 	@Column
 	private String ward;
 
-
 	@Column
 	private boolean isDelete;
 
 	@Column
 	private String email;
-
 
 	@Nationalized
 	@Column
@@ -206,7 +203,6 @@ public class User implements UserDetails {
 		return true;
 	}
 
-
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -218,5 +214,6 @@ public class User implements UserDetails {
 		// TODO Auto-generated method stub
 		return true;
 	}
+
 
 }

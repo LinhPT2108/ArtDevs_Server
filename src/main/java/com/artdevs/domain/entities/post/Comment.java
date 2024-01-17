@@ -46,7 +46,6 @@ public class Comment {
 	private Date timeComment;
 
 
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private User userReportId;
