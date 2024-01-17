@@ -44,12 +44,6 @@ public class User implements UserDetails {
 	@Id
 	private String userId;
 
-	@Column
-	private boolean isAccountNonExpired;
-
-	@Column
-	private boolean isAccountNonLocked;
-
 	@Nationalized
 	@Column
 	private String address;
@@ -70,16 +64,10 @@ public class User implements UserDetails {
 	private String ward;
 
 	@Column
-	private boolean isCreadentialsNonExprired;
-
-	@Column
 	private boolean isDelete;
 
 	@Column
 	private String email;
-
-	@Column
-	private boolean isEnabled;
 
 	@Nationalized
 	@Column
@@ -214,15 +202,16 @@ public class User implements UserDetails {
 	}
 
 	@Override
-	public boolean isEnabled() {
-		return this.isEnabled;
-	}
-
-	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(this.role.getRoleName()));
 		return List.of(new SimpleGrantedAuthority(authorities.toString()));
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 }

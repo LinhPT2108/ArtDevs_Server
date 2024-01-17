@@ -46,10 +46,6 @@ public class Comment {
 	@Column
 	private Date timeComment;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column
-	private Date timeUserId;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private User userReportId;

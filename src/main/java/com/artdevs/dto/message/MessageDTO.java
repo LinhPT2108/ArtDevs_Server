@@ -5,8 +5,6 @@ import java.util.List;
 
 import com.artdevs.domain.entities.message.PictureOfMessage;
 
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +26,6 @@ public class MessageDTO {
 
     private String status;
 
-    @Temporal(TemporalType.TIMESTAMP)
     private Date timeMessage;
 
     private String relationShipId;

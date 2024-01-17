@@ -15,7 +15,7 @@ import com.artdevs.domain.entities.post.Share;
 import com.artdevs.dto.post.ShareDTO;
 import com.artdevs.mapper.post.ShareMapper;
 import com.artdevs.repositories.post.ShareRepository;
-import com.artdevs.services.impl.post.ShareServiceImpl;
+import com.artdevs.services.ShareService;
 import com.artdevs.utils.Path;
 
 @RestController
@@ -23,14 +23,14 @@ import com.artdevs.utils.Path;
 public class ShareRestController {
 
     @Autowired
-    ShareServiceImpl shareServiceImpl;
+    ShareService shareService;
 
     @Autowired
     ShareRepository shareRepository;
 
     @PostMapping("/share")
     public ResponseEntity<Share> postShare(@RequestBody ShareDTO shareDTO) {
-        return ResponseEntity.ok(shareServiceImpl.saveShare(ShareMapper.convertToShare(shareDTO)));
+        return ResponseEntity.ok(shareService.saveShare(ShareMapper.convertToShare(shareDTO)));
     }
 
     @GetMapping("/share")

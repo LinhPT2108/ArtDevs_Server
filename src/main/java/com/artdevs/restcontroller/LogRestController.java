@@ -15,21 +15,21 @@ import com.artdevs.domain.entities.user.Log;
 import com.artdevs.dto.user.LogDTO;
 import com.artdevs.mapper.LogMapper;
 import com.artdevs.repositories.user.LogRepository;
-import com.artdevs.services.impl.user.LogServiceImpl;
+import com.artdevs.services.LogService;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class LogRestController {
     @Autowired
-    LogServiceImpl logServiceImpl;
+    LogService logService;
 
     @Autowired
     LogRepository LogRepository;
 
     @PostMapping("/log")
     public ResponseEntity<Log> postLog(@RequestBody LogDTO logDTO) {
-        return ResponseEntity.ok(logServiceImpl.saveLog(LogMapper.convertToLog(logDTO)));
+        return ResponseEntity.ok(logService.saveLog(LogMapper.convertToLog(logDTO)));
     }
 
     @GetMapping("/log")

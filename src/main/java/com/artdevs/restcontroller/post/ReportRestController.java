@@ -15,21 +15,21 @@ import com.artdevs.domain.entities.post.Report;
 import com.artdevs.dto.post.ReportDTO;
 import com.artdevs.mapper.post.ReportMapper;
 import com.artdevs.repositories.post.ReportRepository;
-import com.artdevs.services.impl.post.ReportServiceImpl;
+import com.artdevs.services.ReportService;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class ReportRestController {
     @Autowired
-    ReportServiceImpl reportServiceImpl;
+    ReportService reportService;
 
     @Autowired
     ReportRepository reportRepository;
 
     @PostMapping("/report")
     public ResponseEntity<Report> postReport(@RequestBody ReportDTO reportDTO) {
-        return ResponseEntity.ok(reportServiceImpl.saveReport(ReportMapper.convertToReport(reportDTO)));
+        return ResponseEntity.ok(reportService.saveReport(ReportMapper.convertToReport(reportDTO)));
     }
 
     @GetMapping("/report")

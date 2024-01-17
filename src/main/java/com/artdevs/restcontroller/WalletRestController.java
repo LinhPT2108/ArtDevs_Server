@@ -16,14 +16,14 @@ import com.artdevs.dto.transition.WalletDTO;
 import com.artdevs.mapper.WalletMapper;
 import com.artdevs.repositories.user.UserRepository;
 import com.artdevs.repositories.user.WalletRepository;
-import com.artdevs.services.impl.transition.WalletServiceImpl;
+import com.artdevs.services.WalletService;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class WalletRestController {
     @Autowired
-    WalletServiceImpl walletServiceImpl;
+    WalletService walletService;
 
     @Autowired
     WalletRepository walletRepository;
@@ -34,7 +34,7 @@ public class WalletRestController {
     @PostMapping("/wallet")
     public ResponseEntity<Wallet> postWallet(@RequestBody WalletDTO walletDTO) {
 
-        return ResponseEntity.ok(walletServiceImpl.saveWallet(WalletMapper.convertToWallet(walletDTO)));
+        return ResponseEntity.ok(walletService.saveWallet(WalletMapper.convertToWallet(walletDTO)));
     }
 
     @GetMapping("/wallet")

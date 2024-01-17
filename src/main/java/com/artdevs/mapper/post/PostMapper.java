@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 
-import com.artdevs.domain.entities.post.Comment;
 import com.artdevs.domain.entities.post.HashTag;
 import com.artdevs.domain.entities.post.ImageOfPost;
 import com.artdevs.domain.entities.post.Likes;
@@ -19,7 +18,7 @@ public class PostMapper {
 
 	public static PostDTO convertoPostDTO(Post post) {
 		PostDTO postdto = modelMapper.map(post, PostDTO.class);
-		postdto.setListCommentPost(getComment(post));
+		// postdto.setListCommentPost(getComment(post));
 		postdto.setListHashtag(getHashtag(post));
 		postdto.setListImage(getImage(post));
 		postdto.setListLikePost(getLikepost(post));
@@ -34,13 +33,14 @@ public class PostMapper {
 		return post;
 	}
 
-	private static List<Comment> getComment(Post post) {
-		return post
-				.getListCommentPost().stream()
-				.map(cmt -> new Comment(cmt.getId(), cmt.getContent(), cmt.getImageUrl(), cmt.getCount(),
-						cmt.getTimeComment(), cmt.getTimeComment(), cmt.getUserReportId(), post))
-				.collect(Collectors.toList());
-	}
+	// private static List<Comment> getComment(Post post) {
+	// return post
+	// .getListCommentPost().stream()
+	// .map(cmt -> new Comment(cmt.getId(), cmt.getContent(), cmt.getImageUrl(),
+	// cmt.getCount(),
+	// cmt.getTimeComment(), cmt.getTimeComment(), post))
+	// .collect(Collectors.toList());
+	// }
 
 	private static List<HashTag> getHashtag(Post post) {
 		return post

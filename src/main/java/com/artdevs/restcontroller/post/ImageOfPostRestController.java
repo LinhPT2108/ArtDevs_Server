@@ -13,23 +13,23 @@ import org.springframework.web.bind.annotation.RestController;
 import com.artdevs.domain.entities.post.ImageOfPost;
 import com.artdevs.dto.post.ImageOfPostDTO;
 import com.artdevs.mapper.post.ImageOfPostMapper;
-import com.artdevs.repositories.post.ImageofpostRepository;
-import com.artdevs.services.impl.post.ImageOfPostServiceImpl;
+import com.artdevs.services.ImageOfPostService;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class ImageOfPostRestController {
     @Autowired
-    ImageOfPostServiceImpl imageofpostRepositoryServiceImpl;
+    ImageOfPostService imageofpostRepositoryService;
 
     @PostMapping("/imageofpost")
     public ResponseEntity<ImageOfPost> postImageOfPost(@RequestBody ImageOfPostDTO imageOfPostDTO) {
-        return ResponseEntity.ok(imageofpostRepositoryServiceImpl.saveImageOfPost(ImageOfPostMapper.convertToImageOfPost(imageOfPostDTO)));
+        return ResponseEntity.ok(
+                imageofpostRepositoryService.saveImageOfPost(ImageOfPostMapper.convertToImageOfPost(imageOfPostDTO)));
     }
 
     @GetMapping("/imageofpost")
     public ResponseEntity<List<ImageOfPost>> getImageOfPost() {
-        return ResponseEntity.ok(imageofpostRepositoryServiceImpl.findAll());
+        return ResponseEntity.ok(imageofpostRepositoryService.findAll());
     }
 }

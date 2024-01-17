@@ -15,7 +15,7 @@ public class DetailHashTagMapper {
 
     public static DetailHashtagDTO convertToDetailHashTagDTO(DetailHashtag detailHashtag) {
         DetailHashtagDTO detailHashtagDTO = modelMapper.map(detailHashtag, DetailHashtagDTO.class);
-        detailHashtagDTO.setListHashTag(getListHashTag(detailHashtag));
+        detailHashtagDTO.setListHashtagOfDetail(getListHashTag(detailHashtag));
         return detailHashtagDTO;
     }
 

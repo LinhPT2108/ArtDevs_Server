@@ -28,12 +28,12 @@ public class Skill {
 	@Nationalized
 	@Column
 	private String description;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private User user;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
+
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "programinglanguageId")
 	private ProgramingLanguage language;
 }
