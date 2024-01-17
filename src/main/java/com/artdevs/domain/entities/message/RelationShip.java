@@ -3,12 +3,11 @@ package com.artdevs.domain.entities.message;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.annotations.Nationalized;
-
 import com.artdevs.domain.entities.user.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,26 +29,23 @@ public class RelationShip {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-
 	@Column
 
 	private Boolean status;
-	
-
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timeRelation;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userAction")
 	private User actionUser;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userRelation1")
 	private User userOneId;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userRelation2")
 	private User userTwoId;
 

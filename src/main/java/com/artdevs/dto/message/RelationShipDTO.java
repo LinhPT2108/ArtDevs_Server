@@ -1,6 +1,7 @@
 package com.artdevs.dto.message;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,4 +20,12 @@ public class RelationShipDTO {
     private String status;
 
     private Date timeRelation;
+
+    private String relationShipActionUser;
+
+    private String relationShipUserOneId;
+
+    private String relatioShipUserTwoId;
+
+    private List<MessageDTO> listRelationMessage;
 }
