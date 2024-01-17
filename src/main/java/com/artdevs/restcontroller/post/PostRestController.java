@@ -25,7 +25,7 @@ public class PostRestController {
 	public ResponseEntity<List<PostDTO>> getPost(){
 		List<PostDTO> listpost = new ArrayList<>();
 		for (Post post : postsv.findAll()) {
-			listpost.add(PostMapper.convertoDTO(post));
+			listpost.add(PostMapper.convertoPostDTO(post));
 		}
 		return ResponseEntity.ok(listpost);
 	}
