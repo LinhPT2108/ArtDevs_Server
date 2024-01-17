@@ -74,7 +74,7 @@ public class Post {
 	private List<Comment> listCommentPost;
 	
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.EAGER,mappedBy = "postImage")
+	@OneToMany(fetch = FetchType.LAZY,mappedBy = "postImage")
 	private List<ImageOfPost> listImage;
 	
 	
@@ -88,7 +88,5 @@ public class Post {
 	
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.EAGER,mappedBy = "post")
-
-
 	private List<PrivacyPostDetail> privacyPostDetails;
 }

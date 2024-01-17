@@ -34,7 +34,6 @@ public class CommentDTO {
 
     private String PostID;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date timeUserId;
+
 
 }

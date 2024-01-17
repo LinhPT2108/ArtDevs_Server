@@ -28,9 +28,6 @@ import lombok.Setter;
 public class UserDTO {
 	private String userId;
 
-	private boolean isAccountNonExpired;
-
-	private boolean isAccountNonLocked;
 
 	private String BackgroundImageUrl;
 
@@ -40,13 +37,11 @@ public class UserDTO {
 
 	private String ward;
 
-	private boolean isCreadentialsNonExprired;
 
 	private boolean isDelete;
 
 	private String email;
 
-	private boolean isEnabled;
 
 	private String firstName;
 

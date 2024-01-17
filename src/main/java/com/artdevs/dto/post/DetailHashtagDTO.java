@@ -17,7 +17,6 @@ public class DetailHashtagDTO {
 
     private int id;
 
-    @Nationalized
     private String hashtagText;
 
     private List<HashTagDTO> listHashTag;

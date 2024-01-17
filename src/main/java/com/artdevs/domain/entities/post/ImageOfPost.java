@@ -26,7 +26,7 @@ public class ImageOfPost {
 	@Column
 	private String imageOfPostUrl;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "postId")
 	private Post postImage;
 }

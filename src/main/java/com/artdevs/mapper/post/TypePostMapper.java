@@ -28,7 +28,7 @@ public class TypePostMapper {
         List<PostDTO> postDTO = new ArrayList<>();
         List<Post> posts = typePost.getListPostOfType();
         for (Post post : posts) {
-            postDTO.add(PostMapper.convertoPostDTO(post));
+            postDTO.add(PostMapper.convertoDTO(post));
         }
         return postDTO;
     }

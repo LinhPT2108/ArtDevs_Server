@@ -10,8 +10,8 @@ public class HashTagMapper {
 
     public static HashTagDTO convertToHashTagDTO(HashTag hashTag) {
         HashTagDTO hashTagDTO = modelMapper.map(hashTag, HashTagDTO.class);
-        hashTagDTO.setPostHashtag(hashTag.getPostHashtag().getPostId().toString());
-        hashTagDTO.setHashtagDetail(hashTag.getHashtagDetail().getId());
+        hashTagDTO.setPostIDofHashtag(hashTag.getPostHashtag().getPostId().toString());
+        hashTagDTO.setHashtagDetailID(hashTag.getHashtagDetail().getId());
         return hashTagDTO;
     }
 

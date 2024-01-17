@@ -97,7 +97,7 @@ public class User implements UserDetails {
 	@Column
 	private String username;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "userRole")
 	private Role role;
 

@@ -37,7 +37,7 @@ public class CommentRestController {
         List<CommentDTO> listCommentDTO = new ArrayList<>();
         List<Comment> listComment = commentRepository.findAll();
         for (Comment comment : listComment) {
-            listCommentDTO.add(CommentMapper.convertToCommentDTO(comment));
+            listCommentDTO.add(CommentMapper.convertToDTO(comment));
         }
         return ResponseEntity.ok(listCommentDTO);
     }
