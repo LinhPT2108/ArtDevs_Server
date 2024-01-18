@@ -1,5 +1,8 @@
 package com.artdevs.mapper.post;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
@@ -10,6 +13,9 @@ public class CommentMapper {
     private static final ModelMapper modelMapper = new ModelMapper();
 
  
+
+    public static CommentDTO convertToCommentDTO(Comment comment) {
+        CommentDTO commentDTO = modelMapper.map(comment, CommentDTO.class);
 
         commentDTO.setPostID(comment.getPostCommentId().getPostId());
 

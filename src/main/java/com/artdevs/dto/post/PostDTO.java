@@ -27,12 +27,12 @@ public class PostDTO {
 	private String content;
 	private Date time;
 	private Date timelineUserId;
-	private User user;
-	private List<Likes> listLikePost;
-	private List<Share> listSharePost;
-	private List<Report> listReportPost;
-	private List<Comment> listCommentPost;
-	private List<ImageOfPost> listImage;
+	private String userId;
+	private Long totalLike;
+	private Long totalShare;
+	private List<ReportDTO> listReportPost;
+	private Long totalComment;
+	private List<String> listImageofPost;
 	private TypePost postType;
-	private List<HashTag> listHashtag;
+	private List<HashTagDTO> listHashtag;
 }

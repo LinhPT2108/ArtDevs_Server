@@ -29,7 +29,7 @@ public class CommentRestController {
 
     @PostMapping("/comment")
     public ResponseEntity<Comment> postComment(@RequestBody CommentDTO commentDTO) {
-        return ResponseEntity.ok(commentService.saveComment(CommentMapper.convertToComment(commentDTO)));
+        return ResponseEntity.ok(commentService.saveComment(CommentMapper.convertToEntity(commentDTO)));
     }
 
     @GetMapping("/comment")
@@ -37,7 +37,7 @@ public class CommentRestController {
         List<CommentDTO> listCommentDTO = new ArrayList<>();
         List<Comment> listComment = commentRepository.findAll();
         for (Comment comment : listComment) {
-            listCommentDTO.add(CommentMapper.convertToDTO(comment));
+            listCommentDTO.add(CommentMapper.convertToCommentDTO(comment));
         }
         return ResponseEntity.ok(listCommentDTO);
     }

@@ -5,15 +5,16 @@ import java.util.List;
 import com.artdevs.domain.entities.user.User;
 
 public interface UserService {
-    User findUserById(String userId);
-User findByEmail(String email);
-    List<User> findAll();
+	User findUserById(String userId);
 
-    User saveUser(User user);
+	User findByEmail(String email);
 
-    User updateUser(User user);
+	List<User> findAll();
 
-    void deleteUser(User user);
+	User saveUser(User user);
 
+	User updateUser(User user);
+
+	void deleteUser(User user);
 
 }
