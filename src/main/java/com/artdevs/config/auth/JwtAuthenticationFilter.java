@@ -42,12 +42,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		String authorizationHeader = request.getHeader(AUTHORIZATION);
 		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
 			try {
+				
 				String token = authorizationHeader.substring("Bearer ".length());
+				System.out.println("token: "+ token);
 				Algorithm algorithm = Algorithm.HMAC256(secret_key.getBytes());
 				JWTVerifier verifier = JWT.require(algorithm).build();
 				DecodedJWT decodedJWT = verifier.verify(token);
 				String username = decodedJWT.getSubject();
-				String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
+				String[] roles = null;
+				System.out.println(decodedJWT.getClaim("role").toString());
+				if (decodedJWT.getClaim("role") != null) {
+				    roles = new String[] {decodedJWT.getClaim("role").toString()};
+				} else {
+				    roles = new String[]{"ROLE_DEFAULT"};
+				}
 				Collection<GrantedAuthority> authorities = new ArrayList<>();
 				Arrays.stream(roles).forEach(role -> {
 					authorities.add(new SimpleGrantedAuthority(role));
@@ -65,6 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				response.setContentType(APPLICATION_JSON_VALUE);
 				new ObjectMapper().writeValue(response.getOutputStream(), error);
 				System.out.println("Lỗi không");
+				System.out.println(e);
 			}
 		} else {
 			filterChain.doFilter(request, response);

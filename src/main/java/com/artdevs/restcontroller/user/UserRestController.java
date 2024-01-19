@@ -1,10 +1,15 @@
 package com.artdevs.restcontroller.user;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.artdevs.config.auth.AuthenticationRequest;
+import com.artdevs.config.auth.AuthenticationResponse;
 import com.artdevs.domain.entities.user.Demand;
 import com.artdevs.domain.entities.user.Skill;
 import com.artdevs.domain.entities.user.User;
-import com.artdevs.dto.UserDTO;
 import com.artdevs.dto.UserRegisterDTO;
+import com.artdevs.dto.user.UserDTO;
 import com.artdevs.mapper.UserMapper;
 import com.artdevs.repositories.user.DemandRepository;
 import com.artdevs.repositories.user.PrograminglanguageRepository;
@@ -27,31 +34,37 @@ import com.artdevs.utils.Path;
 @RestController
 @RequestMapping(Path.path_api)
 public class UserRestController {
-	@Autowired 
+	@Autowired
 	UserRepository userRepository;
-	@Autowired SkillRepository skillrep;
-	
-	@Autowired DemandRepository demandrepositories;
-	
-	@Autowired PrograminglanguageRepository programingrepositories;
-	
+	@Autowired
+	SkillRepository skillrep;
+
+	@Autowired
+	DemandRepository demandrepositories;
+
+	@Autowired
+	PrograminglanguageRepository programingrepositories;
+
+	@Autowired
+	HttpSecurity httpSecurity;
+
 	@PostMapping("/user")
-	public ResponseEntity<User> postUser(@RequestBody UserDTO userDTO){
+	public ResponseEntity<User> postUser(@RequestBody UserDTO userDTO) {
 		return ResponseEntity.ok(userRepository.save(UserMapper.UserDTOconvertToUser(userDTO)));
 	}
-	
+
 	@GetMapping("/user")
-	public ResponseEntity<List<UserDTO>> getUser(){
-		List<User> listUser =userRepository.findAll();
+	public ResponseEntity<List<UserDTO>> getUser() {
+		List<User> listUser = userRepository.findAll();
 		List<UserDTO> listUserDTO = new ArrayList<>();
 		for (User user : listUser) {
 			listUserDTO.add(UserMapper.UserConvertToUserDTO(user));
 		}
 		return ResponseEntity.ok(listUserDTO);
 	}
-	
+
 	@PostMapping("/register")
-	public ResponseEntity<User> RegisterUser(@RequestBody UserRegisterDTO RegisterDTO){
+	public ResponseEntity<User> RegisterUser(@RequestBody UserRegisterDTO RegisterDTO) {
 		User user = userRepository.save(UserMapper.RegisterDTOconvertToUser(RegisterDTO));
 		for (String skillname : RegisterDTO.getListSkillOfUser()) {
 			Skill skill = new Skill();
@@ -69,20 +82,33 @@ public class UserRestController {
 //		 user.setUserSkill(skillrep.findByUser(user));
 		return ResponseEntity.ok(user);
 	}
-	
+
 	@GetMapping("/register/{userid}")
-	public ResponseEntity<UserRegisterDTO> RegisterUser(@PathVariable String userid){
+	public ResponseEntity<UserRegisterDTO> RegisterUser(@PathVariable String userid) {
 		UserRegisterDTO register = UserMapper.UserDTOconvertToRegisterDTO(userRepository.findById(userid).get());
 		return ResponseEntity.ok(register);
 	}
-	
-	
-	
+
 	@GetMapping("/user/{userid}")
-	public ResponseEntity<UserDTO> getUser(@PathVariable String userid){
-		
+	public ResponseEntity<UserDTO> getUser(@PathVariable String userid) {
+
 		UserDTO userdto = UserMapper.UserConvertToUserDTO(userRepository.findById(userid).get());
 		return ResponseEntity.ok(userdto);
 	}
-	
+
+	@GetMapping("/api/get-login")
+	public ResponseEntity<Authentication> getMethodName() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		return ResponseEntity.ok(authentication);
 	}
+
+	@PostMapping(value = "/account/logout")
+	public ResponseEntity<Authentication> login() {
+		System.out.println("logout");
+		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(null,
+				null,null));
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		return ResponseEntity.ok(authentication);
+	}
+
+}

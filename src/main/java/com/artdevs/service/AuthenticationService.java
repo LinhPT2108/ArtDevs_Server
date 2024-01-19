@@ -1,5 +1,6 @@
 package com.artdevs.service;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -13,7 +14,7 @@ import com.artdevs.config.auth.AuthenticationRequest;
 import com.artdevs.config.auth.AuthenticationResponse;
 import com.artdevs.domain.entities.user.Role;
 import com.artdevs.domain.entities.user.User;
-import com.artdevs.dto.UserDTO;
+import com.artdevs.dto.user.UserDTO;
 import com.artdevs.mapper.UserMapper;
 import com.artdevs.repositories.user.RoleRepository;
 import com.artdevs.repositories.user.UserRepository;

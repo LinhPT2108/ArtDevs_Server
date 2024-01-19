@@ -1,6 +1,6 @@
 package com.artdevs.config.auth;
 
-import com.artdevs.dto.UserDTO;
+import com.artdevs.dto.user.UserDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

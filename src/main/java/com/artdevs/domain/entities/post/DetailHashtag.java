@@ -27,6 +27,10 @@ public class DetailHashtag {
 	@Column
 	private String hashtagText;
 
+	@Nationalized
+	@Column
+	private String description;
+
 	@OneToMany(mappedBy = "HashtagDetail")
 	private List<HashTag> ListHashtagOfDetail;
 }

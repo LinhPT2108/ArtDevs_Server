@@ -22,10 +22,10 @@ public class ApplicationConfig {
 	private final UserRepository userrep;
 	
 	@Bean
-	UserDetailsService userDetailsService() {
-		return email -> userrep.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException("User not found"));
-	}
-
+    UserDetailsService userDetailsService() {
+        return username -> userrep.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();

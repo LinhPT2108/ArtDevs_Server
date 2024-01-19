@@ -7,9 +7,8 @@ import org.modelmapper.ModelMapper;
 
 import com.artdevs.domain.entities.user.Demand;
 import com.artdevs.domain.entities.user.ProgramingLanguage;
-
 import com.artdevs.domain.entities.user.Skill;
-import com.artdevs.dto.ProgramingLanguageDTO;
+import com.artdevs.dto.user.ProgramingLanguageDTO;
 
 
 public class ProgramingLanguageMapper {

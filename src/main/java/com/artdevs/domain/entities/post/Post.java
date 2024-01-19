@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.Nationalized;
 
 import com.artdevs.domain.entities.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,33 +46,41 @@ public class Post {
 	@Column
 	private boolean isDel;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "userId")
 	private User user;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "postLikeId")
 	private List<Likes> listLikePost;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "postShareId")
 	private List<Share> listSharePost;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "postReportId")
 	private List<Report> listReportPost;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "postCommentId")
 	private List<Comment> listCommentPost;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "postImage")
 	private List<ImageOfPost> listImage;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "typepostId")
 	private TypePost postType;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "postHashtag")
 	private List<HashTag> listHashtag;
 	
-
+	@JsonIgnore
 	@OneToMany(mappedBy = "post")
 	private List<PrivacyPostDetail> privacyPostDetails;
 }

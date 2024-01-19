@@ -1,20 +1,15 @@
 package com.artdevs.mapper;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.artdevs.domain.entities.user.Skill;
 import com.artdevs.domain.entities.user.User;
-
-import com.artdevs.dto.UserDTO;
 import com.artdevs.dto.UserRegisterDTO;
-import com.artdevs.repositories.user.PrograminglanguageRepository;
+import com.artdevs.dto.user.UserDTO;
 import com.artdevs.repositories.user.SkillRepository;
-import com.artdevs.repositories.user.UserRepository;
 
 
 public class UserMapper {

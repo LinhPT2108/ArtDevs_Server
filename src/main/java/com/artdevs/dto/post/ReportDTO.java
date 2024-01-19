@@ -15,7 +15,6 @@ public class ReportDTO {
 
     private int id;
 
-    @Nationalized
     private String reportDetail;
 
     private int count;

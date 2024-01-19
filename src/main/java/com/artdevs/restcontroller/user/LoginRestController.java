@@ -83,6 +83,7 @@ public class LoginRestController {
 	
 	@PostMapping(value = "/api/login")
 	public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
+		System.out.println("hêlolo");
 		System.out.println(authenticationService.authenticate(request));
 		return ResponseEntity.ok(authenticationService.authenticate(request));
 	}

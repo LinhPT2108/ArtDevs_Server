@@ -1,9 +1,14 @@
 package com.artdevs.domain.entities.user;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import org.hibernate.annotations.Nationalized;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.artdevs.domain.entities.message.Message;
 import com.artdevs.domain.entities.message.RelationShip;
@@ -14,6 +19,7 @@ import com.artdevs.domain.entities.post.Report;
 import com.artdevs.domain.entities.post.Share;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -21,6 +27,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,23 +38,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class User {
+public class User implements UserDetails{
 	@Id
 	private String userId;
-
-	@Column
-	private boolean isAccountNonExpired;
-
-	@Column
-	private boolean isAccountNonLocked;
 	
 	@Column
+	@Nullable
 	private boolean gender;
 	
 	@Column
 	private String phoneNumber;
 
 	@Column
+	@Temporal(TemporalType.DATE)
 	private Date birthday;
 	
 	@Nationalized
@@ -69,16 +73,10 @@ public class User {
 	private String ward;
 
 	@Column
-	private boolean isCreadentialsNonExprired;
-
-	@Column
 	private boolean isDelete;
 
 	@Column
 	private String email;
-
-	@Column
-	private boolean isEnabled;
 
 	@Nationalized
 	@Column
@@ -184,4 +182,35 @@ public class User {
 	@JsonIgnore
 	@OneToMany(mappedBy = "userReportId")
 	private List<Comment> listComment;
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority(this.role.getRoleName()));
+		return List.of(new SimpleGrantedAuthority(authorities.toString()));
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 }

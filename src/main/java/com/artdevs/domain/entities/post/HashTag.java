@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class HashTag {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -30,4 +31,5 @@ public class HashTag {
 	@ManyToOne
 	@JoinColumn(name="detailhashtagId")
 	private DetailHashtag HashtagDetail;
+	
 }
