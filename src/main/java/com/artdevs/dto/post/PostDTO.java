@@ -23,7 +23,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostDTO {
 	private String postId;
-	private String imageUrl;
 	private String content;
 	private Date time;
 	private Date timelineUserId;

@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.artdevs.domain.entities.post.ImageOfPost;
 import com.artdevs.domain.entities.post.Post;
 import com.artdevs.dto.post.PostDTO;
 import com.artdevs.mapper.post.PostMapper;
 import com.artdevs.services.HashTagService;
+import com.artdevs.services.ImageOfPostService;
 import com.artdevs.services.PostService;
 import com.artdevs.services.UserService;
 import com.artdevs.utils.Path;
@@ -30,6 +32,8 @@ public class PostRestController {
 	@Autowired HashTagService hashtagSerivce;
 	
 	@Autowired UserService userservice;
+	
+	@Autowired ImageOfPostService imgservice;
 	
 	@GetMapping("/post/page/{page}")
 	public ResponseEntity<List<PostDTO>> getPost(@PathVariable("page") int pagenumber){
@@ -53,7 +57,15 @@ public class PostRestController {
 	@PostMapping("/post")
 	public ResponseEntity<Post> CreatePost(@RequestBody PostDTO postdto){
 		Post post = PostMapper.convertToPost(postdto,userservice);
-		
-		return ResponseEntity.ok(postsv.savePost(post));
+		if(postdto.getListImageofPost().size()>0) {
+			postsv.savePost(post);
+			for (String imgURL : postdto.getListImageofPost()) {
+				ImageOfPost imgOfpost = new ImageOfPost();
+				imgOfpost.setPostImage(post);
+				imgOfpost.setImageOfPostUrl(imgURL);
+				imgservice.saveImageOfPost(imgOfpost);
+			}
+		}
+		return ResponseEntity.ok(post);
 	}
 }
