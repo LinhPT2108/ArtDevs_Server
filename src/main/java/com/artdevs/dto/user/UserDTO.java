@@ -1,6 +1,5 @@
 package com.artdevs.dto.user;
 
-
 import java.util.List;
 
 import org.hibernate.annotations.Nationalized;
@@ -60,50 +59,39 @@ public class UserDTO {
 
 	private String profilePicUrl;
 
-	private String username;
-	
-	private Role role;
-	
-	private List<String> listDemandOfUser;
-	
-	private List<String> listSkillOfUser;
+	private String provider;
 
+	private String username;
+
+	private Role role;
+
+	private List<String> listDemandOfUser;
+
+	private List<String> listSkillOfUser;
 
 	private List<MethodPay> listMethod;
 
-
 	private List<TransitionInfo> userTransition1;
 
-	
 	private List<TransitionInfo> userTransition2;
 
-	
 	private List<Post> listPostOfUser;
 
-	
 	private List<RelationShip> userRelation1;
 
-	
 	private List<RelationShip> userRelation2;
-
 
 	private List<RelationShip> userAction;
 
-	
 	private List<Message> userForm;
 
-	
 	private List<Message> userTo;
 
-	
 	private List<Likes> listLike;
 
-	
 	private List<Share> listShare;
 
-	
 	private List<Report> listReport;
 
-	
 	private List<Comment> listComment;
 }

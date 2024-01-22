@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -88,6 +89,13 @@ public class LoginRestController {
 	
 	@PostMapping(value = "/api/login")
 	public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
+		
+		    return ResponseEntity.ok(authenticationService.authenticate(request));
+		
+	}
+
+	@PostMapping(value = "/api/login/")
+	public ResponseEntity<AuthenticationResponse> loginWithSocial(@RequestBody AuthenticationRequest request) {
 		
 		    return ResponseEntity.ok(authenticationService.authenticate(request));
 		

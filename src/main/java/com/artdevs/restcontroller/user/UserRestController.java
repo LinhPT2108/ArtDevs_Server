@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artdevs.domain.entities.user.Demand;
@@ -84,6 +85,22 @@ public class UserRestController {
 
 		UserDTO userdto = UserMapper.UserConvertToUserDTO(userRepository.findById(userid).get());
 		return ResponseEntity.ok(userdto);
+	}
+
+//	@GetMapping("/user-social?email={email}&provider={provider}")
+//	public ResponseEntity<UserDTO> getUserByEmailAndProvider(@RequestParam("email") String email,
+//			@RequestParam("provider") String provider) {
+//		System.out.println(">>> check email param and provider: " + email + ", " + provider);
+//		UserDTO userdto = UserMapper.UserConvertToUserDTO(userRepository.findById("Aa128").get());
+//		return ResponseEntity.ok(userdto);
+//	}
+	@GetMapping("/user-social")
+	public ResponseEntity<UserDTO> getUserByEmailAndProvider(
+	        @RequestParam("email") String email,
+	        @RequestParam("provider") String provider) {
+	    System.out.println(">>> check email param and provider: " + email + ", " + provider);
+	    UserDTO userdto = UserMapper.UserConvertToUserDTO(userRepository.findByEmailAndProvider(email, provider).get());
+	    return ResponseEntity.ok(userdto);
 	}
 
 }

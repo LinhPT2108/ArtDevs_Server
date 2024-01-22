@@ -18,7 +18,6 @@ public class LoginControllerTest {
 	@GetMapping("/login/success")
 	@ResponseBody
 	public String getLoginsuccess() {
-		
 		return "logindc ròi dmm";
 	}
 }

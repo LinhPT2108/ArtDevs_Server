@@ -11,5 +11,6 @@ import com.artdevs.domain.entities.user.User;
 public interface UserRepository extends JpaRepository<User, String> {
 
 	Optional<User> findByEmail(String email);
-
+	Optional<User> findByEmailAndProvider(String email, String provider);
+	
 }

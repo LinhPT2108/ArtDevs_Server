@@ -44,7 +44,6 @@ public class User implements UserDetails {
 	@Id
 	private String userId;
 
-
 	@Nationalized
 	@Column
 	private String address;
@@ -64,13 +63,11 @@ public class User implements UserDetails {
 	@Column
 	private String ward;
 
-
 	@Column
 	private boolean isDelete;
 
 	@Column
 	private String email;
-
 
 	@Nationalized
 	@Column
@@ -92,7 +89,10 @@ public class User implements UserDetails {
 
 	@Column
 	private String profilePicUrl;
-
+	
+	@Column
+	private String provider;
+	
 	@Nationalized
 	@Column
 	private String username;
@@ -111,8 +111,6 @@ public class User implements UserDetails {
 
 	// @OneToMany(mappedBy = "user")
 	// private List<Wallet> userWallet;
-
-
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
@@ -206,13 +204,13 @@ public class User implements UserDetails {
 		return true;
 	}
 
-
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(this.role.getRoleName()));
 		return List.of(new SimpleGrantedAuthority(authorities.toString()));
 	}
+
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
