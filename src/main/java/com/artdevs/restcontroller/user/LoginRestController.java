@@ -94,12 +94,7 @@ public class LoginRestController {
 		
 	}
 
-	@PostMapping(value = "/api/login/")
-	public ResponseEntity<AuthenticationResponse> loginWithSocial(@RequestBody AuthenticationRequest request) {
-		
-		    return ResponseEntity.ok(authenticationService.authenticate(request));
-		
-	}
+
 	
 	
 }

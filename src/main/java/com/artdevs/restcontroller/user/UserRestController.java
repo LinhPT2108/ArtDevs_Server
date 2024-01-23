@@ -1,10 +1,14 @@
 package com.artdevs.restcontroller.user;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,8 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.artdevs.config.auth.AuthenticationRequest;
+import com.artdevs.config.auth.AuthenticationResponse;
 import com.artdevs.domain.entities.user.Demand;
+import com.artdevs.domain.entities.user.Role;
 import com.artdevs.domain.entities.user.Skill;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.UserRegisterDTO;
@@ -23,6 +31,8 @@ import com.artdevs.repositories.user.DemandRepository;
 import com.artdevs.repositories.user.PrograminglanguageRepository;
 import com.artdevs.repositories.user.SkillRepository;
 import com.artdevs.repositories.user.UserRepository;
+import com.artdevs.service.AuthenticationService;
+import com.artdevs.service.JwtTokenProvider;
 import com.artdevs.utils.Path;
 
 @RestController
@@ -38,6 +48,12 @@ public class UserRestController {
 
 	@Autowired
 	PrograminglanguageRepository programingrepositories;
+	
+	@Autowired
+	JwtTokenProvider jwtService;
+
+	@Autowired
+	private AuthenticationService authenticationService;
 
 	@PostMapping("/user")
 	public ResponseEntity<User> postUser(@RequestBody UserDTO userDTO) {
@@ -69,8 +85,6 @@ public class UserRestController {
 			demand.setLanguage(programingrepositories.findByLanguageName(demandname));
 			demandrepositories.save(demand);
 		}
-		// System.out.println(demandrepositories.findByUser(user));
-		// user.setUserSkill(skillrep.findByUser(user));
 		return ResponseEntity.ok(user);
 	}
 
@@ -87,20 +101,21 @@ public class UserRestController {
 		return ResponseEntity.ok(userdto);
 	}
 
-//	@GetMapping("/user-social?email={email}&provider={provider}")
-//	public ResponseEntity<UserDTO> getUserByEmailAndProvider(@RequestParam("email") String email,
-//			@RequestParam("provider") String provider) {
-//		System.out.println(">>> check email param and provider: " + email + ", " + provider);
-//		UserDTO userdto = UserMapper.UserConvertToUserDTO(userRepository.findById("Aa128").get());
-//		return ResponseEntity.ok(userdto);
-//	}
 	@GetMapping("/user-social")
-	public ResponseEntity<UserDTO> getUserByEmailAndProvider(
-	        @RequestParam("email") String email,
-	        @RequestParam("provider") String provider) {
-	    System.out.println(">>> check email param and provider: " + email + ", " + provider);
-	    UserDTO userdto = UserMapper.UserConvertToUserDTO(userRepository.findByEmailAndProvider(email, provider).get());
-	    return ResponseEntity.ok(userdto);
-	}
+	public ResponseEntity<AuthenticationResponse> getUserByEmailAndProvider(@RequestParam("email") String email,
+			@RequestParam("provider") String provider) {
+		User user = userRepository.findByEmailAndProvider(email, provider).get();
+		UserDTO userdto = UserMapper.UserConvertToUserDTO(user);
 
+		Role role = null;
+		if (user != null) {
+			role = user.getRole();
+		}
+
+		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+		String jwtToken = jwtService.generateToken(user, authorities);
+		String jwtRefeshToken = jwtService.generateRefeshToken(user, authorities);
+		return ResponseEntity.ok(AuthenticationResponse.builder().token(jwtToken).refeshToken(jwtRefeshToken).userdto(userdto).build());
+	}
 }
