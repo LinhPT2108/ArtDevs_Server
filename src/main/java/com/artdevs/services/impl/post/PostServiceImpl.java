@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.artdevs.domain.entities.post.Post;
@@ -23,8 +25,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public Page<Post> findPage(int pagenumber) {
+    	Page<Post> page = postRepository.findAll(PageRequest.of(pagenumber, 2));
+        return page;
+    }
+    
+    @Override
     public List<Post> findAll() {
-        return postRepository.findAll();
+    	
+        return  postRepository.findAll();
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.artdevs.dto.user;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,6 @@ public class PictureDTO {
     private int id;
 
     private String cloudinaryPublicId;
-
 
     private String description;
 

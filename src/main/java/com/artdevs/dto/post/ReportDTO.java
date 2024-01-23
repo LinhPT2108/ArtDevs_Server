@@ -1,7 +1,5 @@
 package com.artdevs.dto.post;
 
-import org.hibernate.annotations.Nationalized;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

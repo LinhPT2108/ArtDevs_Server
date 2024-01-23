@@ -1,9 +1,6 @@
 package com.artdevs.dto.user;
 
-import java.util.Date;
 import java.util.List;
-
-import org.hibernate.annotations.Nationalized;
 
 import com.artdevs.domain.entities.message.Message;
 import com.artdevs.domain.entities.message.RelationShip;
@@ -16,7 +13,6 @@ import com.artdevs.domain.entities.user.MethodPay;
 import com.artdevs.domain.entities.user.Role;
 import com.artdevs.domain.entities.user.TransitionInfo;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,10 +25,6 @@ import lombok.Setter;
 public class UserDTO {
 	private String userId;
 
-	private boolean isAccountNonExpired;
-
-	private boolean isAccountNonLocked;
-
 	private String BackgroundImageUrl;
 
 	private String city;
@@ -41,18 +33,10 @@ public class UserDTO {
 
 	private String ward;
 
-	private boolean isCreadentialsNonExprired;
-
 	private boolean isDelete;
-	private boolean gender;
 
 	private String email;
 
-	private String phoneNumber;
-
-	private Date birthday;
-
-	private boolean isEnabled;
 
 	private String firstName;
 

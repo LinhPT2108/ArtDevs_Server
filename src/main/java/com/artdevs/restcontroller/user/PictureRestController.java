@@ -1,5 +1,6 @@
-package com.artdevs.restcontroller;
+package com.artdevs.restcontroller.user;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,22 +15,29 @@ import com.artdevs.domain.entities.user.Picture;
 import com.artdevs.dto.user.PictureDTO;
 import com.artdevs.mapper.PictureMapper;
 import com.artdevs.repositories.user.PictureRepository;
-import com.artdevs.services.impl.user.PictureServiceImpl;
+import com.artdevs.services.PictureService;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class PictureRestController {
     @Autowired
-    PictureServiceImpl pictureServiceImpl;
+    PictureService pictureService;
+    @Autowired
+    PictureRepository pictureRepository;
 
     @PostMapping("/picture")
     public ResponseEntity<Picture> postPicture(@RequestBody PictureDTO pictureDTO) {
-        return ResponseEntity.ok(pictureServiceImpl.savePicture(PictureMapper.convertToPicture(pictureDTO)));
+        return ResponseEntity.ok(pictureService.savePicture(PictureMapper.convertToPicture(pictureDTO)));
     }
 
     @GetMapping("/picture")
-    public ResponseEntity<List<Picture>> getPicture() {
-        return ResponseEntity.ok(pictureServiceImpl.findAll());
+    public ResponseEntity<List<PictureDTO>> getPicture() {
+        List<PictureDTO> listPictureDTO = new ArrayList<>();
+        List<Picture> listPictures = pictureRepository.findAll();
+        for (Picture picture : listPictures) {
+            listPictureDTO.add(PictureMapper.convertToPictureDTO(picture));
+        }
+        return ResponseEntity.ok(listPictureDTO);
     }
 }

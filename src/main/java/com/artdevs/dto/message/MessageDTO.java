@@ -1,9 +1,9 @@
 package com.artdevs.dto.message;
 
-import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
-import org.hibernate.annotations.Nationalized;
+import com.artdevs.domain.entities.message.PictureOfMessage;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,9 +17,22 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class MessageDTO {
+
     private String message;
+
     private String senderName;
+
     private String receiverName;
+
     private String status;
+
     private Date timeMessage;
+
+    private String relationShipId;
+
+    private String formUserId;
+
+    private String toUserId;
+
+    private List<PictureOfMessage> pictureOfMessages;
 }

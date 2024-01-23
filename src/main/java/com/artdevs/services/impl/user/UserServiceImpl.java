@@ -21,17 +21,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserById(String userId) {
         Optional<User> userOptional = userRepository.findById(userId);
-        return userOptional.orElse(null);
+        System.out.println(userOptional);
+        return userOptional.get();
     }
+    
+  
 
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
-    }
-    
-    @Override
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
     }
 
     @Override
@@ -49,5 +47,10 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user);
     }
 
+    @Override
+    public User findByEmail(String email) {
+        // TODO Auto-generated method stub
+        return userRepository.findByEmail(email).get();
+    }
 
 }

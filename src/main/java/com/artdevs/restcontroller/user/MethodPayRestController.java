@@ -1,5 +1,6 @@
-package com.artdevs.restcontroller;
+package com.artdevs.restcontroller.user;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,22 +16,30 @@ import com.artdevs.dto.transition.MethodPayDTO;
 import com.artdevs.mapper.MethodPayMapper;
 import com.artdevs.repositories.user.MethodpayRepository;
 import com.artdevs.services.MethodPayService;
-import com.artdevs.services.impl.transition.MethodPayServiceImpl;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class MethodPayRestController {
     @Autowired
-    MethodPayServiceImpl methodPayServiceImpl;
+    MethodPayService methodPayService;
+
+    @Autowired
+    MethodpayRepository methodpayRepository;
 
     @PostMapping("/methodpay")
     public ResponseEntity<MethodPay> postMethodPay(@RequestBody MethodPayDTO methodPayDTO) {
-        return ResponseEntity.ok(methodPayServiceImpl.saveMethodPay(MethodPayMapper.convertToMethodPay(methodPayDTO)));
+        return ResponseEntity.ok(methodPayService.saveMethodPay(MethodPayMapper.convertToMethodPay(methodPayDTO)));
     }
 
     @GetMapping("/methodpay")
-    public ResponseEntity<List<MethodPay>> getMethodPay() {
-        return ResponseEntity.ok(methodPayServiceImpl.findAll());
+    public ResponseEntity<List<MethodPayDTO>> getMethodPay() {
+        List<MethodPayDTO> listMethodPayDTO = new ArrayList<>();
+        List<MethodPay> listMethodPay = methodpayRepository.findAll();
+        for (MethodPay methodPay : listMethodPay) {
+            listMethodPayDTO.add(MethodPayMapper.convertToMethodPayDTO(methodPay));
+        }
+
+        return ResponseEntity.ok(listMethodPayDTO);
     }
 }

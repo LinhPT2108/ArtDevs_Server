@@ -2,7 +2,6 @@ package com.artdevs.domain.entities.user;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.annotations.Nationalized;
@@ -18,41 +17,34 @@ import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.post.Report;
 import com.artdevs.domain.entities.post.Share;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.annotation.Nullable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "User")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class User implements UserDetails{
+@Getter
+@Setter
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
+public class User implements UserDetails {
+
 	@Id
 	private String userId;
-	
-	@Column
-	@Nullable
-	private boolean gender;
-	
-	@Column
-	private String phoneNumber;
 
-	@Column
-	@Temporal(TemporalType.DATE)
-	private Date birthday;
-	
 	@Nationalized
 	@Column
 	private String address;
@@ -103,15 +95,14 @@ public class User implements UserDetails{
 	@Column
 	private String username;
 
-	@JsonIgnore
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "userRole")
 	private Role role;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Picture> userPicture;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Log> userLog;
@@ -119,9 +110,7 @@ public class User implements UserDetails{
 	// @OneToMany(mappedBy = "user")
 	// private List<Wallet> userWallet;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "user")
-	private List<SearchHistory> userSearchHistory;
+
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
@@ -130,6 +119,10 @@ public class User implements UserDetails{
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Skill> userSkill;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "user")
+	private List<SearchHistory> userSearchHistory;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
@@ -148,12 +141,12 @@ public class User implements UserDetails{
 	private List<Post> userPost;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "userOneId")
-	private List<RelationShip> userRelation1;
+	@OneToMany(mappedBy = "userOneId",cascade = CascadeType.ALL)
+	private List<RelationShip> userRelationShipOne;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "userTwoId")
-	private List<RelationShip> userRelation2;
+	@OneToMany(mappedBy = "userTwoId",cascade = CascadeType.ALL)
+	private List<RelationShip> userRelationShipTwo;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "actionUser")
@@ -184,14 +177,17 @@ public class User implements UserDetails{
 	private List<Comment> listComment;
 
 	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority(this.role.getRoleName()));
-		return List.of(new SimpleGrantedAuthority(authorities.toString()));
+	public String getUsername() {
+		return this.email;
 	}
 
 	@Override
-	public boolean isCredentialsNonExpired() {
+	public String getPassword() {
+		return this.password;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub
 		return true;
 	}
@@ -203,14 +199,22 @@ public class User implements UserDetails{
 	}
 
 	@Override
-	public boolean isEnabled() {
+	public boolean isCredentialsNonExpired() {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
-	public boolean isAccountNonExpired() {
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority(this.role.getRoleName()));
+		return List.of(new SimpleGrantedAuthority(authorities.toString()));
+	}
+	@Override
+	public boolean isEnabled() {
 		// TODO Auto-generated method stub
 		return true;
 	}
+
+
 }

@@ -1,20 +1,21 @@
 package com.artdevs.mapper.post;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 
 import com.artdevs.domain.entities.post.DetailHashtag;
 import com.artdevs.domain.entities.post.HashTag;
 import com.artdevs.dto.post.DetailHashtagDTO;
+import com.artdevs.dto.post.HashTagDTO;
 
 public class DetailHashTagMapper {
     private static final ModelMapper modelMapper = new ModelMapper();
 
     public static DetailHashtagDTO convertToDetailHashTagDTO(DetailHashtag detailHashtag) {
         DetailHashtagDTO detailHashtagDTO = modelMapper.map(detailHashtag, DetailHashtagDTO.class);
-        detailHashtagDTO.setListHashTag(getListHashTag(detailHashtag));
+        detailHashtagDTO.setListHashtagOfDetail(getListHashTag(detailHashtag));
         return detailHashtagDTO;
     }
 
@@ -23,9 +24,12 @@ public class DetailHashTagMapper {
         return detailHashtag;
     }
 
-    private static List<HashTag> getListHashTag(DetailHashtag detailHashtag) {
-        return detailHashtag.getListHashtagOfDetail().stream().map(
-                ht -> new HashTag(ht.getId(), ht.getCount(), ht.getPostHashtag(), ht.getHashtagDetail()))
-                .collect(Collectors.toList());
+    private static List<HashTagDTO> getListHashTag(DetailHashtag detailHashtag) {
+        List<HashTagDTO> hashTagDTO = new ArrayList<>();
+        List<HashTag> hashTags = detailHashtag.getListHashtagOfDetail();
+        for (HashTag hashTag : hashTags) {
+            hashTagDTO.add(HashTagMapper.convertToHashTagDTO(hashTag));
+        }
+        return hashTagDTO;
     }
 }

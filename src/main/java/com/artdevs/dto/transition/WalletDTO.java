@@ -2,9 +2,6 @@ package com.artdevs.dto.transition;
 
 import java.util.List;
 
-import com.artdevs.domain.entities.user.MethodPay;
-import com.artdevs.domain.entities.user.TransitionInfo;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +18,7 @@ public class WalletDTO {
 
     private long surplus;
 
-    private List<TransitionInfo> listTransitionInfo;
+    private List<TransitionInfoDTO> listTransitionInfo;
 
-    private List<MethodPay> listMethodPay;
+    private List<MethodPayDTO> listMethodPay;
 }

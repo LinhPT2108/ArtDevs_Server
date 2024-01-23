@@ -15,5 +15,5 @@ public class ImageOfPostDTO {
 
     private String imageOfPostUrl;
 
-    private String postImage;
+    private String postID;
 }

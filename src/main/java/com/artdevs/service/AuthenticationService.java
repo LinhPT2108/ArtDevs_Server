@@ -26,54 +26,63 @@ import lombok.RequiredArgsConstructor;
 public class AuthenticationService {
 	@Autowired
 	private final UserRepository userrep;
-	
+
 	@Autowired
 	private RoleRepository rolerep;
-	
+
 	@Autowired
 	JwtTokenProvider jwtService;
 	@Autowired
 	private final AuthenticationManager authenticationManager;
 
 	public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
-//		System.out.println(authenticationRequest.getEmail());
+		// System.out.println(authenticationRequest.getEmail());
 		User user = userrep.findByEmail(authenticationRequest.getEmail()).get();
-//		System.out.println(user.getEmail());
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword() ));
-		
+		// System.out.println(user.getEmail());
+		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
+				authenticationRequest.getPassword()));
+
 		UserDTO userdto = UserMapper.UserConvertToUserDTO(user);
-		Role role = null;
-		if(user!=null) {
-			role = rolerep.findByUserRole(user);
-		}
 		
+		Role role = null;
+		if (user != null) {
+			role = rolerep.findByUserRole(user);
+			System.out.println("role"+ role.getRoleName());
+		}
+
 		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
 		String jwtToken = jwtService.generateToken(user, authorities);
 		String jwtRefeshToken = jwtService.generateRefeshToken(user, authorities);
 		return AuthenticationResponse.builder().token(jwtToken).refeshToken(jwtRefeshToken).userdto(userdto).build();
 	}
-//	public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
-//		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword() ));
-//		User user = userrep.findByEmail(authenticationRequest.getEmail()).orElseThrow();
-//		Role role = null;
-//		if(user!=null) {
-//			role = rolerep.findByUserRole(user);
-//		}
-//		
-//		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-//		List<AccountRole> sets = new ArrayList<>();
-//		accountRoles.stream().forEach(accountRole -> sets.add(new AccountRole(accountRole.getUser(), accountRole.getRole())));
-//		user.setUserRole(sets);
-//		sets.stream().forEach(set -> authorities.add(new SimpleGrantedAuthority(set.getRole().getRoleName())));
-//		var jwtToken = jwtService.generateToken(user, authorities);
-//		var jwtRefeshToken = jwtService.generateRefeshToken(user, authorities);
-//		return AuthenticationResponse.builder()
-//				.token(jwtToken)
-//				.refeshToken(jwtRefeshToken)
-//				.accoutnDTO(AccountMapper.convertToDto(user, promotionalDetailsDAO, flashSaleDAO, productDAO))
-//				.build();
-//	}
+	// public AuthenticationResponse authenticate(AuthenticationRequest
+	// authenticationRequest) {
+	// authenticationManager.authenticate(new
+	// UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
+	// authenticationRequest.getPassword() ));
+	// User user =
+	// userrep.findByEmail(authenticationRequest.getEmail()).orElseThrow();
+	// Role role = null;
+	// if(user!=null) {
+	// role = rolerep.findByUserRole(user);
+	// }
+	//
+	// Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+	// List<AccountRole> sets = new ArrayList<>();
+	// accountRoles.stream().forEach(accountRole -> sets.add(new
+	// AccountRole(accountRole.getUser(), accountRole.getRole())));
+	// user.setUserRole(sets);
+	// sets.stream().forEach(set -> authorities.add(new
+	// SimpleGrantedAuthority(set.getRole().getRoleName())));
+	// var jwtToken = jwtService.generateToken(user, authorities);
+	// var jwtRefeshToken = jwtService.generateRefeshToken(user, authorities);
+	// return AuthenticationResponse.builder()
+	// .token(jwtToken)
+	// .refeshToken(jwtRefeshToken)
+	// .accoutnDTO(AccountMapper.convertToDto(user, promotionalDetailsDAO,
+	// flashSaleDAO, productDAO))
+	// .build();
+	// }
 
-	
 }

@@ -1,5 +1,6 @@
-package com.artdevs.restcontroller;
+package com.artdevs.restcontroller.user;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,22 +15,30 @@ import com.artdevs.domain.entities.user.Log;
 import com.artdevs.dto.user.LogDTO;
 import com.artdevs.mapper.LogMapper;
 import com.artdevs.repositories.user.LogRepository;
-import com.artdevs.services.impl.user.LogServiceImpl;
+import com.artdevs.services.LogService;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class LogRestController {
     @Autowired
-    LogServiceImpl logServiceImpl;
+    LogService logService;
+
+    @Autowired
+    LogRepository LogRepository;
 
     @PostMapping("/log")
     public ResponseEntity<Log> postLog(@RequestBody LogDTO logDTO) {
-        return ResponseEntity.ok(logServiceImpl.saveLog(LogMapper.convertToLog(logDTO)));
+        return ResponseEntity.ok(logService.saveLog(LogMapper.convertToLog(logDTO)));
     }
 
     @GetMapping("/log")
-    public ResponseEntity<List<Log>> getLog() {
-        return ResponseEntity.ok(logServiceImpl.findAll());
+    public ResponseEntity<List<LogDTO>> getLog() {
+        List<LogDTO> listLogDTO = new ArrayList<>();
+        List<Log> listLog = LogRepository.findAll();
+        for (Log log : listLog) {
+            listLogDTO.add(LogMapper.convertToLogDTO(log));
+        }
+        return ResponseEntity.ok(listLogDTO);
     }
 }

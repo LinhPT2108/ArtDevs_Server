@@ -1,15 +1,10 @@
 package com.artdevs.restcontroller.user;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.artdevs.config.auth.AuthenticationRequest;
-import com.artdevs.config.auth.AuthenticationResponse;
 import com.artdevs.domain.entities.user.Demand;
 import com.artdevs.domain.entities.user.Skill;
 import com.artdevs.domain.entities.user.User;
@@ -44,9 +37,6 @@ public class UserRestController {
 
 	@Autowired
 	PrograminglanguageRepository programingrepositories;
-
-	@Autowired
-	HttpSecurity httpSecurity;
 
 	@PostMapping("/user")
 	public ResponseEntity<User> postUser(@RequestBody UserDTO userDTO) {
@@ -78,8 +68,8 @@ public class UserRestController {
 			demand.setLanguage(programingrepositories.findByLanguageName(demandname));
 			demandrepositories.save(demand);
 		}
-//		 System.out.println(demandrepositories.findByUser(user));
-//		 user.setUserSkill(skillrep.findByUser(user));
+		// System.out.println(demandrepositories.findByUser(user));
+		// user.setUserSkill(skillrep.findByUser(user));
 		return ResponseEntity.ok(user);
 	}
 
@@ -94,21 +84,6 @@ public class UserRestController {
 
 		UserDTO userdto = UserMapper.UserConvertToUserDTO(userRepository.findById(userid).get());
 		return ResponseEntity.ok(userdto);
-	}
-
-	@GetMapping("/api/get-login")
-	public ResponseEntity<Authentication> getMethodName() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		return ResponseEntity.ok(authentication);
-	}
-
-	@PostMapping(value = "/account/logout")
-	public ResponseEntity<Authentication> login() {
-		System.out.println("logout");
-		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(null,
-				null,null));
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		return ResponseEntity.ok(authentication);
 	}
 
 }

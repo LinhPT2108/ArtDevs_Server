@@ -1,7 +1,11 @@
 package com.artdevs.restcontroller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +29,8 @@ public class LoginRestController {
 	RoleRepository rolerep;
 	@Autowired
 	private AuthenticationService authenticationService;
-
+	@Autowired
+	private final AuthenticationManager authenticationManager;
 	private final JwtTokenProvider jwtTokenUtil;
 
 //	@PostMapping(value = "/api/login")
@@ -83,9 +88,9 @@ public class LoginRestController {
 	
 	@PostMapping(value = "/api/login")
 	public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
-		System.out.println("hêlolo");
-		System.out.println(authenticationService.authenticate(request));
-		return ResponseEntity.ok(authenticationService.authenticate(request));
+		
+		    return ResponseEntity.ok(authenticationService.authenticate(request));
+		
 	}
 	
 	

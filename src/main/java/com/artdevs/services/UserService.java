@@ -1,19 +1,20 @@
 package com.artdevs.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.artdevs.domain.entities.user.User;
 
 public interface UserService {
-    User findUserById(String userId);
+	User findUserById(String userId);
 
-    List<User> findAll();
+	User findByEmail(String email);
 
-    User saveUser(User user);
+	List<User> findAll();
 
-    User updateUser(User user);
-    Optional<User> findByEmail(String user);
+	User saveUser(User user);
 
-    void deleteUser(User user);
+	User updateUser(User user);
+
+	void deleteUser(User user);
+
 }

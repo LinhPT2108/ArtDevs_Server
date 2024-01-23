@@ -1,7 +1,5 @@
 package com.artdevs.dto.user;
 
-import org.hibernate.annotations.Nationalized;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +13,6 @@ public class SkillDTO {
 
     private int id;
 
-    @Nationalized
     private String description;
 
     private String userId;

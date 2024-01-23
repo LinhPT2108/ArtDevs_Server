@@ -1,5 +1,6 @@
-package com.artdevs.restcontroller;
+package com.artdevs.restcontroller.user;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,26 +14,35 @@ import org.springframework.web.bind.annotation.RestController;
 import com.artdevs.domain.entities.user.ProgramingLanguage;
 import com.artdevs.dto.user.ProgramingLanguageDTO;
 import com.artdevs.mapper.ProgramingLanguageMapper;
-import com.artdevs.services.impl.user.ProgramingLanguageServiceImpl;
+import com.artdevs.repositories.user.PrograminglanguageRepository;
+import com.artdevs.services.ProgramingLanguageService;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class ProgramingLanguageRestController {
     @Autowired
-    ProgramingLanguageServiceImpl programingLanguageServiceImpl;
+    ProgramingLanguageService programingLanguageService;
+
+    @Autowired
+    PrograminglanguageRepository programingRepositories;
 
     @PostMapping("/programingLanguage")
     public ResponseEntity<ProgramingLanguage> postProgramingLanguage(
             @RequestBody ProgramingLanguageDTO programingLanguageDTO) {
         return ResponseEntity
-                .ok(programingLanguageServiceImpl
+                .ok(programingLanguageService
                         .saveProgramingLanguage(ProgramingLanguageMapper
                                 .convertToProgramingLanguage(programingLanguageDTO)));
     }
 
     @GetMapping("/programingLanguage")
-    public ResponseEntity<List<ProgramingLanguage>> getProgramingLanguage() {
-        return ResponseEntity.ok(programingLanguageServiceImpl.findAll());
+    public ResponseEntity<List<ProgramingLanguageDTO>> getProgramingLanguage() {
+        List<ProgramingLanguageDTO> listProgramingLanguageDTO = new ArrayList<>();
+        List<ProgramingLanguage> listProgramingLanguages = programingRepositories.findAll();
+        for (ProgramingLanguage language : listProgramingLanguages) {
+            listProgramingLanguageDTO.add(ProgramingLanguageMapper.convertToProgramingLanguageDTO(language));
+        }
+        return ResponseEntity.ok(listProgramingLanguageDTO);
     }
 }
