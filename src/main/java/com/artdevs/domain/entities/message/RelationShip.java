@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.artdevs.domain.entities.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -54,6 +55,7 @@ public class RelationShip {
 	@JoinColumn(name = "userRelationShipTwo")
 	private User userTwoId;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "relationShipId")
 	private List<Message> relationMessage;
 

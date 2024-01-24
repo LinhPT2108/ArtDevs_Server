@@ -27,5 +27,5 @@ public class RelationShipDTO {
     
     private String UserID2;
     
-    private List<String> messageID;
+//    private List<String> messageID;
 }

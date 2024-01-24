@@ -21,7 +21,6 @@ public class RelationShipMapper {
         relationShipDTO.setUserActionID(relationShip.getActionUser().getUserId());
         relationShipDTO.setUserID1(relationShip.getUserOneId().getUserId());
         relationShipDTO.setUserID2(relationShip.getUserTwoId().getUserId());
-        relationShipDTO.setMessageID(getMessageID(relationShip));
         return relationShipDTO;
     }
     
