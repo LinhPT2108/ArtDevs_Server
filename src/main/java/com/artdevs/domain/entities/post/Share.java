@@ -28,7 +28,7 @@ public class Share {
 	private long id;
 
 	@Column
-	private long count;
+	private long count=0;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="userId")

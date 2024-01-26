@@ -9,9 +9,9 @@ public interface ShareService {
 
     List<Share> findAll();
 
-    Share saveShare(Share share);
+	boolean addShare(String postId) throws Exception;
 
-    Share updateShare(Share share);
+	boolean unShare(String postId) throws Exception;
 
-    void deleteShare(Share share);
+   
 }

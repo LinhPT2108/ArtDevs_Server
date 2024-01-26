@@ -29,7 +29,7 @@ public class Likes {
 	private long id;
 
 	@Column
-	private long count;
+	private long count=0;
 
 
 	@ManyToOne(fetch = FetchType.LAZY)
