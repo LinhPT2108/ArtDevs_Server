@@ -14,10 +14,10 @@ import com.artdevs.dto.message.RelationShipDTO;
 @Service
 public interface RelationshipService {
 
-	List<RelationShip> findAllUserRelationshipsWithStatus(String userId) throws Exception;
+//	List<RelationShip> findAllUserRelationshipsWithStatus(String userId) throws Exception;
 
 	List<RelationShip> findByUserOneIdAndUserTwoIdAndStatus(User userOneId,User userTwoId, int status);
-	List<RelationShipDTO> findAllUserRelationshipsWithStatus(String userId) throws Exception;
+//	List<RelationShipDTO> findAllUserRelationshipsWithStatus(String userId) throws Exception;
 
 
     List<RelationShipDTO> findAllFriendCandidates(String loggedInUserId);

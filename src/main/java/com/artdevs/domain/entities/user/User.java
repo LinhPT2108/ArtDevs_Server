@@ -2,6 +2,7 @@ package com.artdevs.domain.entities.user;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.annotations.Nationalized;
@@ -28,6 +29,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -90,7 +93,14 @@ public class User implements UserDetails {
 
 	@Column
 	private String profilePicUrl;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column
+	private Date birthday;
 
+	@Column
+	private int Gender;
+	
 	@Nationalized
 	@Column
 	private String username;

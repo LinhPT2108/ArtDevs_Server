@@ -43,11 +43,11 @@ public class RelationShipServiceImpl implements RelationshipService {
 //        relationshipRepository.delete(relationShip);
 //    }
 
-	@Override
-	public List<RelationShip> findAllUserRelationshipsWithStatus(String userId) throws Exception {
-	
-		return null;
-	}
+//	@Override
+//	public List<RelationShip> findAllUserRelationshipsWithStatus(String userId) throws Exception {
+//	
+//		return null;
+//	}
 
 	@Override
 	public List<RelationShip> findRelationshipByUserIdAndStatus(String userId) throws Exception{
