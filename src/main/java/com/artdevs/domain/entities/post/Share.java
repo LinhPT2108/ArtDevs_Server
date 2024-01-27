@@ -27,9 +27,6 @@ public class Share {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column
-	private long count;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="userId")
 	private User userShareId;

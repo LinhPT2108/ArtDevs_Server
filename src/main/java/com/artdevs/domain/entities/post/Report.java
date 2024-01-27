@@ -31,9 +31,6 @@ public class Report {
 	@Column
 	private String reportDetail;
 
-	@Column
-	private int count;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private User userReportId;

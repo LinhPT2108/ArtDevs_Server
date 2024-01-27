@@ -52,8 +52,6 @@ public class UserRestController {
 	@Autowired
 	JwtTokenProvider jwtService;
 
-	@Autowired
-	private AuthenticationService authenticationService;
 
 	@PostMapping("/user")
 	public ResponseEntity<User> postUser(@RequestBody UserDTO userDTO) {

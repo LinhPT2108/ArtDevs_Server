@@ -39,7 +39,7 @@ public class PostMapper {
 	private static List<Comment> getComment(Post post) {
 		return post
 				.getListCommentPost().stream()
-				.map(cmt -> new Comment(cmt.getId(), cmt.getContent(), cmt.getImageUrl(), cmt.getCount(),
+				.map(cmt -> new Comment(cmt.getId(), cmt.getContent(), cmt.getImageUrl(), 
 						cmt.getTimeComment(), cmt.getTimeComment(), cmt.getUserReportId(), post))
 				.collect(Collectors.toList());
 	}
@@ -61,21 +61,21 @@ public class PostMapper {
 	private static List<Likes> getLikepost(Post post) {
 		return post
 				.getListLikePost().stream().map(like -> new Likes(like.getId(),
-						like.getCount(), like.getUserLikeId(), post))
+						like.getUserLikeId(), post))
 				.collect(Collectors.toList());
 	}
 
 	private static List<Report> getReportpost(Post post) {
 		return post
 				.getListReportPost().stream().map(rp -> new Report(rp.getId(),
-						rp.getReportDetail(), rp.getCount(), rp.getUserReportId(), post))
+						rp.getReportDetail(),  rp.getUserReportId(), post))
 				.collect(Collectors.toList());
 	}
 
 	private static List<Share> getSharepost(Post post) {
 		return post
 				.getListSharePost().stream().map(share -> new Share(share.getId(),
-						share.getCount(), share.getUserShareId(), post))
+						 share.getUserShareId(), post))
 				.collect(Collectors.toList());
 	}
 }
