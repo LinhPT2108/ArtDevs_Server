@@ -34,6 +34,7 @@ public class RestRealtionShip {
 	@Autowired
 	UserService userservice;
 
+
 	@Autowired
 	RelationshipRepository relationrepository;
 
@@ -45,6 +46,7 @@ public class RestRealtionShip {
 			DTOList.add(RelationShipMapper.convertToRelationShipDTO(relationship));
 		}
 		return ResponseEntity.ok(DTOList);
+
 	}
 
 	@PostMapping("/relationship")

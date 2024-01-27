@@ -20,6 +20,7 @@ import lombok.Setter;
 @Setter
 
 public class HashTag {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -35,4 +36,5 @@ public class HashTag {
 	@JoinColumn(name = "detailhashtagId")
 
 	private DetailHashtag HashtagDetail;
+	
 }

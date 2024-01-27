@@ -1,10 +1,12 @@
 package com.artdevs.domain.entities.post;
 
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.annotations.Nationalized;
 
 import com.artdevs.domain.entities.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
@@ -45,7 +48,6 @@ public class Comment {
 	@Column
 	private Date timeComment;
 
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private User userReportId;
@@ -53,4 +55,12 @@ public class Comment {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "postId")
 	private Post postCommentId;
+
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "commentId")
+	private List<ReplyComment> listReplyCommentPost;
+
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "pictureOfCommentId")
+	private List<PictureOfComment> listPictureOfComment;
 }

@@ -33,7 +33,6 @@ public class RelationShip {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-
 	@Column
 	private int status;
 	

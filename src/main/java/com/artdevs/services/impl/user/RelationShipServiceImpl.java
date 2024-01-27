@@ -164,4 +164,10 @@ public class RelationShipServiceImpl implements RelationshipService {
 
 	
 
+	@Override
+	public List<RelationShip> findByUserOneIdAndUserTwoIdAndStatus(User userOneId, User userTwoId, int status) {
+		// TODO Auto-generated method stub
+		return relationshipRepository.findByUserOneIdAndUserTwoIdAndStatus(userOneId, userTwoId, status);
+	}
+
 }

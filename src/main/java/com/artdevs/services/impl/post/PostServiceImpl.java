@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.artdevs.domain.entities.post.Post;
+import com.artdevs.domain.entities.user.User;
 import com.artdevs.repositories.post.PostRepository;
 import com.artdevs.services.PostService;
 @Service
@@ -51,5 +52,11 @@ public class PostServiceImpl implements PostService {
         postRepository.save(post);
         return true;
     }
+
+	@Override
+	public Optional<Post> findPostByUser(User user) {
+		// TODO Auto-generated method stub
+		return postRepository.findByUser(user);
+	}
 
 }
