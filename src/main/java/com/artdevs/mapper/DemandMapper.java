@@ -17,7 +17,6 @@ public class DemandMapper {
 
         DemandDTO demandDTO = modelMapper.map(demand, DemandDTO.class);
         demandDTO.setUsername(demand.getUser().getUsername());
-        demandDTO.setProgramingLanguage(demand.getLanguage().getLanguageName());
         return demandDTO;
     }
 

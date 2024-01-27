@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.artdevs.domain.entities.post.ImageOfPost;
 import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.user.Demand;
 import com.artdevs.domain.entities.user.Skill;
@@ -79,15 +78,15 @@ public class PostRestController {
 	@PostMapping("/post")
 	public ResponseEntity<Post> CreatePost(@RequestBody PostDTO postdto) {
 		Post post = PostMapper.convertToPost(postdto, userservice);
-		if (postdto.getListImageofPost().size() > 0) {
-			postsv.savePost(post);
-			for (String imgURL : postdto.getListImageofPost()) {
-				ImageOfPost imgOfpost = new ImageOfPost();
-				imgOfpost.setPostImage(post);
-				imgOfpost.setImageOfPostUrl(imgURL);
-				imgservice.saveImageOfPost(imgOfpost);
-			}
-		}
+		// if (postdto.getListImageofPost().size() > 0) {
+		// postsv.savePost(post);
+		// for (String imgURL : postdto.getListImageofPost()) {
+		// ImageOfPost imgOfpost = new ImageOfPost();
+		// imgOfpost.setPostImage(post);
+		// imgOfpost.setImageOfPostUrl(imgURL);
+		// imgservice.saveImageOfPost(imgOfpost);
+		// }
+		// }
 		return ResponseEntity.ok(post);
 	}
 

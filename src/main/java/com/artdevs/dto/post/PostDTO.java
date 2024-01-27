@@ -3,14 +3,9 @@ package com.artdevs.dto.post;
 import java.util.Date;
 import java.util.List;
 
-import com.artdevs.domain.entities.post.Comment;
-import com.artdevs.domain.entities.post.HashTag;
-import com.artdevs.domain.entities.post.ImageOfPost;
-import com.artdevs.domain.entities.post.Likes;
-import com.artdevs.domain.entities.post.Report;
-import com.artdevs.domain.entities.post.Share;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.artdevs.domain.entities.post.TypePost;
-import com.artdevs.domain.entities.user.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,7 +26,7 @@ public class PostDTO {
 	private Long totalShare;
 	private List<ReportDTO> listReportPost;
 	private Long totalComment;
-	private List<String> listImageofPost;
+	private MultipartFile[] listImageofPost;
 	private TypePost postType;
 	private List<HashTagDTO> listHashtag;
 }

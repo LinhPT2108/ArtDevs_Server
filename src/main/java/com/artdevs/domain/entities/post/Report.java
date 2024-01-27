@@ -35,13 +35,10 @@ public class Report {
 	@Column
 	private String reportDetail;
 
-	@Column
-	private int count;
-
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timeCreate;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private User userReportId;

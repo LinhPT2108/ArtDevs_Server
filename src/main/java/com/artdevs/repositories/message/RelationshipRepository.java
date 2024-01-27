@@ -1,9 +1,12 @@
 package com.artdevs.repositories.message;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.artdevs.domain.entities.message.RelationShip;
+import com.artdevs.domain.entities.user.User;
 
 @Repository
 public interface RelationshipRepository extends JpaRepository<RelationShip, Integer> {
@@ -16,7 +19,7 @@ public interface RelationshipRepository extends JpaRepository<RelationShip, Inte
 	// List<RelationShip> findAllByUserOneIdOrUserTwoIdAndStatusNot(String id1,
 	// String id2, int status);
 
-	// RelationShip findByUserOneIdAndUserTwoId(String userOneId, String userTwoId);
+	List<RelationShip> findByUserOneIdAndUserTwoIdAndStatus(User userOneId, User userTwoId, int status);
 
 	// List<RelationShip> findAllByUserOneIdOrUserTwoId(String userOneId, String
 	// userTwoId);
