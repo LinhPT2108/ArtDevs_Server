@@ -21,11 +21,13 @@ import com.artdevs.utils.Path;
 @RestController
 @RequestMapping(Path.path_api)
 public class RestRealtionShip {
-		
-	@Autowired RelationshipService relationservice;
-	
-	@Autowired UserService userservice;
-	
+
+	@Autowired
+	RelationshipService relationservice;
+
+	@Autowired
+	UserService userservice;
+
 //	@GetMapping("/relationship")
 //	public ResponseEntity<List<RelationShipDTO>> getrelationship(){
 ////		List<RelationShip> listrelationship = relationservice.findAll();
@@ -35,9 +37,15 @@ public class RestRealtionShip {
 //		}
 //		return ResponseEntity.ok(DTOList);
 //	}
-	
+
+	@GetMapping("/test/relation")
+	public ResponseEntity<?> getMethodName() {
+		return ResponseEntity.ok(relationservice.findByUserOneIdAndUserTwoIdAndStatus(userservice.findUserById("Aa127"),
+				userservice.findUserById("Aa128"), 0));
+	}
+
 	@PostMapping("/relationship")
-	public ResponseEntity<RelationShip> setRelationship(@RequestBody RelationShipDTO relationshipdto){
+	public ResponseEntity<RelationShip> setRelationship(@RequestBody RelationShipDTO relationshipdto) {
 		return ResponseEntity.ok(RelationShipMapper.convertToRelationShip(relationshipdto, userservice));
 	}
 }

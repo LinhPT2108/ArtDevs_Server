@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.artdevs.domain.entities.message.RelationShip;
+import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.message.RelationShipDTO;
 import com.artdevs.repositories.message.RelationshipRepository;
 import com.artdevs.services.RelationshipService;
@@ -83,6 +84,12 @@ public class RelationShipServiceImpl implements RelationshipService {
 	public List<RelationShipDTO> searchUsers(String loggedInUserId, String search) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<RelationShip> findByUserOneIdAndUserTwoIdAndStatus(User userOneId, User userTwoId, int status) {
+		// TODO Auto-generated method stub
+		return relationshipRepository.findByUserOneIdAndUserTwoIdAndStatus(userOneId, userTwoId, status);
 	}
 
 }

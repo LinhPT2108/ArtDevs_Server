@@ -1,9 +1,6 @@
 package com.artdevs.domain.entities.post;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
-import org.hibernate.annotations.CurrentTimestamp;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,8 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,22 +20,27 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ImageOfPost {
+public class PictureOfComment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-
-	@Column
-	private String imageOfPostUrl;
+	private long id;
 	
 	@Column
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date time;
+	private Long size;
+
+	@Column
+	private String imageUrl;
 	
 	@Column
 	private String cloudinaryPublicId;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "postId")
-	private Post postImage;
+	
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "commentId")
+	private Comment pictureOfCommentId;
+	
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "replyCommentId")
+	private ReplyComment pictureOfReplyCommentId;
 }
