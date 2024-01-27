@@ -1,9 +1,12 @@
 package com.artdevs.domain.entities.post;
 
-import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
-import org.hibernate.annotations.CurrentTimestamp;
+import org.hibernate.annotations.Nationalized;
+
+import com.artdevs.domain.entities.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
@@ -25,22 +29,33 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ImageOfPost {
+public class ReplyComment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private long id;
+
+	@Nationalized
+	@Column
+	private String content;
 
 	@Column
-	private String imageOfPostUrl;
-	
-	@Column
+	private String imageUrl;
+
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date time;
-	
 	@Column
-	private String cloudinaryPublicId;
+	private Date timeComment;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "postId")
-	private Post postImage;
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "userId")
+	private User userReportId;
+
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "commentId")
+	private Comment commentId;
+	
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "pictureOfReplyCommentId")
+	private List<PictureOfComment> listPictureOfComment;
 }

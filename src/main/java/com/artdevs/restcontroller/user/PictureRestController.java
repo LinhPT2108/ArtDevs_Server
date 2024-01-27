@@ -26,10 +26,10 @@ public class PictureRestController {
     @Autowired
     PictureRepository pictureRepository;
 
-    @PostMapping("/picture")
-    public ResponseEntity<Picture> postPicture(@RequestBody PictureDTO pictureDTO) {
-        return ResponseEntity.ok(pictureService.savePicture(PictureMapper.convertToPicture(pictureDTO)));
-    }
+//    @PostMapping("/picture")
+//    public ResponseEntity<Picture> postPicture(@RequestBody PictureDTO pictureDTO) {
+//        return ResponseEntity.ok(pictureService.savePicture(PictureMapper.convertToPicture(pictureDTO)));
+//    }
 
     @GetMapping("/picture")
     public ResponseEntity<List<PictureDTO>> getPicture() {

@@ -1,6 +1,10 @@
 package com.artdevs.domain.entities.user;
 
+import java.util.Date;
+
 import org.hibernate.annotations.Nationalized;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +14,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -40,13 +46,18 @@ public class Picture {
 	@NotBlank(message = "Image URL must not be blank")
 	@Column
 	private String imageUrl;
+	
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column
+	private Date time;
+
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private User user;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "positionPicture")
-	private PositionOfPicture positionOfPicture;
+	@Column
+	private boolean positionOfPicture; // true (1): ảnh đại diện; false (0): ảnh bìa
 
 }

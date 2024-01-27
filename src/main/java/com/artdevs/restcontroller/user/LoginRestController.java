@@ -88,8 +88,12 @@ public class LoginRestController {
 	
 	@PostMapping(value = "/api/login")
 	public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
-		
-		    return ResponseEntity.ok(authenticationService.authenticate(request));
+		try {
+			return ResponseEntity.ok(authenticationService.authenticate(request));			
+		} catch (Exception e) {
+			// TODO: handle exception
+			return ResponseEntity.notFound().build();
+		}
 		
 	}
 	
