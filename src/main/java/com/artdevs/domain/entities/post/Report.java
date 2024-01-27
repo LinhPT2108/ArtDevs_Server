@@ -22,7 +22,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-
 public class Report {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

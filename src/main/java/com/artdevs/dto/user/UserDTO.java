@@ -37,7 +37,6 @@ public class UserDTO {
 
 	private String email;
 
-	private boolean isEnabled;
 
 	private String firstName;
 

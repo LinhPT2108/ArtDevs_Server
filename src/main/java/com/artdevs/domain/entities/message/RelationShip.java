@@ -17,21 +17,22 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class RelationShip {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	@Column
-
-	private Boolean status;
+	private int status;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
@@ -42,11 +43,11 @@ public class RelationShip {
 	private User actionUser;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userRelation1")
+	@JoinColumn(name = "userRelationShipOne")
 	private User userOneId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userRelation2")
+	@JoinColumn(name = "userRelationShipTwo")
 	private User userTwoId;
 
 	@OneToMany(mappedBy = "relationShipId")

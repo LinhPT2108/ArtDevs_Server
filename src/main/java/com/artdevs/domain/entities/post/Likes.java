@@ -21,6 +21,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
+
 public class Likes {
 
 	@Id
@@ -30,11 +31,13 @@ public class Likes {
 	@Column
 	private long count;
 
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private User userLikeId;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "postId")
+
 	private Post postLikeId;
 }

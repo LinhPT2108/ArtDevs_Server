@@ -35,19 +35,26 @@ import lombok.RequiredArgsConstructor;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private static final String secret_key = "123";
-
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		String authorizationHeader = request.getHeader(AUTHORIZATION);
 		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
 			try {
+				
 				String token = authorizationHeader.substring("Bearer ".length());
+				System.out.println("token: "+ token);
 				Algorithm algorithm = Algorithm.HMAC256(secret_key.getBytes());
 				JWTVerifier verifier = JWT.require(algorithm).build();
 				DecodedJWT decodedJWT = verifier.verify(token);
 				String username = decodedJWT.getSubject();
-				String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
+				String[] roles = null;
+				System.out.println(decodedJWT.getClaim("role").toString());
+				if (decodedJWT.getClaim("role") != null) {
+				    roles = new String[] {decodedJWT.getClaim("role").toString().replace("\"", "")};
+				} else {
+				    roles = new String[]{"ROLE_DEFAULT"};
+				}
 				Collection<GrantedAuthority> authorities = new ArrayList<>();
 				Arrays.stream(roles).forEach(role -> {
 					authorities.add(new SimpleGrantedAuthority(role));
@@ -65,10 +72,46 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				response.setContentType(APPLICATION_JSON_VALUE);
 				new ObjectMapper().writeValue(response.getOutputStream(), error);
 				System.out.println("Lỗi không");
+				System.out.println(e);
 			}
 		} else {
 			filterChain.doFilter(request, response);
 		}
 	}
+
+//	@Override
+//	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+//			throws ServletException, IOException {
+//		String authorizationHeader = request.getHeader(AUTHORIZATION);
+//		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+//			try {
+//				String token = authorizationHeader.substring("Bearer ".length());
+//				Algorithm algorithm = Algorithm.HMAC256(secret_key.getBytes());
+//				JWTVerifier verifier = JWT.require(algorithm).build();
+//				DecodedJWT decodedJWT = verifier.verify(token);
+//				String username = decodedJWT.getSubject();
+//				String[] roles = decodedJWT.getClaim("role").asArray(String.class);
+//				Collection<GrantedAuthority> authorities = new ArrayList<>();
+//				Arrays.stream(roles).forEach(role -> {
+//					authorities.add(new SimpleGrantedAuthority(role));
+//				});
+//				UsernamePasswordAuthenticationToken uToken = new UsernamePasswordAuthenticationToken(username,
+//						null,authorities);
+//				SecurityContextHolder.getContext().setAuthentication(uToken);
+//				filterChain.doFilter(request, response);
+//				System.out.println("ra k");
+//			} catch (Exception e) {
+//				response.setHeader("error", e.getMessage());
+//				response.setStatus(FORBIDDEN.value());
+//				Map<String, String> error = new HashMap<>();
+//				error.put("error_message", e.getMessage());
+//				response.setContentType(APPLICATION_JSON_VALUE);
+//				new ObjectMapper().writeValue(response.getOutputStream(), error);
+//				System.out.println("Lỗi không");
+//			}
+//		} else {
+//			filterChain.doFilter(request, response);
+//		}
+//	}
 
 }

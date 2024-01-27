@@ -33,5 +33,6 @@ public class HashTag {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "detailhashtagId")
+
 	private DetailHashtag HashtagDetail;
 }

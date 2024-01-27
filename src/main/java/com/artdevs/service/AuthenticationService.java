@@ -42,9 +42,11 @@ public class AuthenticationService {
 				authenticationRequest.getPassword()));
 
 		UserDTO userdto = UserMapper.UserConvertToUserDTO(user);
+		
 		Role role = null;
 		if (user != null) {
 			role = rolerep.findByUserRole(user);
+			System.out.println("role"+ role.getRoleName());
 		}
 
 		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();

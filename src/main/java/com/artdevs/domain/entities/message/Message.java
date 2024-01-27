@@ -59,10 +59,6 @@ public class Message {
 	@OneToMany(mappedBy = "message")
 	private List<PictureOfMessage> pictureOfMessages;
 
-	@Override
-	public String toString() {
-		return "Message [messageId=" + messageId + ", content=" + content + ", subject=" + subject + ", timeMessage="
-				+ timeMessage + "]";
-	}
+	
 
 }

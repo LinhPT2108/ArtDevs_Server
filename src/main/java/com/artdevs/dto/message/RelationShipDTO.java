@@ -17,7 +17,7 @@ public class RelationShipDTO {
 
     private int id;
 
-    private String status;
+    private int status;
 
     private Date timeRelation;
 
@@ -28,4 +28,12 @@ public class RelationShipDTO {
     private String relatioShipUserTwoId;
 
     private List<MessageDTO> listRelationMessage;
+
+    private String userActionID;
+
+    private String UserID1;
+
+    private String UserID2;
+
+    private List<String> messageID;
 }

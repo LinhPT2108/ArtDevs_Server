@@ -26,6 +26,11 @@ public class ApplicationWebMvcConfiguration implements WebMvcConfigurer {
 					}
 				});
 	}
+//	@Override
+//	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//		registry.addResourceHandler("/static/**", "/templates/**").addResourceLocations("classpath:/static/",
+//				"classpath:/templates/");
+//	}
 
 	@Bean
 	public WebMvcConfigurer webMvcConfigurer() {

@@ -18,7 +18,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-
 public class ImageOfPost {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +25,8 @@ public class ImageOfPost {
 
 	@Column
 	private String imageOfPostUrl;
-
-	@ManyToOne(fetch = FetchType.LAZY)
+	
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "postId")
 	private Post postImage;
 }

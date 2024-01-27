@@ -26,7 +26,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-
 public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +44,7 @@ public class Comment {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timeComment;
+
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
