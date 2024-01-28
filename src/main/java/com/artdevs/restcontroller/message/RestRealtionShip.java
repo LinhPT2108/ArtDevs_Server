@@ -17,9 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.artdevs.domain.entities.message.RelationShip;
 import com.artdevs.dto.message.RelationShipDTO;
+import com.artdevs.dto.user.UserDTO;
+import com.artdevs.mapper.UserMapper;
 import com.artdevs.mapper.message.RelationShipMapper;
 import com.artdevs.repositories.message.RelationshipRepository;
-import com.artdevs.repositories.user.UserRepository;
 import com.artdevs.services.RelationshipService;
 import com.artdevs.services.UserService;
 import com.artdevs.utils.Path;
@@ -131,8 +132,13 @@ public class RestRealtionShip {
 		}
 	}
 	
-	@GetMapping("test")
-	public ResponseEntity<RelationShip> test(){
-		return ResponseEntity.ok(relationrepository.findRelationshipWithFriendWithStatus("Aa127", "Aa123", 0));
+	@GetMapping("/get-friend-online")
+	public ResponseEntity<List<UserDTO>> test(){
+//		System.out.println(relationrepository.findRelationshipByUserIdAndStatusAndOnline("Aa127", 1, true));
+		List<UserDTO> result = relationservice.getFriendOnline()
+		        .stream()
+		        .map(user -> UserMapper.UserConvertToUserDTO(user))
+		        .collect(Collectors.toList());
+		return ResponseEntity.ok(result);
 	}
 }

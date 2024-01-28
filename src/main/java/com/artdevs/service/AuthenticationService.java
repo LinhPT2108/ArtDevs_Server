@@ -18,6 +18,7 @@ import com.artdevs.dto.user.UserDTO;
 import com.artdevs.mapper.UserMapper;
 import com.artdevs.repositories.user.RoleRepository;
 import com.artdevs.repositories.user.UserRepository;
+import com.artdevs.services.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +27,10 @@ import lombok.RequiredArgsConstructor;
 public class AuthenticationService {
 	@Autowired
 	private final UserRepository userrep;
-
+	
+	
+	@Autowired UserService userservice;
+	
 	@Autowired
 	private RoleRepository rolerep;
 
@@ -49,13 +53,16 @@ public class AuthenticationService {
 			role = rolerep.findByUserRole(user);
 			System.out.println("role"+ role.getRoleName());
 		}
-
+		
 		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
 		String jwtToken = jwtService.generateToken(user, authorities);
 		String jwtRefeshToken = jwtService.generateRefeshToken(user, authorities);
+		user.setIsOnline(true);
+		userservice.updateUser(user);
 		return AuthenticationResponse.builder().token(jwtToken).refeshToken(jwtRefeshToken).userdto(userdto).build();
 	}
+	
 	// public AuthenticationResponse authenticate(AuthenticationRequest
 	// authenticationRequest) {
 	// authenticationManager.authenticate(new

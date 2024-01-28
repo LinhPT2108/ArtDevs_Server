@@ -41,8 +41,7 @@ public class Comment {
 	@Column
 	private String imageUrl;
 
-	@Column
-	private long Count;
+	
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column

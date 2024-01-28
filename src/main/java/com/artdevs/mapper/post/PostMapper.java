@@ -133,7 +133,7 @@ public class PostMapper {
 	private static List<Report> getReportpost(Post post) {
 		return post
 				.getListReportPost().stream().map(rp -> new Report(rp.getId(),
-						rp.getReportDetail(), rp.getCount(), rp.getTimeCreate(), rp.getUserReportId(), post))
+						rp.getReportDetail(), rp.getTimeCreate(), rp.getUserReportId(), post))
 				.collect(Collectors.toList());
 	}
 

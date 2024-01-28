@@ -86,7 +86,7 @@ public class User implements UserDetails {
 	private String middleName;
 
 	@Column
-	private String isOnline;
+	private Boolean isOnline;
 
 	@Column
 	private String password;

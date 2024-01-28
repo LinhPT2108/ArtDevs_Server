@@ -22,6 +22,7 @@ import com.artdevs.repositories.user.DemandRepository;
 import com.artdevs.repositories.user.PrograminglanguageRepository;
 import com.artdevs.repositories.user.SkillRepository;
 import com.artdevs.repositories.user.UserRepository;
+import com.artdevs.services.UserService;
 import com.artdevs.utils.Path;
 
 @RestController
@@ -29,6 +30,8 @@ import com.artdevs.utils.Path;
 public class UserRestController {
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired UserService userservice;
 	@Autowired
 	SkillRepository skillrep;
 
@@ -54,7 +57,7 @@ public class UserRestController {
 	}
 
 	@PostMapping("/register")
-	public ResponseEntity<User> RegisterUser(@RequestBody UserRegisterDTO RegisterDTO) {
+	public ResponseEntity<UserDTO> RegisterUser(@RequestBody UserRegisterDTO RegisterDTO) {
 		User user = userRepository.save(UserMapper.RegisterDTOconvertToUser(RegisterDTO));
 		for (String skillname : RegisterDTO.getListSkillOfUser()) {
 			Skill skill = new Skill();
@@ -70,7 +73,8 @@ public class UserRestController {
 		}
 		// System.out.println(demandrepositories.findByUser(user));
 		// user.setUserSkill(skillrep.findByUser(user));
-		return ResponseEntity.ok(user);
+		UserDTO  userdto = UserMapper.UserRegisterConvertToUserDTO(RegisterDTO);
+		return ResponseEntity.ok(userdto);
 	}
 
 	@GetMapping("/register/{userid}")

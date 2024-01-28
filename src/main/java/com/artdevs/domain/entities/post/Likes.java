@@ -32,8 +32,7 @@ public class Likes {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column
-	private long count=0;
+
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column

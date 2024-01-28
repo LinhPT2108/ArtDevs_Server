@@ -72,7 +72,7 @@ public class LikeServiceImpl implements LikesService {
             Likes like = new Likes();
             like.setUserLikeId(user);
             like.setPostLikeId(post);
-            like.setCount(1);
+
 
             return this.likesRepository.save(like) != null;
         } else {

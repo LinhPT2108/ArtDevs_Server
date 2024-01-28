@@ -1,32 +1,33 @@
 package com.artdevs.restcontroller.user;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artdevs.config.auth.AuthenticationRequest;
 import com.artdevs.config.auth.AuthenticationResponse;
-import com.artdevs.repositories.user.RoleRepository;
-import com.artdevs.repositories.user.UserRepository;
+import com.artdevs.domain.entities.user.User;
 import com.artdevs.service.AuthenticationService;
 import com.artdevs.service.JwtTokenProvider;
+import com.artdevs.services.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 public class LoginRestController {
 
-	@Autowired
-	UserRepository userrep;
-	@Autowired
-	RoleRepository rolerep;
+	@Autowired UserService userservice;
+	
 	@Autowired
 	private AuthenticationService authenticationService;
 	@Autowired
@@ -89,12 +90,29 @@ public class LoginRestController {
 	@PostMapping(value = "/api/login")
 	public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
 		try {
+			
 			return ResponseEntity.ok(authenticationService.authenticate(request));			
 		} catch (Exception e) {
 			// TODO: handle exception
+			System.out.println(e);
+			e.printStackTrace();
 			return ResponseEntity.notFound().build();
 		}
 		
+	}
+	
+	@PutMapping(value = "/api/logout")
+	public ResponseEntity<?> logout(HttpServletRequest request){
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userservice.findByEmail(auth.getName());
+		user.setIsOnline(false);
+		userservice.updateUser(user);
+		
+//		String authorizationHeader = request.getHeader(AUTHORIZATION);
+//		String token = authorizationHeader.substring("Bearer ".length());
+//		System.out.println("Logout token: "+ token);
+//		jwtTokenUtil.deleteToken(token);
+		return ResponseEntity.ok(true);
 	}
 	
 	

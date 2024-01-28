@@ -20,21 +20,8 @@ public class UserMapper {
 
 	public static UserDTO UserConvertToUserDTO(User user) {
 		UserDTO userDTO = modelMapper.map(user, UserDTO.class);
-		userDTO.setListComment(null);
-		userDTO.setListLike(null);
-		userDTO.setListShare(null);
-		userDTO.setListReport(null);
-		userDTO.setUserForm(null);
-		userDTO.setUserTo(null);
-		userDTO.setListPostOfUser(null);
 		userDTO.setListSkillOfUser(getSkill(user));
 		userDTO.setListDemandOfUser(getDemand(user));
-		userDTO.setListMethod(null);
-		userDTO.setUserTransition1(null);
-		userDTO.setUserTransition2(null);
-		userDTO.setUserRelation1(null);
-		userDTO.setUserRelation2(null);
-		userDTO.setUserAction(null);
 		return userDTO;
 	}
 
@@ -46,21 +33,8 @@ public class UserMapper {
 
 	public static UserDTO UserRegisterConvertToUserDTO(UserRegisterDTO RegisterDTO) {
 		UserDTO userDTO = modelMapper.map(RegisterDTO, UserDTO.class);
-		userDTO.setListComment(null);
-		userDTO.setListLike(null);
-		userDTO.setListShare(null);
-		userDTO.setListReport(null);
-		userDTO.setUserForm(null);
-		userDTO.setUserTo(null);
-		userDTO.setListPostOfUser(null);
-		userDTO.setListSkillOfUser(null);
-		userDTO.setListDemandOfUser(null);
-		userDTO.setListMethod(null);
-		userDTO.setUserTransition1(null);
-		userDTO.setUserTransition2(null);
-		userDTO.setUserRelation1(null);
-		userDTO.setUserRelation2(null);
-		userDTO.setUserAction(null);
+		userDTO.setListSkillOfUser(RegisterDTO.getListSkillOfUser());
+		userDTO.setListDemandOfUser(RegisterDTO.getListDemandOfUser());
 		return userDTO;
 	}
 

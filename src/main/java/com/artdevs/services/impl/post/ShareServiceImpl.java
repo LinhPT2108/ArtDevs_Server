@@ -52,7 +52,7 @@ public class ShareServiceImpl implements ShareService {
     		Share share = new Share();
     		share.setPostShareId(post);
     		share.setUserShareId(user);
-    		share.setCount(1);
+    
     		return shareRepository.save(share) != null;
     	}else {
 			throw new CustomException(FAILURE_SAVING_SHARE_POST);
