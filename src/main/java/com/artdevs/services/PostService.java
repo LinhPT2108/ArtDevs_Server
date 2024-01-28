@@ -12,7 +12,7 @@ import com.artdevs.domain.entities.user.User;
 public interface PostService {
     Post findPostById(String postId);
     
-    Optional<Post> findPostByUser(User user);
+    Optional<Page<Post>> findPostByUser(User user, Pageable pageable);
 
     Page<Post> findPage(int pagenumber);
 

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.artdevs.domain.entities.post.Post;
@@ -54,9 +55,9 @@ public class PostServiceImpl implements PostService {
     }
 
 	@Override
-	public Optional<Post> findPostByUser(User user) {
+	public Optional<Page<Post>> findPostByUser(User user, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return postRepository.findByUser(user);
+		return postRepository.findByUser(user, pageable);
 	}
 
 }

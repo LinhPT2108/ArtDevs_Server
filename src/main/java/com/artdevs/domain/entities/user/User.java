@@ -110,8 +110,6 @@ public class User implements UserDetails {
 	// @OneToMany(mappedBy = "user")
 	// private List<Wallet> userWallet;
 
-
-
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Demand> userDemand;

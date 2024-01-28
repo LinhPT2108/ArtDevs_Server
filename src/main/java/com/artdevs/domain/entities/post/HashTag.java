@@ -25,9 +25,6 @@ public class HashTag {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column
-	private int count;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "postId")
 	private Post postHashtag;

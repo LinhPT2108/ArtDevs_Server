@@ -13,9 +13,7 @@ public class HashTagDTO {
 
     private int id;
 
-    private int count;
-
     private String postIdByHashTag;
 
-    private int HashtagDetailId;
+    private String HashtagDetailName;
 }

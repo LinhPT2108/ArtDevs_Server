@@ -35,7 +35,6 @@ public class picOfUserRestController {
 			Picture result = this.pictureService.addPicture(loggedInUserId, imageUrl, Boolean.parseBoolean(positionOfPic));
 			return ResponseEntity.ok(PictureMapper.convertToPictureDTO(result));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			System.out.println(e);
 			e.printStackTrace();
 			return ResponseEntity.badRequest().build();

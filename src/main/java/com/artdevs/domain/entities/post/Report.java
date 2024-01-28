@@ -35,9 +35,6 @@ public class Report {
 	@Column
 	private String reportDetail;
 
-	@Column
-	private int count;
-
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timeCreate;
