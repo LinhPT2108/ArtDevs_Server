@@ -25,7 +25,6 @@ import lombok.Setter;
 @Getter
 @Setter
 
-
 public class Likes {
 
 	@Id
@@ -35,7 +34,7 @@ public class Likes {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timeCreate;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private User userLikeId;

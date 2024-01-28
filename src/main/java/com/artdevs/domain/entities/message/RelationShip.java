@@ -17,7 +17,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,14 +33,12 @@ public class RelationShip {
 
 	@Column
 	private int status;
-	
-
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timeRelation;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userAction")
 	private User actionUser;
 
