@@ -46,7 +46,7 @@ public class UserDTO {
 
 	private Date birthday;
 
-	private int gender;
+	private Integer Gender;
 
 	private String isOnline;
 

@@ -132,7 +132,7 @@ public class PostMapper {
 
 	private static List<Comment> getComment(Post post) {
 		return post.getListCommentPost().stream().map(cmt -> new Comment(cmt.getId(), cmt.getContent(),
-				cmt.getImageUrl(), cmt.getTimeComment(), cmt.getUserReportId(), post, null, null))
+				 cmt.getTimeComment(), cmt.getUserReportId(), post, null, null))
 				.collect(Collectors.toList());
 	}
 

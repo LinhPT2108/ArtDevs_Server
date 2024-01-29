@@ -5,10 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.artdevs.domain.entities.message.RelationShip;
-
-import com.artdevs.domain.entities.message.RelationShip;
 import com.artdevs.domain.entities.user.User;
-
 import com.artdevs.dto.message.RelationShipDTO;
 
 @Service

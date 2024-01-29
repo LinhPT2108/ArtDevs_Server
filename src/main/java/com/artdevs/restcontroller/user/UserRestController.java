@@ -2,6 +2,7 @@ package com.artdevs.restcontroller.user;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -91,6 +92,12 @@ public class UserRestController {
 		} catch (Exception e) {
 			return ResponseEntity.notFound().build();
 		}
+	}
+	
+	@GetMapping("/get-mentor")
+	public ResponseEntity<List<UserDTO>> getmenotr(){
+		List<User> listuser = userservice.findMentor();
+		return ResponseEntity.ok(listuser.stream().distinct().map(u -> UserMapper.UserConvertToUserDTO(u)).collect(Collectors.toList()));
 	}
 
 }

@@ -99,7 +99,7 @@ public class User implements UserDetails {
 	private Date birthday;
 
 	@Column
-	private int Gender;
+	private Integer Gender;
 	
 	@Nationalized
 	@Column
