@@ -16,6 +16,7 @@ import com.artdevs.domain.entities.post.HashTag;
 import com.artdevs.domain.entities.post.ImageOfPost;
 import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.post.PrivacyPostDetail;
+import com.artdevs.domain.entities.post.Report;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.post.HashTagDTO;
 import com.artdevs.dto.post.ImageOfPostDTO;
@@ -175,7 +176,8 @@ public class PostMapper {
 	private static List<Report> getReportpost(Post post) {
 		return post
 				.getListReportPost().stream().map(rp -> new Report(rp.getId(),
-						rp.getReportDetail(), rp.getTimeCreate(), rp.getUserReportId(), post))
+						rp.getReportDetail(), rp.getTimeCreate(), rp.getUserReportId(), post)).collect(Collectors.toList());
+	}
 
 	private static Long gettotalComment(Post post) {
 		return  post.getListCommentPost()!=null?(long)post.getListCommentPost().size():0;

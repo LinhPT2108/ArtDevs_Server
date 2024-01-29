@@ -39,21 +39,21 @@ public class RestRealtionShip {
 	@Autowired
 	RelationshipRepository relationrepository;
 
-	@GetMapping("/relationship")
-	public ResponseEntity<List<RelationShipDTO>> getrelationship(){
-		List<RelationShip> listrelationship = relationrepository.findAll();
-		List<RelationShipDTO> DTOList = new ArrayList<>();
-		for (RelationShip relationship : listrelationship) {
-			DTOList.add(RelationShipMapper.convertToRelationShipDTO(relationship));
-		}
-		return ResponseEntity.ok(DTOList);
-
-	}
-
-	@PostMapping("/relationship")
-	public ResponseEntity<RelationShip> setRelationship(@RequestBody RelationShipDTO relationshipdto) {
-		return ResponseEntity.ok(RelationShipMapper.convertToRelationShip(relationshipdto, userservice));
-	}
+//	@GetMapping("/relationship")
+//	public ResponseEntity<List<RelationShipDTO>> getrelationship(){
+//		List<RelationShip> listrelationship = relationrepository.findAll();
+//		List<RelationShipDTO> DTOList = new ArrayList<>();
+//		for (RelationShip relationship : listrelationship) {
+//			DTOList.add(RelationShipMapper.convertToRelationShipDTO(relationship));
+//		}
+//		return ResponseEntity.ok(DTOList);
+//
+//	}
+//
+//	@PostMapping("/relationship")
+//	public ResponseEntity<RelationShip> setRelationship(@RequestBody RelationShipDTO relationshipdto) {
+//		return ResponseEntity.ok(RelationShipMapper.convertToRelationShip(relationshipdto, userservice));
+//	}
 
 	@GetMapping("/get-request-friend")
 	public ResponseEntity<List<RelationShipDTO>> Getrequestfriend() {

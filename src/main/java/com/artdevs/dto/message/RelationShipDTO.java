@@ -21,19 +21,19 @@ public class RelationShipDTO {
 
     private Date timeRelation;
 
-    private String relationShipActionUser;
+//    private String relationShipActionUser;
+//
+//    private String relationShipUserOneId;
+//
+//    private String relatioShipUserTwoId;
 
-    private String relationShipUserOneId;
-
-    private String relatioShipUserTwoId;
-
-    private List<MessageDTO> listRelationMessage;
+//    private List<MessageDTO> listRelationMessage;
 
     private String userActionID;
 
     private String UserID1;
 
     private String UserID2;
-
-    private List<String> messageID;
+//
+//    private List<String> messageID;
 }
