@@ -15,12 +15,12 @@ import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.message.RelationShipDTO;
 import com.artdevs.repositories.message.RelationshipRepository;
 import com.artdevs.services.RelationshipService;
-import com.artdevs.services.UserService;
 
 @Service
 public class RelationShipServiceImpl implements RelationshipService {
 
 	@Autowired
+
 	UserService userservice;
 
 	@Autowired
@@ -48,6 +48,7 @@ public class RelationShipServiceImpl implements RelationshipService {
 //    public void deleteRelationShip(RelationShip relationShip) {
 //        relationshipRepository.delete(relationShip);
 //    }
+
 
 //	@Override
 //	public List<RelationShip> findAllUserRelationshipsWithStatus(String userId) throws Exception {

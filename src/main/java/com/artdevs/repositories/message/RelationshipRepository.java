@@ -3,12 +3,15 @@ package com.artdevs.repositories.message;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
 
+
 import com.artdevs.domain.entities.message.RelationShip;
 import com.artdevs.domain.entities.user.User;
+
 
 
 @EnableJpaRepositories
@@ -114,5 +117,6 @@ public interface RelationshipRepository extends JpaRepository<RelationShip,Integ
 //	            "WHERE (r.userOneId.userId = :id OR r.userTwoId.userId = :id) " +
 //	            "AND r.status = 0")
 //	    List<RelationShip> findAllRequestedForFriendUsers(@Param(value = "id") String id);
+
 
 }

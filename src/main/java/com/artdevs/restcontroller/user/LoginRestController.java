@@ -94,8 +94,9 @@ public class LoginRestController {
 			return ResponseEntity.ok(authenticationService.authenticate(request));			
 		} catch (Exception e) {
 			// TODO: handle exception
-			System.out.println(e);
+
 			e.printStackTrace();
+
 			return ResponseEntity.notFound().build();
 		}
 		

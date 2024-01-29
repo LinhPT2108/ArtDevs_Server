@@ -5,6 +5,8 @@ import java.util.Date;
 
 import org.hibernate.annotations.CurrentTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -40,6 +42,7 @@ public class ImageOfPost {
 	@Column
 	private String cloudinaryPublicId;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "postId")
 	private Post postImage;

@@ -21,5 +21,5 @@ public class ImageOfPostDTO {
     
     private String cloudinaryPublicId;
     
-    private  Date time;
+    private Date time;
 }

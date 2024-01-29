@@ -41,8 +41,6 @@ public class Comment {
 	@Column
 	private String imageUrl;
 
-	
-
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timeComment;

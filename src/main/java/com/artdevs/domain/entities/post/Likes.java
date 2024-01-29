@@ -25,19 +25,16 @@ import lombok.Setter;
 @Getter
 @Setter
 
-
 public class Likes {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-
-
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timeCreate;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private User userLikeId;
