@@ -55,11 +55,13 @@ public class RestRealtionShip {
 		return ResponseEntity.ok(RelationShipMapper.convertToRelationShip(relationshipdto, userservice));
 	}
 
-	@GetMapping("/get-request-friend/{userId}")
-	public ResponseEntity<List<RelationShipDTO>> Getrequestfriend(@PathVariable("userId") String id) {
+	@GetMapping("/get-request-friend")
+	public ResponseEntity<List<RelationShipDTO>> Getrequestfriend() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String LoggerUserID = userservice.findByEmail(auth.getName()).getUserId();
 		List<RelationShip> listrelation;
 		try {
-			listrelation = relationservice.findRelationshipByUserIdAndStatus(id);
+			listrelation = relationservice.findRelationshipByUserIdAndStatus(LoggerUserID);
 			return ResponseEntity
 					.ok(listrelation.stream().map(t -> new RelationShipDTO(t.getId(), t.getStatus(), t.getTimeRelation(),
 							t.getActionUser().getUserId(), t.getUserOneId().getUserId(), t.getUserTwoId().getUserId())).collect(Collectors.toList()));
