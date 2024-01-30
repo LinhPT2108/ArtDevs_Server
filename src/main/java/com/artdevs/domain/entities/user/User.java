@@ -76,7 +76,10 @@ public class User implements UserDetails {
 	@Nationalized
 	@Column
 	private String firstName;
-
+	
+	@Column
+	private String provider;
+	
 	@Nationalized
 	@Column
 	private String lastName;

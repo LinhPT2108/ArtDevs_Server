@@ -18,8 +18,8 @@ public class ProgramingLanguageMapper {
 
     public static ProgramingLanguageDTO convertToProgramingLanguageDTO(ProgramingLanguage programingLanguage) {
         ProgramingLanguageDTO programingLanguageDTO = modelMapper.map(programingLanguage, ProgramingLanguageDTO.class);
-        programingLanguageDTO.setListDemand(getListDemand(programingLanguage));
-        programingLanguageDTO.setListSkills(getListSkill(programingLanguage));
+//        programingLanguageDTO.setListDemand(getListDemand(programingLanguage));
+//        programingLanguageDTO.setListSkills(getListSkill(programingLanguage));
         return programingLanguageDTO;
     }
 
