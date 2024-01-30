@@ -31,7 +31,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Post {
 	@Id
@@ -74,11 +73,11 @@ public class Post {
 	private List<Comment> listCommentPost;
 	
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.EAGER,mappedBy = "postImage")
+	@OneToMany(fetch = FetchType.LAZY,mappedBy = "postImage")
 	private List<ImageOfPost> listImage;
 	
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "typepostId")
 	private TypePost postType;
 	
@@ -88,7 +87,5 @@ public class Post {
 	
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.EAGER,mappedBy = "post")
-
-
 	private List<PrivacyPostDetail> privacyPostDetails;
 }

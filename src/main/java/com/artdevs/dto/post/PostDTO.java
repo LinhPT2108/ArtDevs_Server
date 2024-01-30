@@ -3,6 +3,8 @@ package com.artdevs.dto.post;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.artdevs.domain.entities.post.Comment;
 import com.artdevs.domain.entities.post.HashTag;
 import com.artdevs.domain.entities.post.ImageOfPost;
@@ -23,16 +25,15 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostDTO {
 	private String postId;
-	private String imageUrl;
 	private String content;
 	private Date time;
 	private Date timelineUserId;
-	private User user;
-	private List<Likes> listLikePost;
-	private List<Share> listSharePost;
-	private List<Report> listReportPost;
-	private List<Comment> listCommentPost;
-	private List<ImageOfPost> listImage;
-	private TypePost postType;
-	private List<HashTag> listHashtag;
+	private String userId;
+//	private Long totalLike;
+//	private Long totalShare;
+//	private List<ReportDTO> listReportPost;
+//	private Long totalComment;
+	private MultipartFile[] listImageofPost;
+	private long privacyPostDetails;
+	private List<Integer> listHashtag;
 }

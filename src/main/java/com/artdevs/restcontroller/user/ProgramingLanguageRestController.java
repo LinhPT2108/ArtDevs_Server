@@ -1,4 +1,4 @@
-package com.artdevs.restcontroller;
+package com.artdevs.restcontroller.user;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,14 +15,14 @@ import com.artdevs.domain.entities.user.ProgramingLanguage;
 import com.artdevs.dto.user.ProgramingLanguageDTO;
 import com.artdevs.mapper.ProgramingLanguageMapper;
 import com.artdevs.repositories.user.PrograminglanguageRepository;
-import com.artdevs.services.impl.user.ProgramingLanguageServiceImpl;
+import com.artdevs.services.ProgramingLanguageService;
 import com.artdevs.utils.Path;
 
 @RestController
 @RequestMapping(Path.path_api)
 public class ProgramingLanguageRestController {
     @Autowired
-    ProgramingLanguageServiceImpl programingLanguageServiceImpl;
+    ProgramingLanguageService programingLanguageService;
 
     @Autowired
     PrograminglanguageRepository programingRepositories;
@@ -31,7 +31,7 @@ public class ProgramingLanguageRestController {
     public ResponseEntity<ProgramingLanguage> postProgramingLanguage(
             @RequestBody ProgramingLanguageDTO programingLanguageDTO) {
         return ResponseEntity
-                .ok(programingLanguageServiceImpl
+                .ok(programingLanguageService
                         .saveProgramingLanguage(ProgramingLanguageMapper
                                 .convertToProgramingLanguage(programingLanguageDTO)));
     }

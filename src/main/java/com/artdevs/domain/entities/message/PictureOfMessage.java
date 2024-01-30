@@ -28,6 +28,9 @@ public class PictureOfMessage {
 	@Column
 	private String url;
 	
+	@Column
+	private String cloudinaryPublicId;
+	
 	@ManyToOne
 	@JoinColumn(name = "message")
 	private Message message;

@@ -35,11 +35,11 @@ public class TransitionInfo {
 	@JoinColumn(name = "userTransition1")
 	private User user1;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "userTransition2")
 	private User user2;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "walletId")
 	private Wallet walletOfUser;
 }

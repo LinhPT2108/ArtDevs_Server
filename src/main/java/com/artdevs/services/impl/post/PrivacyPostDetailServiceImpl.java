@@ -3,6 +3,7 @@ package com.artdevs.services.impl.post;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.post.PrivacyPostDetail;
@@ -10,6 +11,7 @@ import com.artdevs.domain.entities.user.User;
 import com.artdevs.repositories.post.PrivacyPostDetailRespository;
 import com.artdevs.services.PrivacyPostDetailService;
 
+@Service
 public class PrivacyPostDetailServiceImpl implements PrivacyPostDetailService{
 	@Autowired
 	PrivacyPostDetailRespository privacyPostDetailRespository;

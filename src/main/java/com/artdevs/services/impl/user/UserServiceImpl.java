@@ -21,7 +21,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserById(String userId) {
         Optional<User> userOptional = userRepository.findById(userId);
-        return userOptional.orElse(null);
+        System.out.println(userOptional);
+        return userOptional.get();
     }
     
   
@@ -44,6 +45,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(User user) {
         userRepository.delete(user);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        // TODO Auto-generated method stub
+        return userRepository.findByEmail(email).get();
     }
 
 }

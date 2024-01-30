@@ -4,9 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.artdevs.domain.entities.post.Post;
+import com.artdevs.domain.entities.user.User;
 import com.artdevs.repositories.post.PostRepository;
 import com.artdevs.services.PostService;
 @Service
@@ -22,8 +26,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public Page<Post> findPage(int pagenumber) {
+    	Page<Post> page = postRepository.findAll(PageRequest.of(pagenumber, 2));
+        return page;
+    }
+    
+    @Override
     public List<Post> findAll() {
-        return postRepository.findAll();
+    	
+        return  postRepository.findAll();
     }
 
     @Override
@@ -42,5 +53,11 @@ public class PostServiceImpl implements PostService {
         postRepository.save(post);
         return true;
     }
+
+	@Override
+	public Optional<Page<Post>> findPostByUser(User user, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return postRepository.findByUser(user, pageable);
+	}
 
 }

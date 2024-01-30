@@ -19,6 +19,7 @@ import com.artdevs.domain.entities.post.Share;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -97,7 +98,7 @@ public class User implements UserDetails {
 	@Column
 	private String username;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "userRole")
 	private Role role;
 
@@ -141,12 +142,12 @@ public class User implements UserDetails {
 	private List<Post> userPost;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "userOneId")
-	private List<RelationShip> userRelation1;
+	@OneToMany(mappedBy = "userOneId",cascade = CascadeType.ALL)
+	private List<RelationShip> userRelationShipOne;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "userTwoId")
-	private List<RelationShip> userRelation2;
+	@OneToMany(mappedBy = "userTwoId",cascade = CascadeType.ALL)
+	private List<RelationShip> userRelationShipTwo;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "actionUser")
@@ -216,5 +217,6 @@ public class User implements UserDetails {
 		// TODO Auto-generated method stub
 		return true;
 	}
+
 
 }

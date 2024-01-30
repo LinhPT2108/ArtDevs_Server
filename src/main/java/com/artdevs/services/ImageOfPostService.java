@@ -2,6 +2,8 @@ package com.artdevs.services;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.artdevs.domain.entities.post.ImageOfPost;
 
 public interface ImageOfPostService {
@@ -9,7 +11,7 @@ public interface ImageOfPostService {
 
     List<ImageOfPost> findAll();
 
-    ImageOfPost saveImageOfPost(ImageOfPost imageofpost);
+    ImageOfPost saveImageOfPost(String postId, MultipartFile file) throws Exception;
 
     ImageOfPost updateImageOfPost(ImageOfPost imageofpost);
 

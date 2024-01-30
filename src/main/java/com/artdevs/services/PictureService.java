@@ -2,16 +2,18 @@ package com.artdevs.services;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.artdevs.domain.entities.user.Picture;
+import com.artdevs.dto.user.PictureDTO;
 
 public interface PictureService {
-    Picture findPictureById(Integer pictureId);
+	  	Picture addPicture(String loggedInUserId, MultipartFile file, boolean posiotionOfPic) throws Exception;
 
-    List<Picture> findAll();
+	    List<PictureDTO> getAllPicturesByUserId(String userId);
 
-    Picture savePicture(Picture picture);
+	    List<PictureDTO> getPictureOfUserByPosition(String userId, boolean position);
+	    
+	    boolean deletePicture(String loggedInUserId, String photoToRemoveId) throws Exception;
 
-    Picture updatePicture(Picture picture);
-
-    void deletePicture(Picture picture);
 }

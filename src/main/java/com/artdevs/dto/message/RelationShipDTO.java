@@ -1,11 +1,8 @@
 package com.artdevs.dto.message;
 
 import java.util.Date;
+import java.util.List;
 
-import org.hibernate.annotations.Nationalized;
-
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,9 +17,23 @@ public class RelationShipDTO {
 
     private int id;
 
-    @Nationalized
-    private String status;
+    private int status;
 
-    @Temporal(TemporalType.TIMESTAMP)
     private Date timeRelation;
+
+    private String relationShipActionUser;
+
+    private String relationShipUserOneId;
+
+    private String relatioShipUserTwoId;
+
+    private List<MessageDTO> listRelationMessage;
+
+    private String userActionID;
+
+    private String UserID1;
+
+    private String UserID2;
+
+    private List<String> messageID;
 }

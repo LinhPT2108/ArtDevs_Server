@@ -1,5 +1,6 @@
 package com.artdevs.dto.user;
 
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,10 +17,13 @@ public class PictureDTO {
 
     private String cloudinaryPublicId;
 
-
     private String description;
 
     private String imageUrl;
 
     private String userId;
+    
+    private boolean positionOfPicture;
+    
+    private Date time;
 }

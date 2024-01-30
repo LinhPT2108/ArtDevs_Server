@@ -20,19 +20,18 @@ import lombok.Setter;
 @Setter
 
 public class HashTag {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
-	@Column
-	private int count;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "postId")
 	private Post postHashtag;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "detailhashtagId")
 
 	private DetailHashtag HashtagDetail;
+	
 }
