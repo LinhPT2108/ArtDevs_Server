@@ -1,5 +1,6 @@
 package com.artdevs.mapper.post;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,8 +8,10 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
 import com.artdevs.domain.entities.post.Comment;
-import com.artdevs.domain.entities.user.User;
-import com.artdevs.dto.post.CommentDTO;
+import com.artdevs.domain.entities.post.PictureOfComment;
+import com.artdevs.dto.post.CommentToGetDTO;
+import com.artdevs.dto.post.CommentToPostDTO;
+import com.artdevs.dto.post.ImageOfCommentDTO;
 import com.artdevs.services.PostService;
 import com.artdevs.services.UserService;
 
@@ -17,32 +20,47 @@ public class CommentMapper {
 
  
 
-    public static CommentDTO convertToCommentDTO(Comment comment) {
-        CommentDTO commentDTO = modelMapper.map(comment, CommentDTO.class);
-
-        commentDTO.setPostID(comment.getPostCommentId().getPostId());
-
-        return commentDTO;
+    public static CommentToPostDTO convertToCommentToPostDTO(Comment comment) {
+        CommentToPostDTO CommentToPostDTO = modelMapper.map(comment, CommentToPostDTO.class);
+        CommentToPostDTO.setPostID(comment.getPostCommentId().getPostId());
+        return CommentToPostDTO;
     }
+    
+    public static CommentToGetDTO convertToCommentToGetDTO(Comment comment) {
+    	CommentToGetDTO commenttoGetDTO = modelMapper.map(comment, CommentToGetDTO.class);
+    	commenttoGetDTO.setListImageofComment(getImage(comment));
+    	commenttoGetDTO.setPostID(comment.getPostCommentId().getPostId());
+    	return commenttoGetDTO;
+    }
+    
 
-    public static Comment convertToEntity(CommentDTO commentDTO,UserService userservice,PostService postservice) {
-    	Comment comment = modelMapper.map(commentDTO, Comment.class);
-    	comment.setPostCommentId(postservice.findPostById(commentDTO.getPostID()));
-    	comment.setUserReportId(userservice.findUserById(commentDTO.getUserID()));
+    public static Comment convertToEntity(CommentToPostDTO CommentToPostDTO,UserService userservice,PostService postservice) {
+    	Comment comment = modelMapper.map(CommentToPostDTO, Comment.class);
+    	comment.setPostCommentId(postservice.findPostById(CommentToPostDTO.getPostID()));
+    	comment.setUserReportId(userservice.findUserById(CommentToPostDTO.getUserID()));
         return comment;
     }
 
-    public static List<CommentDTO> convertListToDTO(List<Comment> comments) {
+    public static List<CommentToPostDTO> convertListToDTO(List<Comment> comments) {
         return comments.stream()
-                .map(comment -> modelMapper.map(comment, CommentDTO.class))
+                .map(comment -> modelMapper.map(comment, CommentToPostDTO.class))
                 .collect(Collectors.toList());
     }
 
-    public static List<Comment> convertListToEntity(List<CommentDTO> commentDTOs) {
-        return modelMapper.map(commentDTOs, new TypeToken<List<Comment>>() {}.getType());
+    public static List<Comment> convertListToEntity(List<CommentToPostDTO> CommentToPostDTOs) {
+        return modelMapper.map(CommentToPostDTOs, new TypeToken<List<Comment>>() {}.getType());
     }
     
-    
+	private static List<ImageOfCommentDTO> getImage(Comment comment) {
+		List<PictureOfComment> imageOfCMT = comment.getListPictureOfComment();
+		List<ImageOfCommentDTO> imageOfCommentDTOs = new ArrayList<>();
+		if (imageOfCommentDTOs !=null) {
+			for (PictureOfComment i : imageOfCMT) {
+				imageOfCommentDTOs.add(ImageOfCommentMapper.convertToImageOfCommentDTO(i));
+			}
+		}
+		return imageOfCommentDTOs;
+	}
 
     // private static List<User> getComment(Comment comment){
     // return comment

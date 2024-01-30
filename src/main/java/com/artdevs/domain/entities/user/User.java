@@ -2,6 +2,7 @@ package com.artdevs.domain.entities.user;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.annotations.Nationalized;
@@ -28,6 +29,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -83,7 +86,7 @@ public class User implements UserDetails {
 	private String middleName;
 
 	@Column
-	private String isOnline;
+	private Boolean isOnline;
 
 	@Column
 	private String password;
@@ -91,8 +94,12 @@ public class User implements UserDetails {
 	@Column
 	private String profilePicUrl;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column
-	private String provider;
+	private Date birthday;
+
+	@Column
+	private Integer Gender;
 	
 	@Nationalized
 	@Column
@@ -211,7 +218,6 @@ public class User implements UserDetails {
 		authorities.add(new SimpleGrantedAuthority(this.role.getRoleName()));
 		return List.of(new SimpleGrantedAuthority(authorities.toString()));
 	}
-
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub

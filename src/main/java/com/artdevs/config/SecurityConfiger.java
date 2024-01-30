@@ -201,7 +201,7 @@ public class SecurityConfiger {
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-wishlist"),
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-orders-by-user"),
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-best-seller"))
-					.hasAnyAuthority("Admin")
+					.hasAnyAuthority("admin")
 					.anyRequest().permitAll())
 
 //		        .formLogin(login -> login

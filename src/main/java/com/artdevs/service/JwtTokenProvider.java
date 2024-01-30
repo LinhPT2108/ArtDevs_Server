@@ -2,13 +2,14 @@ package com.artdevs.service;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Date;
-import java.util.stream.Collectors;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.artdevs.domain.entities.user.User;
@@ -24,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
-
+	
 	private static final String secret_key = "123";
 
 	public String generateToken(User user, Collection<SimpleGrantedAuthority> authorities) {
@@ -66,5 +67,30 @@ public class JwtTokenProvider {
         }
         return false;
     }
+	 public void deleteToken(String authToken) {
+	        try {
+	            Algorithm algorithm = Algorithm.HMAC256(secret_key.getBytes());
+	            JWTVerifier verifier = JWT.require(algorithm)
+	                    .build();
+	            DecodedJWT decodedJWT = verifier.verify(authToken);
+
+	            // Đặt thời gian hết hạn ngay lập tức để token trở thành không hợp lệ
+	            Algorithm invalidateAlgorithm = Algorithm.HMAC256("invalid".getBytes());
+	            String invalidatedToken = JWT.create()
+	                    .withSubject(decodedJWT.getSubject())
+	                    .withExpiresAt(new Date())
+	                    .sign(invalidateAlgorithm);
+
+	            // In ra để kiểm tra, bạn có thể thay thế bằng cách khác như lưu vào một danh sách token đã hết hạn
+	            System.out.println("Invalidated Token: " + invalidatedToken);
+	        } catch (SignatureException ex) {
+	            System.out.println("Invalid JWT token signature");
+	        } catch (JWTVerificationException ex) {
+	            System.out.println("Invalid JWT token");
+	            System.out.println(ex);
+	        }
+	    }
+    // Phương thức để xóa token
+   
 
 }
