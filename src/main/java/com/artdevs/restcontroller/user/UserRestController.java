@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.artdevs.domain.entities.user.Demand;
 import com.artdevs.domain.entities.user.Skill;
 import com.artdevs.domain.entities.user.User;
+import com.artdevs.dto.ErrorResponseDTO;
 import com.artdevs.dto.UserRegisterDTO;
 import com.artdevs.dto.user.UserDTO;
 import com.artdevs.mapper.UserMapper;
@@ -31,8 +33,9 @@ import com.artdevs.utils.Path;
 public class UserRestController {
 	@Autowired
 	UserRepository userRepository;
-	
-	@Autowired UserService userservice;
+
+	@Autowired
+	UserService userservice;
 	@Autowired
 	SkillRepository skillrep;
 
@@ -58,24 +61,33 @@ public class UserRestController {
 	}
 
 	@PostMapping("/register")
-	public ResponseEntity<UserDTO> RegisterUser(@RequestBody UserRegisterDTO RegisterDTO) {
-		User user = userRepository.save(UserMapper.RegisterDTOconvertToUser(RegisterDTO));
-		for (String skillname : RegisterDTO.getListSkillOfUser()) {
-			Skill skill = new Skill();
-			skill.setUser(user);
-			skill.setLanguage(programingrepositories.findByLanguageName(skillname));
-			skillrep.save(skill);
-		}
-		for (String demandname : RegisterDTO.getListDemandOfUser()) {
-			Demand demand = new Demand();
-			demand.setUser(user);
-			demand.setLanguage(programingrepositories.findByLanguageName(demandname));
-			demandrepositories.save(demand);
-		}
-		// System.out.println(demandrepositories.findByUser(user));
-		// user.setUserSkill(skillrep.findByUser(user));
-		UserDTO  userdto = UserMapper.UserRegisterConvertToUserDTO(RegisterDTO);
-		return ResponseEntity.ok(userdto);
+	public ResponseEntity<?> RegisterUser(@RequestBody UserRegisterDTO RegisterDTO) {
+		try {
+			User emailExist = userRepository.findByEmail(RegisterDTO.getEmail()).get();
+			if (emailExist == null) {
+				User user = userRepository.save(UserMapper.RegisterDTOconvertToUser(RegisterDTO));
+				for (String skillname : RegisterDTO.getListSkillOfUser()) {
+					Skill skill = new Skill();
+					skill.setUser(user);
+					skill.setLanguage(programingrepositories.findByLanguageName(skillname));
+					skillrep.save(skill);
+				}
+				for (String demandname : RegisterDTO.getListDemandOfUser()) {
+					Demand demand = new Demand();
+					demand.setUser(user);
+					demand.setLanguage(programingrepositories.findByLanguageName(demandname));
+					demandrepositories.save(demand);
+				}
+				UserDTO userdto = UserMapper.UserRegisterConvertToUserDTO(RegisterDTO);
+				return ResponseEntity.ok(userdto);
+			}  else {
+	            ErrorResponseDTO errorResponse = new ErrorResponseDTO(HttpStatus.BAD_REQUEST.value(), "Email đã tồn tại !");
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+	        }
+	    } catch (Exception e) {
+	        ErrorResponseDTO errorResponse = new ErrorResponseDTO(HttpStatus.BAD_REQUEST.value(), "Đăng ký thất bại: " + e.getMessage());
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+	    }
 	}
 
 	@GetMapping("/register/{userid}")
@@ -93,11 +105,12 @@ public class UserRestController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+
 	@GetMapping("/get-mentor")
-	public ResponseEntity<List<UserDTO>> getmenotr(){
+	public ResponseEntity<List<UserDTO>> getmenotr() {
 		List<User> listuser = userservice.findMentor();
-		return ResponseEntity.ok(listuser.stream().distinct().map(u -> UserMapper.UserConvertToUserDTO(u)).collect(Collectors.toList()));
+		return ResponseEntity.ok(
+				listuser.stream().distinct().map(u -> UserMapper.UserConvertToUserDTO(u)).collect(Collectors.toList()));
 	}
 
 }
