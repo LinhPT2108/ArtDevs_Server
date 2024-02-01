@@ -9,6 +9,6 @@ import com.artdevs.domain.entities.post.Comment;
 import com.artdevs.domain.entities.post.ReplyComment;
 
 @Repository
-public interface ReplyCommentRepository extends JpaRepository<ReplyComment, Integer>{
+public interface ReplyCommentRepository extends JpaRepository<ReplyComment, Long> {
 	List<ReplyComment> findByCommentId(Comment commentId);
 }

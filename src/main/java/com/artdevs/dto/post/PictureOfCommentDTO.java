@@ -1,7 +1,5 @@
 package com.artdevs.dto.post;
 
-import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,18 +9,17 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentDTO {
+public class PictureOfCommentDTO {
 
-    private long id;
+    private Long id;
 
-    private String content;
+    private Long size;
 
     private String imageUrl;
 
-    private Date timeComment;
+    private String cloudinaryPublicId;
 
-    private String UserID;
+    private Long pictureOfCommentId;
 
-    private String PostID;
-
+    private Long pictureOfReplyCommentId;
 }

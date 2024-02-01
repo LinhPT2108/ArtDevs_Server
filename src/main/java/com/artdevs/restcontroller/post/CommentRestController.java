@@ -25,22 +25,28 @@ import com.artdevs.utils.Path;
 @RestController
 @RequestMapping(Path.path_api)
 public class CommentRestController {
-    @Autowired CommentService commentService;
-    @Autowired PostService postservice;
-    @Autowired UserService userservice;
+    @Autowired
+    CommentService commentService;
+    @Autowired
+    PostService postservice;
+    @Autowired
+    UserService userservice;
 
     @PostMapping("/comment")
     public ResponseEntity<Comment> postComment(@RequestBody CommentDTO commentDTO) {
-    	commentDTO.setTimeComment(new Date());
-        return ResponseEntity.ok(commentService.saveComment(CommentMapper.convertToEntity(commentDTO,userservice,postservice)));
+        commentDTO.setTimeComment(new Date());
+        return ResponseEntity
+                .ok(commentService.saveComment(CommentMapper.convertToEntity(commentDTO, userservice, postservice)));
     }
+
     @PostMapping("/comment/{postid}")
-    public ResponseEntity<Comment> postComment(@PathVariable("postid") String postid ,@RequestBody CommentDTO commentDTO) {
-    	commentDTO.setPostID(postid);
-    	commentDTO.setTimeComment(new Date());
-        return ResponseEntity.ok(commentService.saveComment(CommentMapper.convertToEntity(commentDTO,userservice,postservice)));
+    public ResponseEntity<Comment> postComment(@PathVariable("postid") String postid,
+            @RequestBody CommentDTO commentDTO) {
+        commentDTO.setPostID(postid);
+        commentDTO.setTimeComment(new Date());
+        return ResponseEntity
+                .ok(commentService.saveComment(CommentMapper.convertToEntity(commentDTO, userservice, postservice)));
     }
-    
 
     @GetMapping("/comment")
     public ResponseEntity<List<CommentDTO>> getCommnet() {
@@ -51,8 +57,10 @@ public class CommentRestController {
         }
         return ResponseEntity.ok(listCommentDTO);
     }
+
     @GetMapping("/comment/{postID}/page/{page}")
-    public ResponseEntity<List<CommentDTO>> getCommnetByPostID(@PathVariable("postID") String postid,@PathVariable("page") int pagenumber) {
+    public ResponseEntity<List<CommentDTO>> getCommnetByPostID(@PathVariable("postID") String postid,
+            @PathVariable("page") int pagenumber) {
         List<CommentDTO> listCommentDTO = new ArrayList<>();
         Page<Comment> listComment = commentService.findpagecommentbyPostID(postid, pagenumber);
         for (Comment comment : listComment) {
@@ -60,6 +68,5 @@ public class CommentRestController {
         }
         return ResponseEntity.ok(listCommentDTO);
     }
-    
-    
+
 }

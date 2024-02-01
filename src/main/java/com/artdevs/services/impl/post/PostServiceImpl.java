@@ -13,6 +13,7 @@ import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.repositories.post.PostRepository;
 import com.artdevs.services.PostService;
+
 @Service
 public class PostServiceImpl implements PostService {
 
@@ -27,20 +28,20 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<Post> findPage(int pagenumber) {
-    	Page<Post> page = postRepository.findAll(PageRequest.of(pagenumber, 2));
+        Page<Post> page = postRepository.findAll(PageRequest.of(pagenumber, 2));
         return page;
     }
-    
+
     @Override
     public List<Post> findAll() {
-    	
-        return  postRepository.findAll();
+
+        return postRepository.findAll();
     }
 
     @Override
     public Post savePost(Post post) {
         return postRepository.save(post);
-    } 
+    }
 
     @Override
     public Post updatePost(Post post) {
@@ -49,15 +50,15 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public boolean deletePost(Post post) {
-    	post.setDel(true);
+        post.setDel(true);
         postRepository.save(post);
         return true;
     }
 
-	@Override
-	public Optional<Page<Post>> findPostByUser(User user, Pageable pageable) {
-		// TODO Auto-generated method stub
-		return postRepository.findByUser(user, pageable);
-	}
+    @Override
+    public Optional<Page<Post>> findPostByUser(User user, Pageable pageable) {
+        // TODO Auto-generated method stub
+        return postRepository.findByUser(user, pageable);
+    }
 
 }

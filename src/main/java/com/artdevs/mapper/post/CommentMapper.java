@@ -15,8 +15,6 @@ import com.artdevs.services.UserService;
 public class CommentMapper {
     private static final ModelMapper modelMapper = new ModelMapper();
 
- 
-
     public static CommentDTO convertToCommentDTO(Comment comment) {
         CommentDTO commentDTO = modelMapper.map(comment, CommentDTO.class);
 
@@ -25,10 +23,10 @@ public class CommentMapper {
         return commentDTO;
     }
 
-    public static Comment convertToEntity(CommentDTO commentDTO,UserService userservice,PostService postservice) {
-    	Comment comment = modelMapper.map(commentDTO, Comment.class);
-    	comment.setPostCommentId(postservice.findPostById(commentDTO.getPostID()));
-    	comment.setUserReportId(userservice.findUserById(commentDTO.getUserID()));
+    public static Comment convertToEntity(CommentDTO commentDTO, UserService userservice, PostService postservice) {
+        Comment comment = modelMapper.map(commentDTO, Comment.class);
+        comment.setPostCommentId(postservice.findPostById(commentDTO.getPostID()));
+        comment.setUserReportId(userservice.findUserById(commentDTO.getUserID()));
         return comment;
     }
 
@@ -39,10 +37,9 @@ public class CommentMapper {
     }
 
     public static List<Comment> convertListToEntity(List<CommentDTO> commentDTOs) {
-        return modelMapper.map(commentDTOs, new TypeToken<List<Comment>>() {}.getType());
+        return modelMapper.map(commentDTOs, new TypeToken<List<Comment>>() {
+        }.getType());
     }
-    
-    
 
     // private static List<User> getComment(Comment comment){
     // return comment

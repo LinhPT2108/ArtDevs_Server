@@ -18,8 +18,9 @@ public class ImageOfPostDTO {
     private String imageOfPostUrl;
 
     private String postID;
-    
+
     private String cloudinaryPublicId;
-    
+
     private Date time;
+
 }
