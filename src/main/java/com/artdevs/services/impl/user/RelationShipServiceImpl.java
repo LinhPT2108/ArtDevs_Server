@@ -81,6 +81,31 @@ public class RelationShipServiceImpl implements RelationshipService {
 		
 		return FriendIsOnline;
 	}
+	
+	@Override
+	public List<User> getAllFriend() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User userlogin = userservice.findByEmail(auth.getName());
+		List<User> Result = new ArrayList<>();
+		List<User> user1 = new ArrayList<>();
+		List<User> user2 = new ArrayList<>();
+		List<RelationShip> listFriendRelationship = relationshipRepository.findRelationshipByUserIdAndStatus(userlogin.getUserId(), 1);
+		for (RelationShip relation : listFriendRelationship) {
+			user1.add(relation.getUserOneId());
+			user2.add(relation.getUserTwoId());
+		}
+		for (User user : user1) {
+			if(user.getUserId() != userlogin.getUserId()) {
+				Result.add(user);
+			}
+		}
+		for (User user : user2) {
+			if(user.getUserId()!= userlogin.getUserId()) {
+				Result.add(user);
+			}
+		}
+		return Result;
+	}
 
 	@Override
 	public List<RelationShip> findRelationshipByUserIdAndStatus(String userId) throws Exception {
@@ -192,5 +217,7 @@ public class RelationShipServiceImpl implements RelationshipService {
 		// TODO Auto-generated method stub
 		return relationshipRepository.findByUserOneIdAndUserTwoIdAndStatus(userOneId, userTwoId, status);
 	}
+
+	
 
 }

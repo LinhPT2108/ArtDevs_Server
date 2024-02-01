@@ -36,4 +36,6 @@ public interface RelationshipService {
 
 
 	List<User> getFriendOnline();
+	
+	List<User> getAllFriend();
 }

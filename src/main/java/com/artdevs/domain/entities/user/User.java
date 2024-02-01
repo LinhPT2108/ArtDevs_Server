@@ -92,6 +92,12 @@ public class User implements UserDetails {
 	private String password;
 
 	@Column
+	private Integer MatchPrice;
+	
+	@Column 
+	private Boolean isReady;
+	
+	@Column
 	private String profilePicUrl;
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -117,8 +123,8 @@ public class User implements UserDetails {
 	@OneToMany(mappedBy = "user")
 	private List<Log> userLog;
 
-	// @OneToMany(mappedBy = "user")
-	// private List<Wallet> userWallet;
+//	 @OneToMany(mappedBy = "user")
+//	 private List<Wallet> userWallet;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")

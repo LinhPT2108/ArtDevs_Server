@@ -1,5 +1,6 @@
 package com.artdevs.services.impl.post;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,11 +14,14 @@ import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.repositories.post.PostRepository;
 import com.artdevs.services.PostService;
+import com.artdevs.services.RelationshipService;
 @Service
 public class PostServiceImpl implements PostService {
 
     @Autowired
     PostRepository postRepository;
+    
+    @Autowired RelationshipService relationservice;
 
     @Override
     public Post findPostById(String postId) {
@@ -58,6 +62,22 @@ public class PostServiceImpl implements PostService {
 	public Optional<Page<Post>> findPostByUser(User user, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return postRepository.findByUser(user, pageable);
+	}
+
+	@Override
+	public List<Post> findPostWithListFriend() {
+		// TODO Auto-generated method stub
+		List<Post> Result = new ArrayList<>();
+		
+		List<User> Listfriend = relationservice.getAllFriend();
+		
+		for (User user : Listfriend) {
+			for (Post u : user.getUserPost()) {
+				Result.add(u);
+			}
+		}
+		
+		return Result;
 	}
 
 }

@@ -21,5 +21,7 @@ public interface UserService {
 	void deleteUser(User user);
 
 	List<User> findMentor();
+	
+	List<User> FindMentorIsReady();
 
 }
