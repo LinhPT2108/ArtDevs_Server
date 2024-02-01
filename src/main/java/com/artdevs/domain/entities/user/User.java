@@ -227,5 +227,17 @@ public class User implements UserDetails {
 		return true;
 	}
 
+	public User(String userId, String email, String firstName, String provider, String profilePicUrl, String username,
+			Role role) {
+		super();
+		this.userId = userId;
+		this.email = email;
+		this.firstName = firstName;
+		this.provider = provider;
+		this.profilePicUrl = profilePicUrl;
+		this.username = username;
+		this.role = role;
+	}
+
 
 }

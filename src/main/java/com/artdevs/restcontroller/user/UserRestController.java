@@ -74,7 +74,6 @@ public class UserRestController {
 		System.out.println(">>> check user: ,");
 		try {
 			User emailExist = userRepository.findByEmail(RegisterDTO.getEmail()).orElse(null);
-			System.out.println(">>> check user: ," + emailExist);
 			if (emailExist == null) {
 				User user = userRepository.save(UserMapper.RegisterDTOconvertToUser(RegisterDTO));
 				for (String skillname : RegisterDTO.getListSkillOfUser()) {
@@ -121,6 +120,24 @@ public class UserRestController {
 		}
 	}
 
+	@PostMapping("/check-user-by-email-provider")
+	public ResponseEntity<?> RegisterUserWithProvider(@RequestParam String email, @RequestParam String provider) {
+		try {
+			User emailExist = userRepository.findByEmail(email).orElse(null);
+			if (emailExist != null) {
+
+				return ResponseEntity.ok(UserMapper.UserConvertToUserDTO(emailExist));
+
+			} else {
+				ErrorResponseDTO errorResponse = new ErrorResponseDTO(HttpStatus.NOT_FOUND.value(), "");
+				return ResponseEntity.ok(errorResponse);
+			}
+		} catch (Exception e) {
+			ErrorResponseDTO errorResponse = new ErrorResponseDTO(HttpStatus.NOT_FOUND.value(), "");
+			return ResponseEntity.ok(errorResponse);
+		}
+	}
+
 	@GetMapping("/user/{userid}")
 	public ResponseEntity<UserDTO> getUser(@PathVariable String userid) {
 		try {
@@ -138,17 +155,35 @@ public class UserRestController {
 				listuser.stream().distinct().map(u -> UserMapper.UserConvertToUserDTO(u)).collect(Collectors.toList()));
 	}
 
-	@GetMapping("/user-social")
-	public ResponseEntity<AuthenticationResponse> getUserByEmailAndProvider(@RequestParam("email") String email,
-			@RequestParam("provider") String provider) {
-		User user = userRepository.findByEmailAndProvider(email, provider).get();
-		UserDTO userdto = UserMapper.UserConvertToUserDTO(user);
+//	@PostMapping("/user-social")
+//	public ResponseEntity<?> getUserByEmailAndProvidere(@RequestParam("email") String email,
+//			@RequestParam("provider") String provider, @RequestBody UserRegisterDTO RegisterDTO) {
+//		User user = userRepository.findByEmailAndProvider(email, provider).orElse(null);
+//		return ResponseEntity.ok(user);
+//	}
 
+	@PostMapping("/user-social")
+	public ResponseEntity<AuthenticationResponse> getUserByEmailAndProvider(@RequestBody UserRegisterDTO RegisterDTO) {
+		User user = userRepository.findByEmailAndProvider(RegisterDTO.getEmail(), RegisterDTO.getProvider()).orElse(null);
+		System.out.println(">>> check user: " + user);
 		Role role = null;
-		if (user != null) {
-			role = user.getRole();
+		if (user == null) {
+			user = userRepository.save(UserMapper.RegisterDTOconvertToUser(RegisterDTO));
+			for (String skillname : RegisterDTO.getListSkillOfUser()) {
+				Skill skill = new Skill();
+				skill.setUser(user);
+				skill.setLanguage(programingrepositories.findByLanguageName(skillname));
+				skillrep.save(skill);
+			}
+			for (String demandname : RegisterDTO.getListDemandOfUser()) {
+				Demand demand = new Demand();
+				demand.setUser(user);
+				demand.setLanguage(programingrepositories.findByLanguageName(demandname));
+				demandrepositories.save(demand);
+			}
 		}
-
+		role = user.getRole();
+		UserDTO userdto = UserMapper.UserRegisterConvertToUserDTO(RegisterDTO);
 		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
 		String jwtToken = jwtService.generateToken(user, authorities);
