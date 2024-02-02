@@ -1,9 +1,8 @@
-package com.artdevs.domain.entities.message;
+package com.artdevs.domain.entities.user;
 
 import java.util.Date;
-import java.util.List;
 
-import com.artdevs.domain.entities.user.User;
+import org.hibernate.annotations.Nationalized;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,11 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,31 +22,25 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class RelationShip {
+public class Star {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
-	@Column
-	private int status;
 	
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column
-	private Date timeRelation;
-
-	@ManyToOne
-	@JoinColumn(name = "userAction")
-	private User actionUser;
-
+	@Nationalized
+	private String content;
+	
+	@Column
+	private double star;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userRelationShipOne")
-	private User userOneId;
-
+	@JoinColumn(name = "userSend")
+	private User userSend;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userRelationShipTwo")
-	private User userTwoId;
-
-	@OneToMany(mappedBy = "relationShipId")
-	private List<Message> relationMessage;
-
+	@JoinColumn(name = "userReceive")
+	private User userReceive;
+	
+	
 }

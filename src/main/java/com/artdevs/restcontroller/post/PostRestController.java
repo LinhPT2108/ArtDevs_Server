@@ -84,7 +84,7 @@ public class PostRestController {
 		return ResponseEntity.ok(PostMapper.convertoGetDTO(post, hashtagSerivce));
 	}
 
-	@GetMapping("/post")
+	@GetMapping("/post-by-user-logged")
 	public ResponseEntity<?> getPostall(@RequestParam("page") Optional<Integer> p) {
 		Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
 		System.out.println(authenticate.getName());
@@ -156,7 +156,7 @@ public class PostRestController {
 		return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce));
 	}
 	
-	@PutMapping("path/{id}")
+	@PutMapping("/update-post/{id}")
 	public ResponseEntity<?> putMethodName(@PathVariable("id") String id) {
 		//TODO: process PUT request
 		

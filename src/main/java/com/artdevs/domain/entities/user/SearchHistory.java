@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.hibernate.annotations.Nationalized;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,6 +38,7 @@ public class SearchHistory {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createDate;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "userId")
 	private User user;

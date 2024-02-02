@@ -60,4 +60,10 @@ public class PostServiceImpl implements PostService {
 		return postRepository.findByUser(user, pageable);
 	}
 
+	@Override
+	public Optional<Page<Post>> findPostByContent(String keyword, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return postRepository.findbyKeyword(keyword, pageable);
+	}
+
 }

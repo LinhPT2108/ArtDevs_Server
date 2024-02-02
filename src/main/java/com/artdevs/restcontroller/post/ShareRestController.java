@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,5 +43,17 @@ public class ShareRestController {
             listShareDTO.add(ShareMapper.convertToShareDTO(share));
         }
         return ResponseEntity.ok(listShareDTO);
+    }
+    
+    @DeleteMapping("/share/{shareId}")
+    public ResponseEntity<Boolean> deleteShare(@PathVariable("shareId") long shareId){
+    	try {
+    		Share share = shareService.findShareById(shareId);
+    		shareService.deleteShare(share);
+			return ResponseEntity.ok(true);
+		} catch (Exception e) {
+			System.out.println(e);
+			return ResponseEntity.ok(false);
+		}
     }
 }

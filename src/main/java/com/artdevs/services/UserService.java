@@ -1,6 +1,10 @@
 package com.artdevs.services;
 
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.artdevs.domain.entities.user.User;
 
@@ -16,5 +20,10 @@ public interface UserService {
 	User updateUser(User user);
 
 	void deleteUser(User user);
+	
+
+    Optional<Page<User>> findUserByKeyword(String keyword, Pageable pageable);
+    
+    Optional<Page<User>> findMentorByKeyword(String keyword, Pageable pageable);
 
 }

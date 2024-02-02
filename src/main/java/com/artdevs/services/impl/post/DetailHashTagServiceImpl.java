@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.artdevs.domain.entities.post.DetailHashtag;
@@ -40,4 +42,10 @@ public class DetailHashTagServiceImpl implements DetailHashTagService {
     public void deleteDetailHashtag(DetailHashtag detailHashtag) {
         detailHashtagRepository.delete(detailHashtag);
     }
+
+	@Override
+	public Optional<Page<DetailHashtag>> findbyKeyword(String keyword, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return detailHashtagRepository.findByKeyword(keyword, pageable);
+	}
 }

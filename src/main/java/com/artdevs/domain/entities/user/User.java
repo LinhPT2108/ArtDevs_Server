@@ -119,6 +119,14 @@ public class User implements UserDetails {
 	private List<Skill> userSkill;
 
 	@JsonIgnore
+	@OneToMany(mappedBy = "userSend")
+	private List<Star> userStarSend;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "userReceive")
+	private List<Star> userStarReceive;
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<SearchHistory> userSearchHistory;
 
