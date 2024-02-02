@@ -15,7 +15,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,12 +33,12 @@ public class Share {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timeCreate;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="userId")
+	@JoinColumn(name = "userId")
 	private User userShareId;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="postId")
+	@JoinColumn(name = "postId")
 	private Post postShareId;
 }

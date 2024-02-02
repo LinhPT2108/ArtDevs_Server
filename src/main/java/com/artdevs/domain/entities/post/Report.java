@@ -38,7 +38,7 @@ public class Report {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timeCreate;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private User userReportId;

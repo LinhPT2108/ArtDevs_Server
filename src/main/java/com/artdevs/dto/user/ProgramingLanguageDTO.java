@@ -1,7 +1,5 @@
 package com.artdevs.dto.user;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +15,9 @@ public class ProgramingLanguageDTO {
 
     private String LanguageName;
 
-    private List<DemandDTO> listDemand;
+    // private List<DemandDTO> listDemand;
 
-    private List<SkillDTO> listSkills;
+    // private int listDemandId;
+
+    // private List<SkillDTO> listSkills;
 }
