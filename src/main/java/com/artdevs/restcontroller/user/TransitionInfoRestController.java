@@ -16,10 +16,10 @@ import com.artdevs.dto.transition.TransitionInfoDTO;
 import com.artdevs.mapper.TransitionInfoMapper;
 import com.artdevs.repositories.user.TransitioninfoRepository;
 import com.artdevs.services.TransitionInfoService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class TransitionInfoRestController {
     @Autowired
     TransitionInfoService transitionInfoService;

@@ -13,6 +13,7 @@ import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.repositories.post.PostRepository;
 import com.artdevs.services.PostService;
+import com.artdevs.utils.Global;
 @Service
 public class PostServiceImpl implements PostService {
 
@@ -27,7 +28,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<Post> findPage(int pagenumber) {
-    	Page<Post> page = postRepository.findAll(PageRequest.of(pagenumber, 2));
+    	Page<Post> page = postRepository.findAll(PageRequest.of(pagenumber, Global.size_page));
         return page;
     }
     

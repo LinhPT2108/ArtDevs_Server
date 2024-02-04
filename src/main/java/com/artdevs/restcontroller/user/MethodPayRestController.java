@@ -16,10 +16,10 @@ import com.artdevs.dto.transition.MethodPayDTO;
 import com.artdevs.mapper.MethodPayMapper;
 import com.artdevs.repositories.user.MethodpayRepository;
 import com.artdevs.services.MethodPayService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class MethodPayRestController {
     @Autowired
     MethodPayService methodPayService;

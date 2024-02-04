@@ -32,10 +32,10 @@ import com.artdevs.repositories.user.SkillRepository;
 import com.artdevs.repositories.user.UserRepository;
 import com.artdevs.service.JwtTokenProvider;
 import com.artdevs.services.UserService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class UserRestController {
 	@Autowired
 	UserRepository userRepository;

@@ -14,10 +14,10 @@ import com.artdevs.dto.message.MessageDTO;
 import com.artdevs.mapper.message.MessageMapper;
 import com.artdevs.repositories.message.MessageRepository;
 import com.artdevs.services.MessageService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class MessageRestCotroller {
 
     @Autowired

@@ -16,10 +16,10 @@ import com.artdevs.dto.user.ProgramingLanguageDTO;
 import com.artdevs.mapper.ProgramingLanguageMapper;
 import com.artdevs.repositories.user.PrograminglanguageRepository;
 import com.artdevs.services.ProgramingLanguageService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class ProgramingLanguageRestController {
     @Autowired
     ProgramingLanguageService programingLanguageService;

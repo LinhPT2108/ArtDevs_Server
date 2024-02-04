@@ -12,7 +12,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.artdevs.config.auth.JwtAuthenticationFilter;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 import lombok.RequiredArgsConstructor;
 @Configuration
@@ -150,57 +150,57 @@ public class SecurityConfiger {
 							AntPathRequestMatcher.antMatcher("/product"), AntPathRequestMatcher.antMatcher("/product/**"),
 							AntPathRequestMatcher.antMatcher("/api/login"))
 					.permitAll()
-					.requestMatchers(AntPathRequestMatcher.antMatcher(Path.path_api + "/cart"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/cart/**"))
+					.requestMatchers(AntPathRequestMatcher.antMatcher(Global.path_api + "/cart"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/cart/**"))
 					.hasAnyAuthority("user")
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/account/**"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/account"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/account/**"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/account"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/account/**"))
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/account"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/account/**"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/account"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/account/**"))
 					.hasAnyAuthority("admin", "staff", "shipper", "user")
-					.requestMatchers(AntPathRequestMatcher.antMatcher(Path.path_api + "/order"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/order/**"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/order"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/order/**"))
+					.requestMatchers(AntPathRequestMatcher.antMatcher(Global.path_api + "/order"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/order/**"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/order"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/order/**"))
 					.hasAnyAuthority("admin", "staff", "shipper")
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/admin/dashboard"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/product"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/product/**"),
-	AntPathRequestMatcher.antMatcher(Path.path_api + "/flashSale"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/flashSale/**"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/voucher"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/voucher/**"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/manufacturer"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/manufacturer/**"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/category"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/category/**"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/product"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/product/**"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/banner"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/banner/**"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/flashSale"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/flashSale/**"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/voucher"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/voucher/**"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/update-status"))
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/product"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/product/**"),
+	AntPathRequestMatcher.antMatcher(Global.path_api + "/flashSale"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/flashSale/**"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/voucher"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/voucher/**"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/manufacturer"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/manufacturer/**"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/category"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/category/**"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/product"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/product/**"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/banner"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/banner/**"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/flashSale"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/flashSale/**"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/voucher"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/voucher/**"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/update-status"))
 					.hasAnyAuthority("admin", "staff")
-					.requestMatchers(AntPathRequestMatcher.antMatcher(Path.path_api + "/userCustom"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/userCustom/**"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-revenue"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-revenue/**"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-order"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-wishlist"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-orders-by-user"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-best-seller"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/userCustom"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/userCustom/**"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-revenue"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-revenue/**"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-order"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-wishlist"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-orders-by-user"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-best-seller"))
+					.requestMatchers(AntPathRequestMatcher.antMatcher(Global.path_api + "/userCustom"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/userCustom/**"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/statistical-revenue"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/statistical-revenue/**"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/statistical-order"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/statistical-wishlist"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/statistical-orders-by-user"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/statistical-best-seller"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/userCustom"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/userCustom/**"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/statistical-revenue"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/statistical-revenue/**"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/statistical-order"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/statistical-wishlist"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/statistical-orders-by-user"),
+							AntPathRequestMatcher.antMatcher(Global.path_api + "/statistical-best-seller"))
 					.hasAnyAuthority("admin")
 					.anyRequest().permitAll())
 

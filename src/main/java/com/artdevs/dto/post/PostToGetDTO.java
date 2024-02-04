@@ -3,8 +3,6 @@ package com.artdevs.dto.post;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +17,7 @@ public class PostToGetDTO {
 	private String content;
 	private Date time;
 	private Date timelineUserId;
-	private String userId;
+	private UserPostDTO userPost;
 	private Long totalLike;
 	private Long totalShare;
 	private Long totalComment;
