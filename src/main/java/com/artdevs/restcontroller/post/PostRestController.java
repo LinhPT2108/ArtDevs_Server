@@ -76,6 +76,17 @@ public class PostRestController {
 		}
 		return ResponseEntity.ok(listpost);
 	}
+	
+	@GetMapping(value = "/friend-post")
+	public ResponseEntity<?> getMethodName(@RequestParam("page") Optional<Integer> p) {
+		Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
+
+		if(!authenticate.getName().equals("anonymousUser")) {
+			
+		}
+		return ResponseEntity.ok().build();
+	}
+
 
 	@GetMapping("/post/{postId}")
 	public ResponseEntity<PostToGetDTO> getPostById(@PathVariable("postId") String postId) {

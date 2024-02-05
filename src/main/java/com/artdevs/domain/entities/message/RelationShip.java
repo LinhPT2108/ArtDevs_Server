@@ -33,11 +33,7 @@ public class RelationShip {
 
 	@Column
 	private int status;
-<<<<<<< HEAD
 	
-=======
-
->>>>>>> 5a65df190ccc77b20881b206a057db4bd2cc1c8c
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timeRelation;

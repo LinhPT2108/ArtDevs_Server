@@ -45,7 +45,7 @@ public class UserRestController {
 
 	@GetMapping("/user")
 	public ResponseEntity<List<UserDTO>> getUser() {
-		List<User> listUser = userRepository.findAll();
+		List<User> listUser = userRepository.findAll().stream().filter(t -> t.getRole().getId() == 3).toList();
 		List<UserDTO> listUserDTO = new ArrayList<>();
 		for (User user : listUser) {
 			listUserDTO.add(UserMapper.UserConvertToUserDTO(user));
