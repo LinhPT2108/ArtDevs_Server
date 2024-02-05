@@ -2,17 +2,24 @@ package com.artdevs.services;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.artdevs.domain.entities.message.RelationShip;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.message.RelationShipDTO;
 
+@Service
 public interface RelationshipService {
+
+//	List<RelationShip> findAllUserRelationshipsWithStatus(String userId) throws Exception;
+
 	List<RelationShip> findByUserOneIdAndUserTwoIdAndStatus(User userOneId,User userTwoId, int status);
-	List<RelationShipDTO> findAllUserRelationshipsWithStatus(String userId) throws Exception;
+//	List<RelationShipDTO> findAllUserRelationshipsWithStatus(String userId) throws Exception;
+
 
     List<RelationShipDTO> findAllFriendCandidates(String loggedInUserId);
 
-    boolean createRequestForAddingFriend(String loggedInUserId, String friendCandidateId) throws Exception;
+
 
     boolean removeFriend(String loggedInUserId, String friendToRemoveId) throws Exception;
 
@@ -21,4 +28,14 @@ public interface RelationshipService {
     boolean cancelFriendshipRequest(String loggedInUserId, String friendToRejectId) throws Exception;
 
     List<RelationShipDTO> searchUsers(String loggedInUserId, String search);
+
+	List<RelationShip> findRelationshipByUserIdAndStatus(String userId) throws Exception;
+
+
+	boolean createRequestForAddingFriend(String loggedInUserId, String friendCandidateId) throws Exception;
+
+
+	List<User> getFriendOnline();
+	
+	List<User> getAllFriend();
 }

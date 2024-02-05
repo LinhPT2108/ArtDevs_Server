@@ -40,7 +40,7 @@ public class Post {
 	@Column
 	private String content;
 
-	@Temporal(TemporalType.TIMESTAMP)
+	
 	@Column
 	private Date time;
 

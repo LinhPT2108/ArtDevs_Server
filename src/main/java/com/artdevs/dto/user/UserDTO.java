@@ -1,5 +1,6 @@
 package com.artdevs.dto.user;
 
+import java.util.Date;
 import java.util.List;
 
 import com.artdevs.domain.entities.message.Message;
@@ -37,12 +38,15 @@ public class UserDTO {
 
 	private String email;
 
-
 	private String firstName;
 
 	private String lastName;
 
 	private String middleName;
+
+	private Date birthday;
+
+	private Integer Gender;
 
 	private String isOnline;
 
@@ -58,29 +62,4 @@ public class UserDTO {
 
 	private List<String> listSkillOfUser;
 
-	private List<MethodPay> listMethod;
-
-	private List<TransitionInfo> userTransition1;
-
-	private List<TransitionInfo> userTransition2;
-
-	private List<Post> listPostOfUser;
-
-	private List<RelationShip> userRelation1;
-
-	private List<RelationShip> userRelation2;
-
-	private List<RelationShip> userAction;
-
-	private List<Message> userForm;
-
-	private List<Message> userTo;
-
-	private List<Likes> listLike;
-
-	private List<Share> listShare;
-
-	private List<Report> listReport;
-
-	private List<Comment> listComment;
 }

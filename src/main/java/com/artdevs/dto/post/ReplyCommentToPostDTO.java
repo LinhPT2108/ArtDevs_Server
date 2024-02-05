@@ -3,6 +3,8 @@ package com.artdevs.dto.post;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,13 +14,13 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReplyCommentDTO {
+public class ReplyCommentToPostDTO {
 
     private long id;
 
     private String content;
 
-    private List<String> listPicture;
+    private MultipartFile[] listImageOfComment;
 
     private Date timeComment;
 

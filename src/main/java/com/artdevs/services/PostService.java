@@ -27,4 +27,6 @@ public interface PostService {
     
     List<Post> findAll();
     
+    List<Post> findPostWithListFriend();
+    
 }

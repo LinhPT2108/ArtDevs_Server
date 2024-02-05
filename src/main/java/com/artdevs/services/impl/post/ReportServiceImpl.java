@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.post.Report;
 import com.artdevs.repositories.post.ReportRepository;
 import com.artdevs.services.ReportService;
@@ -40,5 +41,11 @@ public class ReportServiceImpl implements ReportService {
     public void deleteReport(Report reportd) {
         reportRepository.delete(reportd);
     }
+
+	@Override
+	public List<Report> FindByPost(Post post) {
+		
+		return reportRepository.findByPostReportId(post);
+	}
 
 }
