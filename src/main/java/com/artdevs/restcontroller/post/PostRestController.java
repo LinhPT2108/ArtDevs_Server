@@ -45,10 +45,10 @@ import com.artdevs.services.PrivacyPostDetailService;
 import com.artdevs.services.PrivacyPostService;
 import com.artdevs.services.RelationshipService;
 import com.artdevs.services.UserService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class PostRestController {
 
 	@Autowired
@@ -76,11 +76,11 @@ public class PostRestController {
 	RelationshipService relationshipService;
 	
 	@GetMapping("/post/page")
-	public ResponseEntity<List<PostDTO>> getPost(@RequestParam("page") int pagenumber) {
+	public ResponseEntity<List<PostToGetDTO>> getPost(@RequestParam("page") int pagenumber) {
 		Page<Post> page = postsv.findPage(pagenumber);
-		List<PostDTO> listpost = new ArrayList<>();
+		List<PostToGetDTO> listpost = new ArrayList<>();
 		for (Post post : page) {
-			listpost.add(PostMapper.convertoDTO(post, hashtagSerivce));
+			listpost.add(PostMapper.convertoGetDTO(post, hashtagSerivce));
 		}
 		return ResponseEntity.ok(listpost);
 	}

@@ -32,7 +32,7 @@ public class JwtTokenProvider {
 		Algorithm algorithm = Algorithm.HMAC256(secret_key.getBytes());
 		return JWT.create()
 				.withSubject(user.getUsername())
-				.withExpiresAt(new Date(System.currentTimeMillis() + 50 * 60 * 1000))
+				.withExpiresAt(new Date(System.currentTimeMillis() + 30 * 86400*1000))
 				.withClaim("role",user.getRole().getRoleName())
 				.sign(algorithm);
 	}
@@ -40,7 +40,7 @@ public class JwtTokenProvider {
 	public String generateRefeshToken(User user, Collection<SimpleGrantedAuthority> authorities) {
 		Algorithm algorithm = Algorithm.HMAC256(secret_key.getBytes());
 		return JWT.create().withSubject(user.getUsername())
-				.withExpiresAt(new Date(System.currentTimeMillis() + 80 * 60 * 1000)).sign(algorithm);
+				.withExpiresAt(new Date(System.currentTimeMillis() + 45 * 86400*1000)).sign(algorithm);
 	}
 
 	public boolean validateToken(String authToken) {

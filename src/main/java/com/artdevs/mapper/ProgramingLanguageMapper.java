@@ -12,15 +12,14 @@ import com.artdevs.dto.user.DemandDTO;
 import com.artdevs.dto.user.ProgramingLanguageDTO;
 import com.artdevs.dto.user.SkillDTO;
 
+
 public class ProgramingLanguageMapper {
     private static final ModelMapper modelMapper = new ModelMapper();
 
     public static ProgramingLanguageDTO convertToProgramingLanguageDTO(ProgramingLanguage programingLanguage) {
         ProgramingLanguageDTO programingLanguageDTO = modelMapper.map(programingLanguage, ProgramingLanguageDTO.class);
-        programingLanguageDTO.setLanguageName(programingLanguage.getLanguageName());
-
-        // programingLanguageDTO.setListDemand(getListDemand(programingLanguage));
-        // programingLanguageDTO.setListSkills(getListSkill(programingLanguage));
+//        programingLanguageDTO.setListDemand(getListDemand(programingLanguage));
+//        programingLanguageDTO.setListSkills(getListSkill(programingLanguage));
         return programingLanguageDTO;
     }
 

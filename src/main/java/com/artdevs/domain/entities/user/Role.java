@@ -21,16 +21,23 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@Column
 	private String roleName;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "role")
 	private List<User> userRole;
+
+	public Role(int id, String roleName) {
+		super();
+		this.id = id;
+		this.roleName = roleName;
+	}
+
 }

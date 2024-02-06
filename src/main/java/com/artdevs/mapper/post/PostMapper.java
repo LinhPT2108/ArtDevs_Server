@@ -23,6 +23,7 @@ import com.artdevs.dto.post.ImageOfPostDTO;
 import com.artdevs.dto.post.PostDTO;
 import com.artdevs.dto.post.PostToGetDTO;
 import com.artdevs.dto.post.PrivacyPostDetailDTO;
+import com.artdevs.dto.post.UserPostDTO;
 import com.artdevs.services.HashTagService;
 import com.artdevs.services.UserService;
 
@@ -95,7 +96,7 @@ public class PostMapper {
 
 		PostToGetDTO postdto = modelMapper.map(post, PostToGetDTO.class);
 //		postdto.setListCommentPost(getComment(post));
-		postdto.setUserId(post.getUser().getUserId());
+		postdto.setUserPost(new UserPostDTO(post.getUser().getUserId(),post.getUser().getUsername(),post.getUser().getProfilePicUrl()));
 		postdto.setListHashtag(getHashtag(post, hashtagSerivce));
 		postdto.setListImageofPost(getImage(post));
 		postdto.setTotalLike(gettotalLike(post));

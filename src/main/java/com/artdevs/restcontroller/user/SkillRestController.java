@@ -16,10 +16,10 @@ import com.artdevs.dto.user.SkillDTO;
 import com.artdevs.mapper.SkillMapper;
 import com.artdevs.repositories.user.SkillRepository;
 import com.artdevs.services.SkillService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class SkillRestController {
     @Autowired
     SkillService skillService;

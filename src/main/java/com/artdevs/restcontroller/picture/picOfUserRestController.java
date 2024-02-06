@@ -15,10 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.artdevs.domain.entities.user.Picture;
 import com.artdevs.mapper.PictureMapper;
 import com.artdevs.services.PictureService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class picOfUserRestController {
 
 	@Autowired

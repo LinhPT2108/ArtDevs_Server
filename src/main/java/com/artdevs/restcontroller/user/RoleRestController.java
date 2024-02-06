@@ -15,10 +15,10 @@ import com.artdevs.dto.user.RoleDTO;
 import com.artdevs.mapper.RoleMapper;
 import com.artdevs.repositories.user.RoleRepository;
 import com.artdevs.services.impl.transition.RoleServiceImpl;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class RoleRestController {
 
 	@Autowired

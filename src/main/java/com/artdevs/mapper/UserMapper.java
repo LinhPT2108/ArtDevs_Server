@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.UserRegisterDTO;
@@ -46,6 +47,7 @@ public class UserMapper {
 	}
 
 	public static User RegisterDTOconvertToUser(UserRegisterDTO RegisterDTO) {
+		RegisterDTO.setPassword(new BCryptPasswordEncoder().encode(RegisterDTO.getPassword()));
 		User user = modelMapper.map(RegisterDTO, User.class);
 		user.setUserSkill(null);
 		user.setUserDemand(null);

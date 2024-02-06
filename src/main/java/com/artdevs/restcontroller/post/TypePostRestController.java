@@ -17,10 +17,10 @@ import com.artdevs.mapper.post.TypePostMapper;
 import com.artdevs.repositories.post.TypepostRepository;
 import com.artdevs.services.HashTagService;
 import com.artdevs.services.TypePostService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class TypePostRestController {
     @Autowired
     TypePostService typepostRepositoryService;

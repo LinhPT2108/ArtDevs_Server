@@ -32,10 +32,10 @@ import com.artdevs.services.ImageOfCommentService;
 import com.artdevs.services.PostService;
 import com.artdevs.services.ReplyCommentService;
 import com.artdevs.services.UserService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class CommentRestController {
 	@Autowired
 	CommentService commentService;

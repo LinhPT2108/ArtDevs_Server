@@ -16,10 +16,10 @@ import com.artdevs.dto.post.DetailHashtagDTO;
 import com.artdevs.mapper.post.DetailHashTagMapper;
 import com.artdevs.repositories.post.DetailHashtagRepository;
 import com.artdevs.services.DetailHashTagService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class DetailHashTagRestController {
     @Autowired
     DetailHashTagService detailHashTagService;

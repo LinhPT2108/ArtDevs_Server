@@ -13,10 +13,10 @@ import com.artdevs.domain.entities.post.PrivacyPost;
 import com.artdevs.dto.post.privacyPostDTO;
 import com.artdevs.mapper.post.PrivacyPostMapper;
 import com.artdevs.repositories.post.PrivacyPostResponsitory;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class PrivacyPostRestCotroller {
 
     @Autowired
