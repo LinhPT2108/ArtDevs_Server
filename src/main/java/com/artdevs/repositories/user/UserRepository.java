@@ -1,5 +1,6 @@
 package com.artdevs.repositories.user;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.artdevs.domain.entities.user.Role;
 import com.artdevs.domain.entities.user.User;
 
 @Repository
@@ -24,4 +26,8 @@ public interface UserRepository extends JpaRepository<User, String> {
 			+ " OR  p.lastName LIKE %:keyword% )" + " AND p.role.id = 3")
 	Optional<Page<User>> searchMentorByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
+	List<User> findByRole(Role role);
+	
+	List<User> findByRoleAndIsReadyAndIsOnline(Role role,Boolean Ready,Boolean online);
+	
 }

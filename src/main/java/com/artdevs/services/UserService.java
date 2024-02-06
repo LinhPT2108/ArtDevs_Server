@@ -5,10 +5,10 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
 import org.springframework.stereotype.Service;
 
 import com.artdevs.domain.entities.user.User;
+import com.google.protobuf.Option;
 
 @Service
 public interface UserService {
@@ -32,5 +32,6 @@ public interface UserService {
 	List<User> findMentor();
 	
 	List<User> FindMentorIsReady();
+	
 
 }
