@@ -3,16 +3,7 @@ package com.artdevs.dto.user;
 import java.util.Date;
 import java.util.List;
 
-import com.artdevs.domain.entities.message.Message;
-import com.artdevs.domain.entities.message.RelationShip;
-import com.artdevs.domain.entities.post.Comment;
-import com.artdevs.domain.entities.post.Likes;
-import com.artdevs.domain.entities.post.Post;
-import com.artdevs.domain.entities.post.Report;
-import com.artdevs.domain.entities.post.Share;
-import com.artdevs.domain.entities.user.MethodPay;
 import com.artdevs.domain.entities.user.Role;
-import com.artdevs.domain.entities.user.TransitionInfo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,13 +12,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
-	
+@NoArgsConstructor
+public class MentorDTO {
 	private String userId;
 
-	private List<PictureDTO> backgroundimage;
+	private List<PictureDTO> backgroudimage;
 
 	private String city;
 
@@ -59,6 +49,9 @@ public class UserDTO {
 
 	private Role role;
 
-	private List<String> ListDemandOfUser;
+	private Boolean isReady;
+	
+	private Integer PriceMatch;
 
+	private List<String> listSkillOfMentor;
 }

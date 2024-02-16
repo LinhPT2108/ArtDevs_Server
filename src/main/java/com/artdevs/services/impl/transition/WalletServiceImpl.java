@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.artdevs.domain.entities.user.User;
 import com.artdevs.domain.entities.user.Wallet;
 import com.artdevs.repositories.user.WalletRepository;
 import com.artdevs.services.WalletService;
@@ -40,5 +41,11 @@ public class WalletServiceImpl implements WalletService {
     public void deleteWallet(Wallet wallet) {
         walletRepository.delete(wallet);
     }
+
+	@Override
+	public Wallet FindByUser(User user) {
+		// TODO Auto-generated method stub
+		return walletRepository.findByUser(user);
+	}
 
 }

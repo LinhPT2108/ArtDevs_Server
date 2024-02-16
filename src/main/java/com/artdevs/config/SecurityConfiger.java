@@ -185,7 +185,7 @@ public class SecurityConfiger {
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/voucher/**"),
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/update-status"))
 					.hasAnyAuthority("admin", "staff")
-					.requestMatchers(AntPathRequestMatcher.antMatcher(Path.path_api + "/userCustom"),
+					.requestMatchers(AntPathRequestMatcher.antMatcher(Path.path_api + "/set-isready"),
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/userCustom/**"),
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-revenue"),
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-revenue/**"),
@@ -193,7 +193,7 @@ public class SecurityConfiger {
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-wishlist"),
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-orders-by-user"),
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-best-seller"),
-							AntPathRequestMatcher.antMatcher(Path.path_api + "/userCustom"),
+							AntPathRequestMatcher.antMatcher(Path.path_api + "/accept-match/**"),
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/userCustom/**"),
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-revenue"),
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-revenue/**"),
@@ -201,7 +201,7 @@ public class SecurityConfiger {
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-wishlist"),
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-orders-by-user"),
 							AntPathRequestMatcher.antMatcher(Path.path_api + "/statistical-best-seller"))
-					.hasAnyAuthority("admin")
+					.hasAnyAuthority("mentor")
 					.anyRequest().permitAll())
 
 //		        .formLogin(login -> login

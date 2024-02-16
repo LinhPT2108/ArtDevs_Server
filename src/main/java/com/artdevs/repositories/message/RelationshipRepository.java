@@ -19,7 +19,7 @@ public interface RelationshipRepository extends JpaRepository<RelationShip,Integ
 
 	
 	
-	List<RelationShip> findByUserOneIdAndUserTwoIdAndStatus(User userOneId,User userTwoId, int status);
+	RelationShip findByUserOneIdAndUserTwoIdAndStatus(User userOneId,User userTwoId, int status);
 	
 
 //	 List<RelationShip> findAllByUserOneIdAndStatus(String id, int status);
@@ -30,7 +30,7 @@ public interface RelationshipRepository extends JpaRepository<RelationShip,Integ
 //
 //	    RelationShip findByUserOneIdAndUserTwoId(String userOneId, String userTwoId);
 //
-//	    List<RelationShip> findAllByUserOneIdOrUserTwoId(String userOneId, String userTwoId);
+	    RelationShip findAllByUserOneIdOrUserTwoId(User userOneId, User userTwoId);
 
 
 	 
