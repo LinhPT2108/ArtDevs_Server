@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +44,7 @@ import com.artdevs.services.UserService;
 import com.artdevs.utils.Global;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(Global.path_api)
 public class PostRestController {
 
@@ -54,13 +56,13 @@ public class PostRestController {
 
 	@Autowired
 	DetailHashTagService detailHashTagService;
-	
+
 	@Autowired
 	UserService userservice;
 
-	@Autowired 
+	@Autowired
 	ImageOfPostService imgservice;
-	
+
 	@Autowired
 	PrivacyPostDetailService privacyPostDetailService;
 
@@ -88,17 +90,19 @@ public class PostRestController {
 	public ResponseEntity<?> getPostall(@RequestParam("page") Optional<Integer> p) {
 		Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
 		System.out.println(authenticate.getName());
-		if(!authenticate.getName().equals("anonymousUser")) {
+		if (!authenticate.getName().equals("anonymousUser")) {
 			String loggedInUserEmail = authenticate.getName();
 			User user = userservice.findByEmail(loggedInUserEmail);
 			Pageable pageable = PageRequest.of(p.orElse(0), 7, Sort.by("time").descending());
-			Optional<Page<Post>> list = postsv.findPostByUser(user,pageable);
+			Optional<Page<Post>> list = postsv.findPostByUser(user, pageable);
+
+			System.out.println(">>>check list: "+ list.get());
 			List<PostToGetDTO> listpost = new ArrayList<>();
 			for (Post post : list.get()) {
 				listpost.add(PostMapper.convertoGetDTO(post, hashtagSerivce));
 			}
-			return ResponseEntity.ok(listpost);			
-		}else {
+			return ResponseEntity.ok(listpost); 
+		} else {
 			return ResponseEntity.ok(HttpStatus.SC_UNAUTHORIZED);
 		}
 	}
@@ -113,7 +117,7 @@ public class PostRestController {
 		post.setTime(new Date());
 		post.setTimelineUserId(new Date());
 		Post postsave = postsv.savePost(post);
-		
+
 		PrivacyPostDetail privacyPost = new PrivacyPostDetail();
 		privacyPost.setPost(postsave);
 		privacyPost.setStatus(true);
@@ -123,8 +127,8 @@ public class PostRestController {
 		List<PrivacyPostDetail> privacyPostDetails = new ArrayList<>();
 		privacyPostDetails.add(privacyPost);
 		postsave.setPrivacyPostDetails(privacyPostDetails);
-		
-		if (postdto.getListImageofPost() != null) {
+		System.out.println(">>> lenght:" + postdto.getListImageofPost().length);
+		if (postdto.getListImageofPost().length > 0) {
 			List<ImageOfPost> imageOfPosts = new ArrayList<>();
 			MultipartFile[] listImg = postdto.getListImageofPost();
 			for (MultipartFile m : listImg) {
@@ -132,15 +136,13 @@ public class PostRestController {
 					ImageOfPost imageOfPost = imgservice.saveImageOfPost(postsave.getPostId(), m);
 					imageOfPosts.add(imageOfPost);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					System.out.println(e);
-					e.printStackTrace();
 				}
 			}
 			postsave.setListImage(imageOfPosts);
 		}
-		
-		if(postdto.getListHashtag()!=null) {
+
+		if (postdto.getListHashtag() != null) {
 			List<HashTag> hashTags = new ArrayList<>();
 			for (Integer h : postdto.getListHashtag()) {
 				DetailHashtag detailHashtag = detailHashTagService.findDetailHashtagById(h);
@@ -150,16 +152,16 @@ public class PostRestController {
 				hashtagSerivce.saveHashTag(hashtagSave);
 				hashTags.add(hashtagSave);
 			}
-			
+
 			postsave.setListHashtag(hashTags);
 		}
 		return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce));
 	}
-	
+
 	@PutMapping("path/{id}")
 	public ResponseEntity<?> putMethodName(@PathVariable("id") String id) {
-		//TODO: process PUT request
-		
+		// TODO: process PUT request
+
 		return ResponseEntity.ok().build();
 	}
 }

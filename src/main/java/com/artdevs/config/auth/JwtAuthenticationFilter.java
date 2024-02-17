@@ -63,7 +63,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 						null,authorities);
 				SecurityContextHolder.getContext().setAuthentication(uToken);
 				filterChain.doFilter(request, response);
-				System.out.println("ra k");
+				System.out.println("ra k: "+decodedJWT.getExpiresAt());
+				
 			} catch (Exception e) {
 				response.setHeader("error", e.getMessage());
 				response.setStatus(FORBIDDEN.value());
