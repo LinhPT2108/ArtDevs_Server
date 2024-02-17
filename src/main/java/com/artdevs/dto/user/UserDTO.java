@@ -1,7 +1,8 @@
 package com.artdevs.dto.user;
 
-import java.util.Date;
 import java.util.List;
+
+import org.hibernate.annotations.Nationalized;
 
 import com.artdevs.domain.entities.message.Message;
 import com.artdevs.domain.entities.message.RelationShip;
@@ -28,6 +29,11 @@ public class UserDTO {
 	private String userId;
 
 	private List<PictureDTO> backgroundimage;
+	private boolean isAccountNonExpired;
+
+	private boolean isAccountNonLocked;
+
+	private String BackgroundImageUrl;
 
 	private String city;
 
@@ -35,9 +41,13 @@ public class UserDTO {
 
 	private String ward;
 
+	private boolean isCreadentialsNonExprired;
+
 	private boolean isDelete;
 
 	private String email;
+
+	private boolean isEnabled;
 
 	private String firstName;
 
@@ -45,15 +55,13 @@ public class UserDTO {
 
 	private String middleName;
 
-	private Date birthday;
-
-	private Integer Gender;
-
 	private String isOnline;
 
 	private String password;
 
 	private List<PictureDTO> profileimage;
+
+	private String provider;
 
 	private String username;
 
@@ -61,4 +69,29 @@ public class UserDTO {
 
 	private List<String> ListDemandOfUser;
 
+	private List<MethodPay> listMethod;
+
+	private List<TransitionInfo> userTransition1;
+
+	private List<TransitionInfo> userTransition2;
+
+	private List<Post> listPostOfUser;
+
+	private List<RelationShip> userRelation1;
+
+	private List<RelationShip> userRelation2;
+
+	private List<RelationShip> userAction;
+
+	private List<Message> userForm;
+
+	private List<Message> userTo;
+
+	private List<Likes> listLike;
+
+	private List<Share> listShare;
+
+	private List<Report> listReport;
+
+	private List<Comment> listComment;
 }

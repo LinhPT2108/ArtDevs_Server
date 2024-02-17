@@ -23,10 +23,10 @@ import com.artdevs.mapper.message.RelationShipMapper;
 import com.artdevs.repositories.message.RelationshipRepository;
 import com.artdevs.services.RelationshipService;
 import com.artdevs.services.UserService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class RestRealtionShip {
 
 	@Autowired

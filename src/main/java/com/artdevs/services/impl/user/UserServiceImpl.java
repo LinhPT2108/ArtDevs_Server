@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -132,6 +134,7 @@ public class UserServiceImpl implements UserService {
 		}
 		return result;
 	}
+
 	
 	@Override
 	public Boolean SendMatchMentor(String mentorID) {
@@ -262,4 +265,19 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	
+
+
+	@Override
+	public Optional<Page<User>> findUserByKeyword(String keyword, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return userRepository.searchByKeyword(keyword, pageable);
+	}
+
+	@Override
+	public Optional<Page<User>> findMentorByKeyword(String keyword, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return userRepository.searchMentorByKeyword(keyword, pageable);
+	}
+
+
 }

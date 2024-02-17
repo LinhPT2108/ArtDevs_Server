@@ -6,7 +6,7 @@ import com.artdevs.domain.entities.user.Notification;
 import com.artdevs.dto.user.NotificationDTO;
 import com.artdevs.mapper.NotificationMapper;
 import com.artdevs.services.NotificationService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 import com.google.protobuf.Option;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class NotificationRestController {
 
 	@Autowired

@@ -76,7 +76,10 @@ public class User implements UserDetails {
 	@Nationalized
 	@Column
 	private String firstName;
-
+	
+	@Column
+	private String provider;
+	
 	@Nationalized
 	@Column
 	private String lastName;
@@ -134,6 +137,14 @@ public class User implements UserDetails {
 	@OneToMany(mappedBy = "user")
 	private List<Skill> userSkill;
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "userSend")
+	private List<Star> userStarSend;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "userReceive")
+	private List<Star> userStarReceive;
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<SearchHistory> userSearchHistory;
@@ -228,6 +239,18 @@ public class User implements UserDetails {
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	public User(String userId, String email, String firstName, String provider, String profilePicUrl, String username,
+			Role role) {
+		super();
+		this.userId = userId;
+		this.email = email;
+		this.firstName = firstName;
+		this.provider = provider;
+		this.profilePicUrl = profilePicUrl;
+		this.username = username;
+		this.role = role;
 	}
 
 

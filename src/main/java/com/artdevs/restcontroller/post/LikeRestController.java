@@ -18,10 +18,10 @@ import com.artdevs.dto.post.LikeDTO;
 import com.artdevs.mapper.post.LikeMapper;
 import com.artdevs.repositories.post.LikesRepository;
 import com.artdevs.services.LikesService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class LikeRestController {
     @Autowired
     LikesService likeService;

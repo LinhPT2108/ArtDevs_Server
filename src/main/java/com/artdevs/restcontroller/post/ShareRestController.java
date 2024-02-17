@@ -19,10 +19,10 @@ import com.artdevs.dto.post.ShareDTO;
 import com.artdevs.mapper.post.ShareMapper;
 import com.artdevs.repositories.post.ShareRepository;
 import com.artdevs.services.ShareService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class ShareRestController {
 
 	@Autowired
