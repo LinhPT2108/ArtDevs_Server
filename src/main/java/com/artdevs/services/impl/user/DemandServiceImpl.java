@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.artdevs.domain.entities.user.Demand;
+import com.artdevs.domain.entities.user.User;
 import com.artdevs.repositories.user.DemandRepository;
 import com.artdevs.services.DemandService;
 @Service
@@ -40,4 +41,10 @@ public class DemandServiceImpl implements DemandService {
     public void deleteDemand(Demand demand) {
         demandRepository.delete(demand);
     }
+
+	@Override
+	public List<Demand> findByUser(User user) {
+		// TODO Auto-generated method stub
+		return demandRepository.findByUser(user);
+	}
 }

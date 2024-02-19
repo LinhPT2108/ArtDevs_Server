@@ -32,7 +32,7 @@ public class JwtTokenProvider {
 		Algorithm algorithm = Algorithm.HMAC256(secret_key.getBytes());
 		return JWT.create()
 				.withSubject(user.getUsername())
-				.withExpiresAt(new Date(System.currentTimeMillis() + 30 * 86400*1000))
+				.withExpiresAt(new Date(System.currentTimeMillis() + 300 * 86400*1000))
 				.withClaim("role",user.getRole().getRoleName())
 				.sign(algorithm);
 	}

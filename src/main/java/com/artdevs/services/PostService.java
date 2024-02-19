@@ -29,4 +29,6 @@ public interface PostService {
     
     List<Post> findPostWithListFriend();
     
+    Optional<List<Post>> findbyKeyword(String keyword);
+    
 }

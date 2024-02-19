@@ -12,5 +12,5 @@ import com.artdevs.domain.entities.user.User;
 @Repository
 public interface PictureRepository extends JpaRepository<Picture, Integer> {
 	List<Picture> findByUserAndPositionOfPicture(User user, boolean position);
-	
+	List<Picture> findByUser_UserId(String user);
 }

@@ -75,11 +75,6 @@ public class Post {
 	@OneToMany(fetch = FetchType.LAZY,mappedBy = "postImage")
 	private List<ImageOfPost> listImage;
 	
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "typepostId")
-	private TypePost postType;
-	
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.EAGER,mappedBy = "postHashtag")
 	private List<HashTag> listHashtag;
