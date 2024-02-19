@@ -20,9 +20,9 @@ public class TransitionInfoDTO {
 
     private Date timeTransiton;
 
-    private String userId1;
+    private String user;
 
-    private String userId2;
+    private String mentor;
 
-    private int walletId;
+
 }

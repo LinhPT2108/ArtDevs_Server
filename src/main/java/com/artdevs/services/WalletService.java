@@ -2,6 +2,7 @@ package com.artdevs.services;
 
 import java.util.List;
 
+import com.artdevs.domain.entities.user.User;
 import com.artdevs.domain.entities.user.Wallet;
 
 public interface WalletService {
@@ -14,4 +15,6 @@ public interface WalletService {
     Wallet updateWallet(Wallet wallet);
 
     void deleteWallet(Wallet wallet);
+    
+    Wallet FindByUser(User user);
 }

@@ -17,7 +17,7 @@ public class WalletMapper {
 
     public static WalletDTO convertToWalletDTO(Wallet wallet) {
         WalletDTO walletDTO = modelMapper.map(wallet, WalletDTO.class);
-        walletDTO.setListTransitionInfo(getListTransitionInfo(wallet));
+//        walletDTO.setListTransitionInfo(getListTransitionInfo(wallet));
         walletDTO.setListMethodPay(getMethodPays(wallet));
         return walletDTO;
     }
@@ -27,14 +27,14 @@ public class WalletMapper {
         return wallet;
     }
 
-    private static List<TransitionInfoDTO> getListTransitionInfo(Wallet wallet) {
-        List<TransitionInfoDTO> transitionInfoDTO = new ArrayList<>();
-        List<TransitionInfo> transitionInfos = wallet.getTrainsition();
-        for (TransitionInfo transitionInfo : transitionInfos) {
-            transitionInfoDTO.add(TransitionInfoMapper.convertToTransitionInfoDTO(transitionInfo));
-        }
-        return transitionInfoDTO;
-    }
+//    private static List<TransitionInfoDTO> getListTransitionInfo(Wallet wallet) {
+//        List<TransitionInfoDTO> transitionInfoDTO = new ArrayList<>();
+//        List<TransitionInfo> transitionInfos = wallet.getTrainsition();
+//        for (TransitionInfo transitionInfo : transitionInfos) {
+//            transitionInfoDTO.add(TransitionInfoMapper.convertToTransitionInfoDTO(transitionInfo));
+//        }
+//        return transitionInfoDTO;
+//    }
 
     private static List<MethodPayDTO> getMethodPays(Wallet wallet) {
         List<MethodPayDTO> methodPayDTO = new ArrayList<>();

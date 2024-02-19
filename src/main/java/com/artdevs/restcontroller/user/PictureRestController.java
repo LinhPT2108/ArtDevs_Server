@@ -16,10 +16,10 @@ import com.artdevs.dto.user.PictureDTO;
 import com.artdevs.mapper.PictureMapper;
 import com.artdevs.repositories.user.PictureRepository;
 import com.artdevs.services.PictureService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class PictureRestController {
     @Autowired
     PictureService pictureService;

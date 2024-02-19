@@ -34,7 +34,7 @@ public class RelationShip {
 
 	@Column
 	private int status;
-
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timeRelation;

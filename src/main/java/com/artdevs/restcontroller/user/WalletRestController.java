@@ -17,10 +17,10 @@ import com.artdevs.mapper.WalletMapper;
 import com.artdevs.repositories.user.UserRepository;
 import com.artdevs.repositories.user.WalletRepository;
 import com.artdevs.services.WalletService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class WalletRestController {
     @Autowired
     WalletService walletService;

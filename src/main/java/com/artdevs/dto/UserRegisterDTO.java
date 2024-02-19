@@ -46,6 +46,8 @@ public class UserRegisterDTO {
 
 	private String profilePicUrl;
 
+	private String provider;
+	
 	private String username;
 
 	private Role role;
@@ -53,5 +55,7 @@ public class UserRegisterDTO {
 	private List<String> listDemandOfUser;
 
 	private List<String> listSkillOfUser;
+	
+	
 
 }

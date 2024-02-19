@@ -16,10 +16,10 @@ import com.artdevs.dto.user.LogDTO;
 import com.artdevs.mapper.LogMapper;
 import com.artdevs.repositories.user.LogRepository;
 import com.artdevs.services.LogService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class LogRestController {
     @Autowired
     LogService logService;

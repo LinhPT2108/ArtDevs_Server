@@ -5,6 +5,8 @@ import java.util.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -22,7 +24,8 @@ import lombok.Setter;
 @Setter
 public class TransitionInfo {
 	@Id
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@Column
 	private long price_match;
@@ -33,13 +36,13 @@ public class TransitionInfo {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userTransition1")
-	private User user1;
+	private User Userlogin;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "userTransition2")
-	private User user2;
+	private User Mentor;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "walletId")
-	private Wallet walletOfUser;
+//	@ManyToOne(fetch = FetchType.EAGER)
+//	@JoinColumn(name = "walletId")
+//	private Wallet walletOfUser;
 }

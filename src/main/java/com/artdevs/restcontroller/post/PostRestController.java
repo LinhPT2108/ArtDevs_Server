@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -32,6 +34,8 @@ import com.artdevs.domain.entities.post.PrivacyPostDetail;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.post.PostDTO;
 import com.artdevs.dto.post.PostToGetDTO;
+import com.artdevs.dto.user.UserDTO;
+import com.artdevs.mapper.UserMapper;
 import com.artdevs.mapper.post.PostMapper;
 import com.artdevs.services.DetailHashTagService;
 import com.artdevs.services.HashTagService;
@@ -39,11 +43,12 @@ import com.artdevs.services.ImageOfPostService;
 import com.artdevs.services.PostService;
 import com.artdevs.services.PrivacyPostDetailService;
 import com.artdevs.services.PrivacyPostService;
+import com.artdevs.services.RelationshipService;
 import com.artdevs.services.UserService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class PostRestController {
 
 	@Autowired
@@ -67,25 +72,58 @@ public class PostRestController {
 	@Autowired
 	PrivacyPostService privacyPostService;
 
+	@Autowired
+	RelationshipService relationshipService;
+	
 	@GetMapping("/post/page")
-	public ResponseEntity<List<PostDTO>> getPost(@RequestParam("page") int pagenumber) {
+	public ResponseEntity<List<PostToGetDTO>> getPost(@RequestParam("page") int pagenumber) {
 		Page<Post> page = postsv.findPage(pagenumber);
-		List<PostDTO> listpost = new ArrayList<>();
+		List<PostToGetDTO> listpost = new ArrayList<>();
 		for (Post post : page) {
-			listpost.add(PostMapper.convertoDTO(post, hashtagSerivce));
+			listpost.add(PostMapper.convertoGetDTO(post, hashtagSerivce));
 		}
 		return ResponseEntity.ok(listpost);
 	}
+	
+	@GetMapping(value = "/friend-post")
+	public ResponseEntity<?> getMethodName(@RequestParam("page") Optional<Integer> p) {
+		Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
+		if(!authenticate.getName().equals("anonymousUser")) {
+			List<User> listFriend = relationshipService.getAllFriend();
+			List<Post> listPostFriend = new ArrayList<>();
+			for (User u : listFriend) {
+			    if (!u.getUserPost().isEmpty()) {
+			        listPostFriend.addAll(u.getUserPost());
+			    }
+			}
+
+			int pageSize = 7;
+			int currentPage = p.orElse(0);
+
+			int start = currentPage * pageSize;
+			int end = Math.min((start + pageSize), listPostFriend.size());
+
+			List<Post> sublist = listPostFriend.subList(start, end);
+
+			Pageable pageable = PageRequest.of(currentPage, pageSize, Sort.by("time").descending());
+			Page<Post> postPage = new PageImpl<>(sublist, pageable, listPostFriend.size());
+
+			return ResponseEntity.ok(postPage.get().map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce)));
+		
+		}else {
+			return ResponseEntity.ok(HttpStatus.SC_UNAUTHORIZED);
+		}
+	}
+
 
 	@GetMapping("/post/{postId}")
 	public ResponseEntity<PostToGetDTO> getPostById(@PathVariable("postId") String postId) {
 		Post post = postsv.findPostById(postId);
-
 		return ResponseEntity.ok(PostMapper.convertoGetDTO(post, hashtagSerivce));
 	}
 
-	@GetMapping("/post")
-	public ResponseEntity<?> getPostall(@RequestParam("page") Optional<Integer> p) {
+	@GetMapping("/post-by-user-logged")
+	public ResponseEntity<?> getPostUserLogged(@RequestParam("page") Optional<Integer> p) {
 		Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
 		System.out.println(authenticate.getName());
 		if(!authenticate.getName().equals("anonymousUser")) {
@@ -156,7 +194,7 @@ public class PostRestController {
 		return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce));
 	}
 	
-	@PutMapping("path/{id}")
+	@PutMapping("/update-post/{id}")
 	public ResponseEntity<?> putMethodName(@PathVariable("id") String id) {
 		//TODO: process PUT request
 		

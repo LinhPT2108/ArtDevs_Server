@@ -16,10 +16,10 @@ import com.artdevs.dto.user.DemandDTO;
 import com.artdevs.mapper.DemandMapper;
 import com.artdevs.repositories.user.DemandRepository;
 import com.artdevs.services.DemandService;
-import com.artdevs.utils.Path;
+import com.artdevs.utils.Global;
 
 @RestController
-@RequestMapping(Path.path_api)
+@RequestMapping(Global.path_api)
 public class DemandRestController {
     @Autowired
     DemandService demandService;
