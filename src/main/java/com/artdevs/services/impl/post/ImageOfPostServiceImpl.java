@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.artdevs.domain.entities.post.ImageOfPost;
 import com.artdevs.domain.entities.post.Post;
-import com.artdevs.domain.entities.user.User;
 import com.artdevs.repositories.post.ImageofpostRepository;
 import com.artdevs.repositories.post.PostRepository;
 import com.artdevs.repositories.user.UserRepository;
@@ -25,7 +24,7 @@ public class ImageOfPostServiceImpl implements ImageOfPostService {
 
 	@Autowired
 	ImageofpostRepository imageofpostRepository;
-	
+
 	@Autowired
 	UserRepository userRepository;
 
@@ -37,7 +36,7 @@ public class ImageOfPostServiceImpl implements ImageOfPostService {
 
 	@Autowired
 	PostRepository postRepository;
-	
+
 	@Override
 	public ImageOfPost findImageOfPostById(Integer imageofpostId) {
 		Optional<ImageOfPost> imageOfPostOptional = imageofpostRepository.findById(imageofpostId);

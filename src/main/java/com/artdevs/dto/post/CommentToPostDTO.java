@@ -21,8 +21,6 @@ public class CommentToPostDTO {
 
     private MultipartFile[] listImageofComment;
 
-    private long Count;
-
     private Date timeComment;
 
     private String UserID;

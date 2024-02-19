@@ -23,18 +23,18 @@ public class CommentServiceImpl implements CommentService {
         Optional<Comment> commentOptional = commentRepository.findById(commentId);
         return commentOptional.orElse(null);
     }
-    
-    @Override
-    public List<Comment> findCommentByPostId(String postid){
 
-    	return commentRepository.findByPostCommentId(postid);
-    }
-    
     @Override
-    public Page<Comment> findpagecommentbyPostID(String postid,int pagenumber){
-    	return commentRepository.findPageByPostCommentId(postid,PageRequest.of(pagenumber, 2));
+    public List<Comment> findCommentByPostId(String postid) {
+
+        return commentRepository.findByPostCommentId(postid);
     }
-    
+
+    @Override
+    public Page<Comment> findpagecommentbyPostID(String postid, int pagenumber) {
+        return commentRepository.findPageByPostCommentId(postid, PageRequest.of(pagenumber, 2));
+    }
+
     @Override
     public List<Comment> findAll() {
         return commentRepository.findAll();

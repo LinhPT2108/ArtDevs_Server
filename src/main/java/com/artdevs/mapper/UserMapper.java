@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.artdevs.domain.entities.user.Picture;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.UserRegisterDTO;
 import com.artdevs.dto.user.MentorDTO;
@@ -24,6 +25,8 @@ public class UserMapper {
 		UserDTO userDTO = modelMapper.map(user, UserDTO.class);
 		
 		userDTO.setListDemandOfUser(getDemand(user));
+		userDTO.setProfilePicUrl(getAvatar(user, true));
+		userDTO.setBackgroundImageUrl(getAvatar(user, false));
 		return userDTO;
 	}
 
@@ -87,4 +90,13 @@ public class UserMapper {
 	// return listSkill;
 	// }
 
+	private static String getAvatar(User user, boolean positon) {
+		// System.out.println(user.getUserId());
+		List<Picture> listPic = user.getUserPicture().stream()
+				.sorted((o1, o2) -> o2.getTime().compareTo(o1.getTime()))
+				.filter(t -> t.isPositionOfPicture() == positon).toList();
+
+		return listPic.get(0) != null ? listPic.get(0).getImageUrl() : null;
+
+	}
 }
