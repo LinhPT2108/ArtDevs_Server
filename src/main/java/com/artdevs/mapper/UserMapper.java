@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.UserRegisterDTO;
+import com.artdevs.dto.user.MentorDTO;
 import com.artdevs.dto.user.UserDTO;
 import com.artdevs.repositories.user.SkillRepository;
 
@@ -21,7 +22,7 @@ public class UserMapper {
 
 	public static UserDTO UserConvertToUserDTO(User user) {
 		UserDTO userDTO = modelMapper.map(user, UserDTO.class);
-		userDTO.setListSkillOfUser(getSkill(user));
+		
 		userDTO.setListDemandOfUser(getDemand(user));
 		return userDTO;
 	}
@@ -34,24 +35,31 @@ public class UserMapper {
 
 	public static UserDTO UserRegisterConvertToUserDTO(UserRegisterDTO RegisterDTO) {
 		UserDTO userDTO = modelMapper.map(RegisterDTO, UserDTO.class);
-		userDTO.setListSkillOfUser(RegisterDTO.getListSkillOfUser());
 		userDTO.setListDemandOfUser(RegisterDTO.getListDemandOfUser());
 		return userDTO;
 	}
 
-	public static UserRegisterDTO UserDTOconvertToRegisterDTO(User user) {
-		UserRegisterDTO registerDTO = modelMapper.map(user, UserRegisterDTO.class);
-		registerDTO.setListSkillOfUser(getSkill(user));
-		registerDTO.setListDemandOfUser(getDemand(user));
-		return registerDTO;
-	}
-
+//	public static UserRegisterDTO UserDTOconvertToRegisterDTO(User user) {
+//		UserRegisterDTO registerDTO = modelMapper.map(user, UserRegisterDTO.class);
+//		registerDTO.setListSkillOfUser(getSkill(user));
+//		registerDTO.setListDemandOfUser(getDemand(user));
+//		return registerDTO;
+//	}
+//	
+	
 	public static User RegisterDTOconvertToUser(UserRegisterDTO RegisterDTO) {
 		RegisterDTO.setPassword(new BCryptPasswordEncoder().encode(RegisterDTO.getPassword()));
 		User user = modelMapper.map(RegisterDTO, User.class);
 		user.setUserSkill(null);
 		user.setUserDemand(null);
 		return user;
+	}
+	
+	public static MentorDTO UserConvertToMentorDTO(User user) {
+		MentorDTO mentorDTO = modelMapper.map(user, MentorDTO.class);
+		mentorDTO.setListSkillOfMentor(getSkill(user));
+		
+		return mentorDTO;
 	}
 
 	// public static User RegisterDTOconvertToUser2(UserRegisterDTO

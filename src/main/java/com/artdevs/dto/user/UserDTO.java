@@ -25,8 +25,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
+	
 	private String userId;
 
+	private List<PictureDTO> backgroundimage;
 	private boolean isAccountNonExpired;
 
 	private boolean isAccountNonLocked;
@@ -57,7 +59,7 @@ public class UserDTO {
 
 	private String password;
 
-	private String profilePicUrl;
+	private List<PictureDTO> profileimage;
 
 	private String provider;
 
@@ -65,9 +67,7 @@ public class UserDTO {
 
 	private Role role;
 
-	private List<String> listDemandOfUser;
-
-	private List<String> listSkillOfUser;
+	private List<String> ListDemandOfUser;
 
 	private List<MethodPay> listMethod;
 

@@ -39,6 +39,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 			{
 				put("public_id", uuid);
 				put("overwrite", true);
+				put("resource_type", "auto");
 			}
 		};
 

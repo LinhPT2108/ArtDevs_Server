@@ -135,9 +135,19 @@ public class RestRealtionShip {
 	}
 	
 	@GetMapping("/get-friend-online")
-	public ResponseEntity<List<UserDTO>> test(){
+	public ResponseEntity<List<UserDTO>> friendisonline(){
 //		System.out.println(relationrepository.findRelationshipByUserIdAndStatusAndOnline("Aa127", 1, true));
 		List<UserDTO> result = relationservice.getFriendOnline()
+		        .stream()
+		        .map(user -> UserMapper.UserConvertToUserDTO(user))
+		        .collect(Collectors.toList());
+		return ResponseEntity.ok(result);
+	}
+	
+	@GetMapping("/get-list-friend")
+	public ResponseEntity<List<UserDTO>> allfriend(){
+//		System.out.println(relationrepository.findRelationshipByUserIdAndStatusAndOnline("Aa127", 1, true));
+		List<UserDTO> result = relationservice.getAllFriend()
 		        .stream()
 		        .map(user -> UserMapper.UserConvertToUserDTO(user))
 		        .collect(Collectors.toList());

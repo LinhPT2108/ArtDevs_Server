@@ -13,6 +13,9 @@ public interface PostService {
     Post findPostById(String postId);
     
     Optional<Page<Post>> findPostByUser(User user, Pageable pageable);
+    
+
+    Optional<Page<Post>> findPostByContent(String keyword, Pageable pageable);
 
     Page<Post> findPage(int pagenumber);
 
@@ -23,5 +26,7 @@ public interface PostService {
     boolean deletePost(Post post);
     
     List<Post> findAll();
+    
+    List<Post> findPostWithListFriend();
     
 }

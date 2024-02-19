@@ -95,6 +95,12 @@ public class User implements UserDetails {
 	private String password;
 
 	@Column
+	private Integer MatchPrice;
+	
+	@Column 
+	private Boolean isReady;
+	
+	@Column
 	private String profilePicUrl;
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -120,8 +126,8 @@ public class User implements UserDetails {
 	@OneToMany(mappedBy = "user")
 	private List<Log> userLog;
 
-	// @OneToMany(mappedBy = "user")
-	// private List<Wallet> userWallet;
+//	 @OneToMany(mappedBy = "user")
+//	 private List<Wallet> userWallet;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
@@ -132,6 +138,14 @@ public class User implements UserDetails {
 	private List<Skill> userSkill;
 
 	@JsonIgnore
+	@OneToMany(mappedBy = "userSend")
+	private List<Star> userStarSend;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "userReceive")
+	private List<Star> userStarReceive;
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<SearchHistory> userSearchHistory;
 
@@ -140,11 +154,11 @@ public class User implements UserDetails {
 	private List<MethodPay> userMethod;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "user1")
+	@OneToMany(mappedBy = "Userlogin")
 	private List<TransitionInfo> userTransition1;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "user2")
+	@OneToMany(mappedBy = "Mentor")
 	private List<TransitionInfo> userTransition2;
 
 	@JsonIgnore
