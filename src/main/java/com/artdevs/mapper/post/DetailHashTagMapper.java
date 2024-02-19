@@ -15,7 +15,7 @@ public class DetailHashTagMapper {
 
     public static DetailHashtagDTO convertToDetailHashTagDTO(DetailHashtag detailHashtag) {
         DetailHashtagDTO detailHashtagDTO = modelMapper.map(detailHashtag, DetailHashtagDTO.class);
-        detailHashtagDTO.setListHashtagOfDetail(getListHashTag(detailHashtag));
+        detailHashtagDTO.setCountHashtagOfDetail(detailHashtag.getListHashtagOfDetail().size());
         return detailHashtagDTO;
     }
 
@@ -24,12 +24,7 @@ public class DetailHashTagMapper {
         return detailHashtag;
     }
 
-    private static List<HashTagDTO> getListHashTag(DetailHashtag detailHashtag) {
-        List<HashTagDTO> hashTagDTO = new ArrayList<>();
-        List<HashTag> hashTags = detailHashtag.getListHashtagOfDetail();
-        for (HashTag hashTag : hashTags) {
-            hashTagDTO.add(HashTagMapper.convertToHashTagDTO(hashTag));
-        }
-        return hashTagDTO;
+    private static int getListHashTag(DetailHashtag detailHashtag) {
+        return detailHashtag.getListHashtagOfDetail().size();
     }
 }

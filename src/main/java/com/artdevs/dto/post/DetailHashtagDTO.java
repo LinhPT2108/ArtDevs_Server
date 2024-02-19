@@ -17,5 +17,5 @@ public class DetailHashtagDTO {
 
     private String hashtagText;
 
-    private List<HashTagDTO> ListHashtagOfDetail;
+    private int countHashtagOfDetail;
 }
