@@ -23,6 +23,7 @@ import com.artdevs.repositories.user.DemandRepository;
 import com.artdevs.repositories.user.PrograminglanguageRepository;
 import com.artdevs.repositories.user.SkillRepository;
 import com.artdevs.repositories.user.UserRepository;
+import com.artdevs.services.PictureService;
 import com.artdevs.services.UserService;
 import com.artdevs.utils.Path;
 
@@ -31,8 +32,12 @@ import com.artdevs.utils.Path;
 public class UserRestController {
 	@Autowired
 	UserRepository userRepository;
-	
-	@Autowired UserService userservice;
+
+	@Autowired
+	PictureService pictureService;
+
+	@Autowired
+	UserService userservice;
 	@Autowired
 	SkillRepository skillrep;
 
@@ -59,7 +64,7 @@ public class UserRestController {
 
 	@PostMapping("/register")
 	public ResponseEntity<UserDTO> RegisterUser(@RequestBody UserRegisterDTO RegisterDTO) {
-		if( userservice.findByEmail(RegisterDTO.getEmail())!=null) {
+		if (userservice.findByEmail(RegisterDTO.getEmail()) != null) {
 			User user = userRepository.save(UserMapper.RegisterDTOconvertToUser(RegisterDTO));
 			for (String skillname : RegisterDTO.getListSkillOfUser()) {
 				Skill skill = new Skill();
@@ -75,12 +80,12 @@ public class UserRestController {
 			}
 			// System.out.println(demandrepositories.findByUser(user));
 			// user.setUserSkill(skillrep.findByUser(user));
-			UserDTO  userdto = UserMapper.UserRegisterConvertToUserDTO(RegisterDTO);
+			UserDTO userdto = UserMapper.UserRegisterConvertToUserDTO(RegisterDTO);
 			return ResponseEntity.ok(userdto);
-		}else {
+		} else {
 			return ResponseEntity.notFound().build();
 		}
-	
+
 	}
 
 	@GetMapping("/register/{userid}")
@@ -93,26 +98,33 @@ public class UserRestController {
 	public ResponseEntity<UserDTO> getUser(@PathVariable String userid) {
 		try {
 			UserDTO userdto = UserMapper.UserConvertToUserDTO(userRepository.findById(userid).get());
+
 			return ResponseEntity.ok(userdto);
 		} catch (Exception e) {
+			System.out.println(e);
 			return ResponseEntity.notFound().build();
 		}
 	}
-	@GetMapping("/get-mentor")
-	public ResponseEntity<List<UserDTO>> getmenotr(){
-		List<User> listuser = userservice.findMentor();
-		return ResponseEntity.ok(listuser.stream().distinct().map(u -> UserMapper.UserConvertToUserDTO(u)).collect(Collectors.toList()));
-	}
+
+	// @GetMapping("/get-mentor")
+	// public ResponseEntity<List<UserDTO>> getmenotr() {
+	// List<User> listuser = userservice.findMentor();
+	// return ResponseEntity.ok(
+	// listuser.stream().distinct().map(u ->
+	// UserMapper.UserConvertToUserDTO(u)).collect(Collectors.toList()));
+	// }
+
 	@GetMapping("/get-mentor-isready")
-	public ResponseEntity<List<UserDTO>> getmenotrisready(){
+	public ResponseEntity<List<UserDTO>> getmenotrisready() {
 		List<User> listuser = userservice.FindMentorIsReady();
-		return ResponseEntity.ok(listuser.stream().distinct().map(u -> UserMapper.UserConvertToUserDTO(u)).collect(Collectors.toList()));
+		return ResponseEntity.ok(
+				listuser.stream().distinct().map(u -> UserMapper.UserConvertToUserDTO(u)).collect(Collectors.toList()));
 	}
-	
-//	@PostMapping("/match-mentor/{mentorid}")
-//	public ResponseEntity<?> matchmentor(){
-//		
-//		return ResponseEntity.ok(null);
-//	}
+
+	// @PostMapping("/match-mentor/{mentorid}")
+	// public ResponseEntity<?> matchmentor(){
+	//
+	// return ResponseEntity.ok(null);
+	// }
 
 }
