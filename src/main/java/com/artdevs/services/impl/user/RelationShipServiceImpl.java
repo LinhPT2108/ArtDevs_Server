@@ -215,7 +215,7 @@ public class RelationShipServiceImpl implements RelationshipService {
 	@Override
 	public RelationShip findByUserOneIdAndUserTwoIdAndStatus(User userOneId, User userTwoId, int status) {
 		// TODO Auto-generated method stub
-		return relationshipRepository.findByUserOneIdAndUserTwoIdAndStatus(userOneId, userTwoId, status);
+		return relationshipRepository.findRelationshipWithFriendWithStatus(userOneId.getUserId(), userTwoId.getUserId(), status);
 	}
 
 	

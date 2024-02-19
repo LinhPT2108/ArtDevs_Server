@@ -163,7 +163,7 @@ public class UserServiceImpl implements UserService {
 				relationrepository.save(relation);
 				
 			}else if(relationrepository.findByUserOneIdAndUserTwoIdAndStatus(userlogin, mentor,3) != null) {
-				RelationShip relation = relationrepository.findByUserOneIdAndUserTwoIdAndStatus(userlogin, mentor,3);
+				RelationShip relation = relationrepository.findRelationshipWithFriendWithStatus(userlogin.getUserId(), mentor.getUserId(),3);
 				relation.setStatus(2);
 				relationrepository.save(relation);
 			}

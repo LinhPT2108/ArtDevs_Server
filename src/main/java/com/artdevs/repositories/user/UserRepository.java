@@ -25,8 +25,6 @@ public interface UserRepository extends JpaRepository<User, String> {
 	@Query("SELECT p FROM User p " + "WHERE (p.firstName LIKE %:keyword%" + " OR  p.middleName LIKE %:keyword%"
 			+ " OR  p.lastName LIKE %:keyword% )" + " AND p.role.id = 3")
 	Optional<Page<User>> searchMentorByKeyword(@Param("keyword") String keyword, Pageable pageable);
-
-	List<User> findByRole(Role role);
 	
 	List<User> findByRoleAndIsReadyAndIsOnline(Role role,Boolean Ready,Boolean online);
 	List<User> findByRole(Role role);
