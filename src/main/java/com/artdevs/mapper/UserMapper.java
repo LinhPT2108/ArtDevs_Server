@@ -25,7 +25,7 @@ public class UserMapper {
 		UserDTO userDTO = modelMapper.map(user, UserDTO.class);
 		
 		userDTO.setListDemandOfUser(getDemand(user));
-		userDTO.setProfilePicUrl(getAvatar(user, true));
+//		userDTO.setProfilePicUrl(getAvatar(user, true));
 		userDTO.setBackgroundImageUrl(getAvatar(user, false));
 		return userDTO;
 	}
