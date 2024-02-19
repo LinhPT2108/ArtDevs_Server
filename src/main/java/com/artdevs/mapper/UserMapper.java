@@ -26,7 +26,7 @@ public class UserMapper {
 		
 		userDTO.setListDemandOfUser(getDemand(user));
 //		userDTO.setProfilePicUrl(getAvatar(user, true));
-		userDTO.setBackgroundImageUrl(getAvatar(user, false));
+//		userDTO.setBackgroundImageUrl(getAvatar(user, false));
 		return userDTO;
 	}
 

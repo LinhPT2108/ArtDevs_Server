@@ -90,11 +90,8 @@ public class LoginRestController {
 	@PostMapping(value = "/api/login")
 	public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
 		try {
-			
 			return ResponseEntity.ok(authenticationService.authenticate(request));			
 		} catch (Exception e) {
-			// TODO: handle exception
-
 			e.printStackTrace();
 
 			return ResponseEntity.notFound().build();
