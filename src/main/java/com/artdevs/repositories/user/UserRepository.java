@@ -27,7 +27,6 @@ public interface UserRepository extends JpaRepository<User, String> {
 	Optional<Page<User>> searchMentorByKeyword(@Param("keyword") String keyword, Pageable pageable);
 	
 	List<User> findByRoleAndIsReadyAndIsOnline(Role role,Boolean Ready,Boolean online);
-	List<User> findByRole(Role role);
 
 	Optional<User> findByEmailAndProvider(String email, String provider);
 	

@@ -13,6 +13,8 @@ import com.artdevs.repositories.user.SearchHistoryRepository;
 import com.artdevs.services.SearchHistoryService;
 import com.artdevs.services.UserService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class SearchHistoryServiceImpl implements SearchHistoryService {
 
@@ -41,6 +43,17 @@ public class SearchHistoryServiceImpl implements SearchHistoryService {
 	@Override
 	public void deleteSearchHistory(SearchHistory SearchHistory) {
 		historyRepository.delete(SearchHistory);
+	}
+
+	@Transactional
+	@Override
+	public void deleteDulicateSearchHistory(String keyword) {
+		Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
+		String loggedInUserEmail = authenticate.getName();
+		if(!loggedInUserEmail.equals("anonymousUser")) {
+			User user = userService.findByEmail(loggedInUserEmail);
+			historyRepository.deleteByKeywordAndUser(keyword, user);
+		}
 	}
 
 }
