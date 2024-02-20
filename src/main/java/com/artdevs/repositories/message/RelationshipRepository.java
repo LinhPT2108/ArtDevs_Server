@@ -24,7 +24,7 @@ public interface RelationshipRepository extends JpaRepository<RelationShip, Inte
 //
 //	    RelationShip findByUserOneIdAndUserTwoId(String userOneId, String userTwoId);
 //
-//	    List<RelationShip> findAllByUserOneIdOrUserTwoId(String userOneId, String userTwoId);
+	    RelationShip findAllByUserOneIdOrUserTwoId(User userOneId, User userTwoId);
 
 	@Query(value = "" + "SELECT r FROM RelationShip AS r "
 			+ "WHERE ((r.userOneId.userId = :id1 AND r.userTwoId.userId = :id2) "

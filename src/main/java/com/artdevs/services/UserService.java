@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.artdevs.domain.entities.message.RelationShip;
+import com.artdevs.domain.entities.user.TransitionInfo;
 import com.artdevs.domain.entities.user.User;
 import com.google.protobuf.Option;
 
@@ -33,5 +35,16 @@ public interface UserService {
 	
 	List<User> FindMentorIsReady();
 	
+
+
+	Boolean SendMatchMentor(String mentorID);
+
+	Boolean AcceptMatchMentor(String mentorID);
+
+	List<User> getListMatchbyUser();
+
+	User setIsReady();
+
+	Boolean CancelSendMatchMentor(String userid);
 
 }

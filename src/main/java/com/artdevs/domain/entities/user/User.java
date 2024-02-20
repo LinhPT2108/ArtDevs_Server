@@ -154,11 +154,11 @@ public class User implements UserDetails {
 	private List<MethodPay> userMethod;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "user1")
+	@OneToMany(mappedBy = "Userlogin")
 	private List<TransitionInfo> userTransition1;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "user2")
+	@OneToMany(mappedBy = "Mentor")
 	private List<TransitionInfo> userTransition2;
 
 	@JsonIgnore

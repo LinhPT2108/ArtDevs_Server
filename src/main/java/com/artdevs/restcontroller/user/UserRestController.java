@@ -8,7 +8,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +27,7 @@ import com.artdevs.domain.entities.user.Skill;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.ErrorResponseDTO;
 import com.artdevs.dto.UserRegisterDTO;
+import com.artdevs.dto.user.MentorDTO;
 import com.artdevs.dto.user.UserDTO;
 import com.artdevs.mapper.UserMapper;
 import com.artdevs.repositories.user.DemandRepository;
@@ -32,6 +36,7 @@ import com.artdevs.repositories.user.SkillRepository;
 import com.artdevs.repositories.user.UserRepository;
 import com.artdevs.service.JwtTokenProvider;
 import com.artdevs.services.UserService;
+import com.artdevs.services.WalletService;
 import com.artdevs.utils.Global;
 
 @RestController
@@ -54,6 +59,8 @@ public class UserRestController {
 	@Autowired
 	PrograminglanguageRepository programingrepositories;
 
+	@Autowired 
+	WalletService walletservice;
 	@PostMapping("/user")
 	public ResponseEntity<User> postUser(@RequestBody UserDTO userDTO) {
 		return ResponseEntity.ok(userRepository.save(UserMapper.UserDTOconvertToUser(userDTO)));
@@ -191,5 +198,74 @@ public class UserRestController {
 		return ResponseEntity.ok(
 				AuthenticationResponse.builder().token(jwtToken).refeshToken(jwtRefeshToken).userdto(userdto).build());
 	}
+
+
+
+//	@GetMapping("/user/{userid}")
+//	public ResponseEntity<UserDTO> getUser(@PathVariable String userid) {
+//		try {
+//			UserDTO userdto = UserMapper.UserConvertToUserDTO(userRepository.findById(userid).get());
+//			return ResponseEntity.ok(userdto);
+//		} catch (Exception e) {
+//			return ResponseEntity.notFound().build();
+//		}
+//	}
+//	@GetMapping("/get-mentor")
+//	public ResponseEntity<List<MentorDTO>> getmenotr(){
+//		List<User> listuser = userservice.findMentor();
+//		return ResponseEntity.ok(listuser.stream().distinct().map(u -> UserMapper.UserConvertToMentorDTO(u)).collect(Collectors.toList()));
+//	}
+	
+	@GetMapping("/get-match-from-user")
+	public ResponseEntity<List<UserDTO>> getmatchfromuser(){
+		List<User> listuser = userservice.getListMatchbyUser();
+		return ResponseEntity.ok(listuser.stream().distinct().map(u -> UserMapper.UserConvertToUserDTO(u)).collect(Collectors.toList()));
+	}
+	
+	@GetMapping("/get-mentor-isready")
+	public ResponseEntity<List<MentorDTO>> getmenotrisready(){
+		List<User> listuser = userservice.FindMentorIsReady();
+		return ResponseEntity.ok(listuser.stream().distinct().map(u -> UserMapper.UserConvertToMentorDTO(u)).collect(Collectors.toList()));
+	}
+	
+	@PostMapping("/send-match/{mentorid}")
+	public ResponseEntity<?> sendmatchmentor(@PathVariable("mentorid") String mentorid){
+		return ResponseEntity.ok(userservice.SendMatchMentor(mentorid));
+	}
+	
+	@PostMapping("/accept-match/{userid}")
+	public ResponseEntity<?> acceptmatchuser(@PathVariable("userid") String userid){
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return ResponseEntity.ok(userservice.AcceptMatchMentor(userid));
+	}
+	
+	@PostMapping("/cancel-sendmatch/{userid}")
+	public ResponseEntity<?> cancelsendmatch(@PathVariable("userid") String userid){
+		return ResponseEntity.ok(userservice.CancelSendMatchMentor(userid));
+	}
+	@PostMapping("/set-isready")
+	public ResponseEntity<MentorDTO> setIsReady(){
+		return ResponseEntity.ok(UserMapper.UserConvertToMentorDTO(userservice.setIsReady()));
+	}
+	
+	@GetMapping("/get-profile")
+	public ResponseEntity<?> Getprofile(){
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		List<GrantedAuthority> authorities = (List<GrantedAuthority>) auth.getAuthorities();
+		if (authorities.stream().anyMatch(authority -> authority.getAuthority().equals("mentor"))) {
+			MentorDTO result = UserMapper.UserConvertToMentorDTO(userservice.findByEmail(auth.getName()));
+			return	ResponseEntity.ok(result);
+		}else if (authorities.stream().anyMatch(authority -> authority.getAuthority().equals("user"))) {
+			UserDTO result = UserMapper.UserConvertToUserDTO(userservice.findByEmail(auth.getName()));
+			return	ResponseEntity.ok(result);
+		}
+		else {
+			return	ResponseEntity.notFound().build();
+		}
+		
+	}
+	
+	
+
 
 }
