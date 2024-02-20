@@ -16,7 +16,7 @@ public class TransitionInfoServiceImpl implements TransitionInfoService {
     TransitioninfoRepository transitioninfoRepository;
 
     @Override
-    public TransitionInfo findTransitionInfoById(String transitionInfoId) {
+    public TransitionInfo findTransitionInfoById(Long transitionInfoId) {
         Optional<TransitionInfo> transitionInfoOptional = transitioninfoRepository
                 .findById(transitionInfoId);
         return transitionInfoOptional.orElse(null);
