@@ -47,19 +47,8 @@ public class LikeRestController {
         	
 			return ResponseEntity.ok(likeService.unLike(postID));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
 			return ResponseEntity.ok(FAILURE_POST_UNLIKE_MESSAGE);
 		}
-    }
-
-    @GetMapping("/like")
-    public ResponseEntity<List<LikeDTO>> getLikes() {
-        List<LikeDTO> listLikeDTO = new ArrayList<>();
-        List<Likes> listLike = likesRepository.findAll();
-        for (Likes like : listLike) {
-            listLikeDTO.add(LikeMapper.convertToLikesDTO(like));
-        }
-        return ResponseEntity.ok(listLikeDTO);
     }
 }

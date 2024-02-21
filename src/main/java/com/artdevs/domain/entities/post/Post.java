@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -31,7 +30,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class Post {
 	@Id
 	private String postId;
@@ -40,7 +39,6 @@ public class Post {
 	@Column
 	private String content;
 
-	
 	@Column
 	private Date time;
 
@@ -54,32 +52,32 @@ public class Post {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private User user;
-	
+
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.EAGER,mappedBy = "postLikeId")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "postLikeId")
 	private List<Likes> listLikePost;
-	
+
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.EAGER,mappedBy = "postShareId")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "postShareId")
 	private List<Share> listSharePost;
-	
+
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.EAGER,mappedBy = "postReportId")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "postReportId")
 	private List<Report> listReportPost;
-	
+
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.EAGER,mappedBy = "postCommentId")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "postCommentId")
 	private List<Comment> listCommentPost;
-	
+
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY,mappedBy = "postImage")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "postImage")
 	private List<ImageOfPost> listImage;
-	
+
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.EAGER,mappedBy = "postHashtag")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "postHashtag")
 	private List<HashTag> listHashtag;
-	
+
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.EAGER,mappedBy = "post")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "post")
 	private List<PrivacyPostDetail> privacyPostDetails;
 }

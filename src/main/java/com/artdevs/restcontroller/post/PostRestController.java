@@ -1,10 +1,10 @@
 package com.artdevs.restcontroller.post;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.apache.http.HttpStatus;
@@ -32,19 +32,24 @@ import com.artdevs.domain.entities.post.HashTag;
 import com.artdevs.domain.entities.post.ImageOfPost;
 import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.post.PrivacyPostDetail;
+import com.artdevs.domain.entities.post.Share;
 import com.artdevs.domain.entities.user.Demand;
 import com.artdevs.domain.entities.user.SearchHistory;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.post.PostDTO;
 import com.artdevs.dto.post.PostToGetDTO;
+import com.artdevs.dto.post.ShareDTO;
 import com.artdevs.mapper.post.PostMapper;
+import com.artdevs.mapper.post.ShareMapper;
 import com.artdevs.services.DetailHashTagService;
 import com.artdevs.services.HashTagService;
 import com.artdevs.services.ImageOfPostService;
+import com.artdevs.services.LikesService;
 import com.artdevs.services.PostService;
 import com.artdevs.services.PrivacyPostDetailService;
 import com.artdevs.services.PrivacyPostService;
 import com.artdevs.services.RelationshipService;
+import com.artdevs.services.ShareService;
 import com.artdevs.services.UserService;
 import com.artdevs.utils.Global;
 
@@ -76,6 +81,12 @@ public class PostRestController {
 	@Autowired
 	RelationshipService relationshipService;
 
+	@Autowired
+	LikesService likesService;
+
+	@Autowired
+	ShareService shareService;
+
 	@GetMapping("/post/page")
 	public ResponseEntity<List<PostToGetDTO>> getPost(@RequestParam("page") int pagenumber) {
 		Page<Post> page = postsv.findPage(pagenumber);
@@ -84,11 +95,11 @@ public class PostRestController {
 		List<Post> posts = postsv.findAll().stream()
 				.filter(post -> !post.isDel() && post.getUser().getUserId() != userLogged.getUserId())
 				.collect(Collectors.toList());
-		
+
 		System.out.println(posts.size());
 		List<PostToGetDTO> listpost = new ArrayList<>();
 		for (Post post : page) {
-			listpost.add(PostMapper.convertoGetDTO(post, hashtagSerivce));
+			listpost.add(PostMapper.convertoGetDTO(post, hashtagSerivce, userservice, likesService));
 		}
 		return ResponseEntity.ok(listpost);
 	}
@@ -98,10 +109,14 @@ public class PostRestController {
 		Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
 		if (!authenticate.getName().equals("anonymousUser")) {
 			List<User> listFriend = relationshipService.getAllFriend();
-			List<Post> listPostFriend = new ArrayList<>();
+			List<Object> listPostFriend = new ArrayList<>();
 			for (User u : listFriend) {
+				System.out.println(u.getUserId());
 				if (!u.getUserPost().isEmpty()) {
 					listPostFriend.addAll(u.getUserPost());
+				}
+				if(!u.getListShare().isEmpty()) {
+					listPostFriend.addAll(u.getListShare());
 				}
 			}
 
@@ -111,16 +126,29 @@ public class PostRestController {
 			int start = currentPage * pageSize;
 			int end = Math.min((start + pageSize), listPostFriend.size());
 
-			List<Post> sublist = listPostFriend.subList(start, end);
-
-			Pageable pageable = PageRequest.of(currentPage, pageSize, Sort.by("time").descending());
-			Page<Post> postPage = new PageImpl<>(sublist, pageable, listPostFriend.size());
-
-			return ResponseEntity.ok(postPage.get()
-					.filter(t -> !t.isDel() && t.getPrivacyPostDetails().stream()
-							.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1))
-					.map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce)));
-
+			List<Object> sublist = listPostFriend.subList(start, end);
+			System.out.println(listPostFriend.size());
+			Pageable pageable = PageRequest.of(currentPage, pageSize);
+			Page<Object> postPage = new PageImpl<>(sublist, pageable, listPostFriend.size());
+			return ResponseEntity.ok(
+				    postPage.get()
+				        .filter(t -> {
+				            if (t instanceof Post) {
+				                return !((Post) t).isDel() && ((Post) t).getPrivacyPostDetails().stream()
+				                    .anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1);
+				            } else {
+				                return true; // Bạn có thể điều chỉnh điều kiện này tùy vào logic của bạn.
+				            }
+				        })
+				        .map(t -> {
+				            if (t instanceof Post) {
+				                return (Object) PostMapper.convertoGetDTO((Post) t, hashtagSerivce, userservice, likesService);
+				            } else {
+				                return (Object) ShareMapper.convertToShareDTO((Share) t, hashtagSerivce, userservice, likesService);
+				            }
+				        })
+				        .collect(Collectors.toList())
+				);
 		} else {
 			return ResponseEntity.ok(HttpStatus.SC_UNAUTHORIZED);
 		}
@@ -152,7 +180,7 @@ public class PostRestController {
 			return ResponseEntity.ok(postPage.get()
 					.filter(t -> !t.isDel() && t.getPrivacyPostDetails().stream()
 							.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1))
-					.map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce)));
+					.map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce, userservice, likesService)));
 		} else {
 			return ResponseEntity.ok(HttpStatus.SC_UNAUTHORIZED);
 		}
@@ -166,26 +194,19 @@ public class PostRestController {
 			List<Post> listPostNewsFeed = new ArrayList<>();
 
 			List<Demand> demandsUser = userLogged.getUserDemand();
-			List<Post> posts = postsv.findAll().stream()
-					.filter(post -> !post.isDel() && post.getUser().getUserId() != userLogged.getUserId()
-							&& post.getPrivacyPostDetails().stream()
-									.anyMatch(detail -> detail.isStatus() && detail.getPrivacyPost().getId() == 1))
-					.collect(Collectors.toList());
 
-				for (Demand d : demandsUser) {
-					Optional<List<Post>> postMatchDemand = postsv.findbyKeyword(d.getLanguage().getLanguageName());
-					if (postMatchDemand.isPresent()) {
-						System.out.println(">>demand: " + postMatchDemand.isPresent());
-						listPostNewsFeed.addAll(postMatchDemand.get());
-					}
+			for (Demand d : demandsUser) {
+				Optional<List<Post>> postMatchDemand = postsv.findbyKeyword(d.getLanguage().getLanguageName());
+				if (postMatchDemand.isPresent()) {
+					listPostNewsFeed.addAll(postMatchDemand.get());
 				}
-				for (SearchHistory s : userLogged.getUserSearchHistory()) {
-					Optional<List<Post>> postMatchSearchHistory = postsv.findbyKeyword(s.getKeyword());
-					if (postMatchSearchHistory.isPresent()) {
-						listPostNewsFeed.addAll(postMatchSearchHistory.get());
-					}
+			}
+			for (SearchHistory s : userLogged.getUserSearchHistory()) {
+				Optional<List<Post>> postMatchSearchHistory = postsv.findbyKeyword(s.getKeyword());
+				if (postMatchSearchHistory.isPresent()) {
+					listPostNewsFeed.addAll(postMatchSearchHistory.get());
 				}
-			
+			}
 
 			int pageSize = Global.size_page;
 			int currentPage = p.orElse(0);
@@ -200,8 +221,9 @@ public class PostRestController {
 
 			return ResponseEntity.ok(postPage.get()
 					.filter(t -> !t.isDel() && t.getPrivacyPostDetails().stream()
-							.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1)).distinct()
-					.map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce)));
+							.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1))
+					.distinct().map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce, userservice, likesService))
+					.collect(Collectors.toList()));
 		} else {
 			return ResponseEntity.ok(HttpStatus.SC_UNAUTHORIZED);
 		}
@@ -210,7 +232,7 @@ public class PostRestController {
 	@GetMapping("/post/{postId}")
 	public ResponseEntity<PostToGetDTO> getPostById(@PathVariable("postId") String postId) {
 		Post post = postsv.findPostById(postId);
-		return ResponseEntity.ok(PostMapper.convertoGetDTO(post, hashtagSerivce));
+		return ResponseEntity.ok(PostMapper.convertoGetDTO(post, hashtagSerivce, userservice, likesService));
 	}
 
 	@GetMapping("/post-by-user-logged")
@@ -224,9 +246,30 @@ public class PostRestController {
 			Optional<Page<Post>> list = postsv.findPostByUser(user, pageable);
 			List<PostToGetDTO> listpost = new ArrayList<>();
 			for (Post post : list.get()) {
-				listpost.add(PostMapper.convertoGetDTO(post, hashtagSerivce));
+				listpost.add(PostMapper.convertoGetDTO(post, hashtagSerivce, userservice, likesService));
 			}
-			return ResponseEntity.ok(listpost);
+			List<Share> shares = shareService.findByUser(user).orElse(null);
+
+			List<Object> mergedList = new ArrayList<>();
+
+			if (!shares.isEmpty()) {
+				List<ShareDTO> shareDTOs = shares.stream()
+						.map(t -> ShareMapper.convertToShareDTO(t, hashtagSerivce, userservice, likesService))
+						.collect(Collectors.toList());
+
+				mergedList.addAll(listpost);
+				mergedList.addAll(shareDTOs);
+				mergedList.sort(Comparator.comparing(obj -> {
+					if (obj instanceof PostDTO) {
+						return ((PostDTO) obj).getTime();
+					} else if (obj instanceof ShareDTO) {
+						return ((ShareDTO) obj).getTimeCreate();
+					}
+					return null;
+				}, Comparator.nullsLast(Comparator.reverseOrder())));
+			}
+
+			return ResponseEntity.ok(mergedList);
 		} else {
 			return ResponseEntity.ok(HttpStatus.SC_UNAUTHORIZED);
 		}
@@ -282,7 +325,7 @@ public class PostRestController {
 
 			postsave.setListHashtag(hashTags);
 		}
-		return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce));
+		return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce, userservice, likesService));
 	}
 
 	@PutMapping("/update-post/{id}")

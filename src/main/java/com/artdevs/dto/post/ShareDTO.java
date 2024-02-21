@@ -1,5 +1,7 @@
 package com.artdevs.dto.post;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +15,13 @@ public class ShareDTO {
 
     private long id;
 
+    private String typePost;
+    
     private String username;
+    
+    private String content;
 
-    private String postId;
+    private PostToGetDTO postId;
+    
+    private Date timeCreate;
 }

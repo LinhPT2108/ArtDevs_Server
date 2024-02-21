@@ -13,7 +13,6 @@ public class LikeDTO {
 
     private long id;
 
-    private long count;
 
     private String username;
 

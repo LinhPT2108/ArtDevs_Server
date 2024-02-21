@@ -98,4 +98,9 @@ public class LikeServiceImpl implements LikesService {
             throw new CustomException(FAILURE_POST_UNLIKE_MESSAGE);
         }
     }
+
+	@Override
+	public Likes findByPostAndUserLogged(String postId, User user) {
+		return likesRepository.findByPostLikeId_PostIdAndUserLikeId(postId, user);
+	}
 }

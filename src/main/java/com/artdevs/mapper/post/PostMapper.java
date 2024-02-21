@@ -10,10 +10,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.artdevs.domain.entities.post.Comment;
 import com.artdevs.domain.entities.post.HashTag;
 import com.artdevs.domain.entities.post.ImageOfPost;
+import com.artdevs.domain.entities.post.Likes;
 import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.post.PrivacyPostDetail;
 import com.artdevs.domain.entities.post.Report;
@@ -25,6 +28,8 @@ import com.artdevs.dto.post.PostToGetDTO;
 import com.artdevs.dto.post.PrivacyPostDetailDTO;
 import com.artdevs.dto.post.UserPostDTO;
 import com.artdevs.services.HashTagService;
+import com.artdevs.services.LikesService;
+import com.artdevs.services.ShareService;
 import com.artdevs.services.UserService;
 
 public class PostMapper {
@@ -92,25 +97,55 @@ public class PostMapper {
 		return postdto;
 	}
 
-	public static PostToGetDTO convertoGetDTO(Post post, HashTagService hashtagSerivce) {
-
+	public static PostToGetDTO convertoGetDTO(Post post, HashTagService hashtagSerivce, UserService userService,
+			LikesService likesService) {
 		PostToGetDTO postdto = modelMapper.map(post, PostToGetDTO.class);
-//		postdto.setListCommentPost(getComment(post));
-		postdto.setUserPost(new UserPostDTO(post.getUser().getUserId(),post.getUser().getUsername(),post.getUser().getProfilePicUrl()));
+		
+		postdto.setUserPost(new UserPostDTO(
+			    safeTrim(post.getUser().getUserId()),
+			    safeTrim(post.getUser().getUsername()),
+			    safeTrim(post.getUser().getProfilePicUrl()),
+			    String.join(" ", 
+			        safeTrim(post.getUser().getFirstName()), 
+			        safeTrim(post.getUser().getMiddleName()), 
+			        safeTrim(post.getUser().getLastName())
+			    )
+			));
 		postdto.setListHashtag(getHashtag(post, hashtagSerivce));
 		postdto.setListImageofPost(getImage(post));
 		postdto.setTotalLike(gettotalLike(post));
 		postdto.setTotalComment(gettotalComment(post));
-//		postdto.setListReportPost(null);
 		postdto.setTotalShare(gettotalShare(post));
 		postdto.setPrivacyPostDetails(getListPrivacyPostDetails(post));
+		postdto.setLikeByUserLogged(isLikeByUserLogged(post.getPostId(), userService, likesService));
+		postdto.setTypePost("post");
 		return postdto;
+	}
+	
+	private static String safeTrim(String input) {
+	    if (input == null) {
+	        return ""; 
+	    } else {
+	        return input.trim(); 
+	    }
+	}
+
+	private static boolean isLikeByUserLogged(String postId, UserService userService, LikesService likesService) {
+		Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
+		if (!authenticate.getName().equals("anonymousUser")) {
+			User userLogged = userService.findByEmail(authenticate.getName());
+			Likes likes = likesService.findByPostAndUserLogged(postId, userLogged);
+			if (likes != null) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private static List<PrivacyPostDetailDTO> getListPrivacyPostDetails(Post post) {
 		List<PrivacyPostDetail> privacyPosts = post.getPrivacyPostDetails();
 		List<PrivacyPostDetailDTO> privacyPostDetailDTOs = new ArrayList<>();
-		if (privacyPosts !=null) {
+		if (privacyPosts != null) {
 			for (PrivacyPostDetail p : privacyPosts) {
 				privacyPostDetailDTOs.add(PrivacyPostDetailMapper.convertToPrivacyPostDetailDTO(p));
 			}
@@ -133,26 +168,25 @@ public class PostMapper {
 
 	private static List<Comment> getComment(Post post) {
 		return post.getListCommentPost().stream().map(cmt -> new Comment(cmt.getId(), cmt.getContent(),
-				 cmt.getTimeComment(), cmt.getUserReportId(), post, null, null))
-				.collect(Collectors.toList());
+				cmt.getTimeComment(), cmt.getUserReportId(), post, null, null)).collect(Collectors.toList());
 	}
 
 	private static List<HashTagDTO> getHashtag(Post post, HashTagService hashtagSerivce) {
 		List<HashTagDTO> listHashtagdto = new ArrayList<>();
 		List<HashTag> listHashTag = post.getListHashtag();
-		if (listHashTag !=null) {
+		if (listHashTag != null) {
 			for (HashTag hashTag : listHashTag) {
 				listHashtagdto.add(HashTagMapper.convertToHashTagDTO(hashTag));
 			}
-		} 
-			return listHashtagdto;
-		
+		}
+		return listHashtagdto;
+
 	}
 
 	private static List<ImageOfPostDTO> getImage(Post post) {
 		List<ImageOfPost> imageOfPosts = post.getListImage();
 		List<ImageOfPostDTO> imageOfPostDTOs = new ArrayList<>();
-		if (imageOfPosts !=null) {
+		if (imageOfPosts != null) {
 			for (ImageOfPost i : imageOfPosts) {
 				imageOfPostDTOs.add(ImageOfPostMapper.convertToImageOfPostDTO(i));
 			}
@@ -161,7 +195,7 @@ public class PostMapper {
 	}
 
 	private static Long gettotalLike(Post post) {
-		return  post.getListLikePost()!=null?(long)post.getListLikePost().size():0;
+		return post.getListLikePost() != null ? (long) post.getListLikePost().size() : 0;
 	}
 
 //	private static List<Report> getReportpost(Post post) {
@@ -170,18 +204,17 @@ public class PostMapper {
 //	}
 
 	private static Long gettotalShare(Post post) {
-		return  post.getListSharePost()!=null? (long) post.getListSharePost().size():0;
+		return post.getListSharePost() != null ? (long) post.getListSharePost().size() : 0;
 	}
 
-
 	private static List<Report> getReportpost(Post post) {
-		return post
-				.getListReportPost().stream().map(rp -> new Report(rp.getId(),
-						rp.getReportDetail(), rp.getTimeCreate(), rp.getUserReportId(), post)).collect(Collectors.toList());
+		return post.getListReportPost().stream()
+				.map(rp -> new Report(rp.getId(), rp.getReportDetail(), rp.getTimeCreate(), rp.getUserReportId(), post))
+				.collect(Collectors.toList());
 	}
 
 	private static Long gettotalComment(Post post) {
-		return  post.getListCommentPost()!=null?(long)post.getListCommentPost().size():0;
+		return post.getListCommentPost() != null ? (long) post.getListCommentPost().size() : 0;
 
 	}
 

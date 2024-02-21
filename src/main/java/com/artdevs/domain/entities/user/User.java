@@ -52,9 +52,6 @@ public class User implements UserDetails {
 	@Column
 	private String address;
 
-	@Column
-	private String BackgroundImageUrl;
-
 	@Nationalized
 	@Column
 	private String city;

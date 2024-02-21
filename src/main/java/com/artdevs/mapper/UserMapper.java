@@ -26,7 +26,7 @@ public class UserMapper {
 		
 		userDTO.setListDemandOfUser(getDemand(user));
 		userDTO.setBackgroundImageUrl(getAvatar(user, false));
-		userDTO.setProfilePicUrl(getAvatar(user, true));
+		userDTO.setProfileImageUrl(getAvatar(user, true));
 		return userDTO;
 	}
 
@@ -92,11 +92,12 @@ public class UserMapper {
 	
 	private static String getAvatar(User user, boolean positon) {
 		// System.out.println(user.getUserId());
-		List<Picture> listPic = user.getUserPicture().stream()
+		System.out.println(user.getUserPicture().size());
+		List<Picture> listPic = !user.getUserPicture().isEmpty() ?user.getUserPicture().stream()
 				.sorted((o1, o2) -> o2.getTime().compareTo(o1.getTime()))
-				.filter(t -> t.isPositionOfPicture() == positon).toList();
+				.filter(t -> t.isPositionOfPicture() == positon).toList():null;
 
-		return listPic.get(0) != null ? listPic.get(0).getImageUrl() : null;
+		return listPic != null ? listPic.get(0).getImageUrl() : null;
 
 	}
 
