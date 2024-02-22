@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class LoginRestController {
 
 	@Autowired UserService userservice;
@@ -100,15 +102,15 @@ public class LoginRestController {
 	}
 	
 	@PutMapping(value = "/api/logout")
-	public ResponseEntity<?> logout(HttpServletRequest request){
+	public ResponseEntity<?> logout(){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userservice.findByEmail(auth.getName());
 		user.setIsOnline(false);
-		userservice.updateUser(user);
+		userservice.saveUser(user);
 		
 //		String authorizationHeader = request.getHeader(AUTHORIZATION);
 //		String token = authorizationHeader.substring("Bearer ".length());
-//		System.out.println("Logout token: "+ token);
+		System.out.println("Logout token: "+ user);
 //		jwtTokenUtil.deleteToken(token);
 		return ResponseEntity.ok(true);
 	}

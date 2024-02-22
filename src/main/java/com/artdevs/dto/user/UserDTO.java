@@ -28,12 +28,9 @@ public class UserDTO {
 	
 	private String userId;
 
-	private List<PictureDTO> backgroundimage;
-	private boolean isAccountNonExpired;
-
-	private boolean isAccountNonLocked;
-
 	private String BackgroundImageUrl;
+	
+	private String profileImageUrl;
 
 	private String city;
 
@@ -58,8 +55,6 @@ public class UserDTO {
 	private String isOnline;
 
 	private String password;
-
-	private List<PictureDTO> profileimage;
 
 	private String provider;
 

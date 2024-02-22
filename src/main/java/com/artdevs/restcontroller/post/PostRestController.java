@@ -212,6 +212,10 @@ public class PostRestController {
 		Post post = postsv.findPostById(postId);
 		return ResponseEntity.ok(PostMapper.convertoGetDTO(post, hashtagSerivce));
 	}
+	@GetMapping("/post")
+	public ResponseEntity<?> getPostAll() {
+		return ResponseEntity.ok(postsv.findAll());
+	}
 
 	@GetMapping("/post-by-user-logged")
 	public ResponseEntity<?> getPostUserLogged(@RequestParam("page") Optional<Integer> p) {
