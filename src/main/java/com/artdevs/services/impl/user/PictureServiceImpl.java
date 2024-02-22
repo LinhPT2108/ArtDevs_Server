@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,7 +63,8 @@ public class PictureServiceImpl implements PictureService {
 	@Override
 	public List<PictureDTO> getAllPicturesByUserId(String userId) {
 		// TODO Auto-generated method stub
-		return null;
+		return pictureRepository.findByUser_UserId(userId).stream().map(t -> PictureMapper.convertToPictureDTO(t))
+				.collect(Collectors.toList());
 	}
 
 	@Override

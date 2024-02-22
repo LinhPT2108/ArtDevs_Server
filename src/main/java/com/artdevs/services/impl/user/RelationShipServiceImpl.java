@@ -48,7 +48,6 @@ public class RelationShipServiceImpl implements RelationshipService {
 //        relationshipRepository.delete(relationShip);
 //    }
 
-
 //	@Override
 //	public List<RelationShip> findAllUserRelationshipsWithStatus(String userId) throws Exception {
 //	
@@ -69,19 +68,19 @@ public class RelationShipServiceImpl implements RelationshipService {
 			user2.add(relation.getUserTwoId());
 		}
 		for (User user : user1) {
-			if(user.getUserId() != userlogin.getUserId()) {
+			if (user.getUserId() != userlogin.getUserId()) {
 				FriendIsOnline.add(user);
 			}
 		}
 		for (User user : user2) {
-			if(user.getUserId()!= userlogin.getUserId()) {
+			if (user.getUserId() != userlogin.getUserId()) {
 				FriendIsOnline.add(user);
 			}
 		}
-		
+
 		return FriendIsOnline;
 	}
-	
+
 	@Override
 	public List<User> getAllFriend() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -89,18 +88,19 @@ public class RelationShipServiceImpl implements RelationshipService {
 		List<User> Result = new ArrayList<>();
 		List<User> user1 = new ArrayList<>();
 		List<User> user2 = new ArrayList<>();
-		List<RelationShip> listFriendRelationship = relationshipRepository.findRelationshipByUserIdAndStatus(userlogin.getUserId(), 1);
+		List<RelationShip> listFriendRelationship = relationshipRepository
+				.findRelationshipByUserIdAndStatus(userlogin.getUserId(), 1);
 		for (RelationShip relation : listFriendRelationship) {
 			user1.add(relation.getUserOneId());
 			user2.add(relation.getUserTwoId());
 		}
 		for (User user : user1) {
-			if(user.getUserId() != userlogin.getUserId()) {
+			if (user.getUserId() != userlogin.getUserId()) {
 				Result.add(user);
 			}
 		}
 		for (User user : user2) {
-			if(user.getUserId()!= userlogin.getUserId()) {
+			if (user.getUserId() != userlogin.getUserId()) {
 				Result.add(user);
 			}
 		}
@@ -217,7 +217,5 @@ public class RelationShipServiceImpl implements RelationshipService {
 		// TODO Auto-generated method stub
 		return relationshipRepository.findRelationshipWithFriendWithStatus(userOneId.getUserId(), userTwoId.getUserId(), status);
 	}
-
-	
 
 }

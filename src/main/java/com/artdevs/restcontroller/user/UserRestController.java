@@ -59,8 +59,9 @@ public class UserRestController {
 	@Autowired
 	PrograminglanguageRepository programingrepositories;
 
-	@Autowired 
+	@Autowired
 	WalletService walletservice;
+
 	@PostMapping("/user")
 	public ResponseEntity<User> postUser(@RequestBody UserDTO userDTO) {
 		return ResponseEntity.ok(userRepository.save(UserMapper.UserDTOconvertToUser(userDTO)));
@@ -171,7 +172,8 @@ public class UserRestController {
 
 	@PostMapping("/user-social")
 	public ResponseEntity<AuthenticationResponse> getUserByEmailAndProvider(@RequestBody UserRegisterDTO RegisterDTO) {
-		User user = userRepository.findByEmailAndProvider(RegisterDTO.getEmail(), RegisterDTO.getProvider()).orElse(null);
+		User user = userRepository.findByEmailAndProvider(RegisterDTO.getEmail(), RegisterDTO.getProvider())
+				.orElse(null);
 		System.out.println(">>> check user: " + user);
 		Role role = null;
 		if (user == null) {
@@ -199,8 +201,6 @@ public class UserRestController {
 				AuthenticationResponse.builder().token(jwtToken).refeshToken(jwtRefeshToken).userdto(userdto).build());
 	}
 
-
-
 //	@GetMapping("/user/{userid}")
 //	public ResponseEntity<UserDTO> getUser(@PathVariable String userid) {
 //		try {
@@ -215,57 +215,56 @@ public class UserRestController {
 //		List<User> listuser = userservice.findMentor();
 //		return ResponseEntity.ok(listuser.stream().distinct().map(u -> UserMapper.UserConvertToMentorDTO(u)).collect(Collectors.toList()));
 //	}
-	
+
 	@GetMapping("/get-match-from-user")
-	public ResponseEntity<List<UserDTO>> getmatchfromuser(){
+	public ResponseEntity<List<UserDTO>> getmatchfromuser() {
 		List<User> listuser = userservice.getListMatchbyUser();
-		return ResponseEntity.ok(listuser.stream().distinct().map(u -> UserMapper.UserConvertToUserDTO(u)).collect(Collectors.toList()));
+		return ResponseEntity.ok(
+				listuser.stream().distinct().map(u -> UserMapper.UserConvertToUserDTO(u)).collect(Collectors.toList()));
 	}
-	
+
 	@GetMapping("/get-mentor-isready")
-	public ResponseEntity<List<MentorDTO>> getmenotrisready(){
+	public ResponseEntity<List<MentorDTO>> getmenotrisready() {
 		List<User> listuser = userservice.FindMentorIsReady();
-		return ResponseEntity.ok(listuser.stream().distinct().map(u -> UserMapper.UserConvertToMentorDTO(u)).collect(Collectors.toList()));
+		return ResponseEntity.ok(listuser.stream().distinct().map(u -> UserMapper.UserConvertToMentorDTO(u))
+				.collect(Collectors.toList()));
 	}
-	
+
 	@PostMapping("/send-match/{mentorid}")
-	public ResponseEntity<?> sendmatchmentor(@PathVariable("mentorid") String mentorid){
+	public ResponseEntity<?> sendmatchmentor(@PathVariable("mentorid") String mentorid) {
 		return ResponseEntity.ok(userservice.SendMatchMentor(mentorid));
 	}
-	
+
 	@PostMapping("/accept-match/{userid}")
-	public ResponseEntity<?> acceptmatchuser(@PathVariable("userid") String userid){
+	public ResponseEntity<?> acceptmatchuser(@PathVariable("userid") String userid) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		return ResponseEntity.ok(userservice.AcceptMatchMentor(userid));
 	}
-	
+
 	@PostMapping("/cancel-sendmatch/{userid}")
-	public ResponseEntity<?> cancelsendmatch(@PathVariable("userid") String userid){
+	public ResponseEntity<?> cancelsendmatch(@PathVariable("userid") String userid) {
 		return ResponseEntity.ok(userservice.CancelSendMatchMentor(userid));
 	}
+
 	@PostMapping("/set-isready")
-	public ResponseEntity<MentorDTO> setIsReady(){
+	public ResponseEntity<MentorDTO> setIsReady() {
 		return ResponseEntity.ok(UserMapper.UserConvertToMentorDTO(userservice.setIsReady()));
 	}
-	
+
 	@GetMapping("/get-profile")
-	public ResponseEntity<?> Getprofile(){
+	public ResponseEntity<?> Getprofile() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		List<GrantedAuthority> authorities = (List<GrantedAuthority>) auth.getAuthorities();
 		if (authorities.stream().anyMatch(authority -> authority.getAuthority().equals("mentor"))) {
 			MentorDTO result = UserMapper.UserConvertToMentorDTO(userservice.findByEmail(auth.getName()));
-			return	ResponseEntity.ok(result);
-		}else if (authorities.stream().anyMatch(authority -> authority.getAuthority().equals("user"))) {
+			return ResponseEntity.ok(result);
+		} else if (authorities.stream().anyMatch(authority -> authority.getAuthority().equals("user"))) {
 			UserDTO result = UserMapper.UserConvertToUserDTO(userservice.findByEmail(auth.getName()));
-			return	ResponseEntity.ok(result);
+			return ResponseEntity.ok(result);
+		} else {
+			return ResponseEntity.notFound().build();
 		}
-		else {
-			return	ResponseEntity.notFound().build();
-		}
-		
-	}
-	
-	
 
+	}
 
 }

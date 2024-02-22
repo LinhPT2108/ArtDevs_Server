@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import com.artdevs.domain.entities.user.TransitionInfo;
 @Repository
-public interface TransitioninfoRepository extends JpaRepository<TransitionInfo, String> {
+public interface TransitioninfoRepository extends JpaRepository<TransitionInfo, Long> {
 
 }

@@ -52,11 +52,12 @@ public class SearchHistoryRestController {
 
 	@GetMapping("/post")
 	public ResponseEntity<?> getPostByKeyword(@RequestParam String keyword, @RequestParam("page") Optional<Integer> p) {
+		searchHistoryService.deleteDulicateSearchHistory(keyword);
 		List<Post> posts = new ArrayList<>();
 
 		String[] listKeyword = keyword.split(" ");
 
-		Pageable pageable = PageRequest.of(p.orElse(0), 7, Sort.by("time").descending());
+		Pageable pageable = PageRequest.of(p.orElse(0), Global.size_page, Sort.by("time").descending());
 		for (String s : listKeyword) {
 			System.out.println(s);
 			Optional<Page<Post>> postMatchKeyWord = postService.findPostByContent(s, pageable);
@@ -80,11 +81,12 @@ public class SearchHistoryRestController {
 	@GetMapping("/people")
 	public ResponseEntity<?> getPeopleByKeyword(@RequestParam String keyword,
 			@RequestParam("page") Optional<Integer> p) {
+		searchHistoryService.deleteDulicateSearchHistory(keyword);
 		List<User> users = new ArrayList<>();
 
 		String[] listKeyword = keyword.split(" ");
 
-		Pageable pageable = PageRequest.of(p.orElse(0), 7);
+		Pageable pageable = PageRequest.of(p.orElse(0), Global.size_page);
 		for (String s : listKeyword) {
 			System.out.println(s);
 			Optional<Page<User>> userMatchKeyWord = userService.findUserByKeyword(s, pageable);
@@ -104,15 +106,16 @@ public class SearchHistoryRestController {
 			return ResponseEntity.badRequest().build();
 		}
 	}
-	
+
 	@GetMapping("/mentor")
 	public ResponseEntity<?> getMentorByKeyword(@RequestParam String keyword,
 			@RequestParam("page") Optional<Integer> p) {
+		searchHistoryService.deleteDulicateSearchHistory(keyword);
 		List<User> users = new ArrayList<>();
 
 		String[] listKeyword = keyword.split(" ");
 
-		Pageable pageable = PageRequest.of(p.orElse(0), 7);
+		Pageable pageable = PageRequest.of(p.orElse(0), Global.size_page);
 		for (String s : listKeyword) {
 			System.out.println(s);
 			Optional<Page<User>> userMatchKeyWord = userService.findMentorByKeyword(s, pageable);
@@ -135,7 +138,8 @@ public class SearchHistoryRestController {
 
 	@GetMapping("/hashtag")
 	public ResponseEntity<?> getMethodName(@RequestParam String keyword, @RequestParam("page") Optional<Integer> p) {
-		Pageable pageable = PageRequest.of(p.orElse(0), 7);
+		searchHistoryService.deleteDulicateSearchHistory(keyword);
+		Pageable pageable = PageRequest.of(p.orElse(0), Global.size_page);
 		Optional<Page<DetailHashtag>> detailHashtags = detailHashTagService.findbyKeyword(keyword, pageable);
 		List<DetailHashtagDTO> detailHashtagDTOs = new ArrayList<>();
 		if (detailHashtags.isPresent()) {
