@@ -157,10 +157,10 @@ public class UserRestController {
 	}
 
 	@GetMapping("/get-mentor")
-	public ResponseEntity<List<UserDTO>> getmenotr() {
+	public ResponseEntity<List<MentorDTO>> getmenotr() {
 		List<User> listuser = userservice.findMentor();
 		return ResponseEntity.ok(
-				listuser.stream().distinct().map(u -> UserMapper.UserConvertToUserDTO(u)).collect(Collectors.toList()));
+				listuser.stream().distinct().map(u -> UserMapper.UserConvertToMentorDTO(u)).collect(Collectors.toList()));
 	}
 
 //	@PostMapping("/user-social")
