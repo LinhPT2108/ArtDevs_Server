@@ -17,7 +17,7 @@ import lombok.Setter;
 public class MentorDTO {
 	private String userId;
 
-	private List<PictureDTO> backgroudimage;
+	private String BackgroundImageUrl;
 
 	private String city;
 
@@ -43,7 +43,7 @@ public class MentorDTO {
 
 	private String password;
 
-	private List<PictureDTO> profileimage;
+	private String profilePicUrl;
 
 	private String username;
 

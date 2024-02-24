@@ -30,6 +30,7 @@ import com.artdevs.dto.UserRegisterDTO;
 import com.artdevs.dto.user.MentorDTO;
 import com.artdevs.dto.user.UserDTO;
 import com.artdevs.mapper.UserMapper;
+import com.artdevs.repositories.message.RelationshipRepository;
 import com.artdevs.repositories.user.DemandRepository;
 import com.artdevs.repositories.user.PrograminglanguageRepository;
 import com.artdevs.repositories.user.SkillRepository;
@@ -55,6 +56,8 @@ public class UserRestController {
 
 	@Autowired
 	JwtTokenProvider jwtService;
+	
+	@Autowired RelationshipRepository relationresp;
 
 	@Autowired
 	PrograminglanguageRepository programingrepositories;
@@ -146,11 +149,22 @@ public class UserRestController {
 		}
 	}
 
-	@GetMapping("/user/{userid}")
-	public ResponseEntity<UserDTO> getUser(@PathVariable String userid) {
+	@GetMapping("/user/{id}")
+	public ResponseEntity<UserDTO> getUser(@PathVariable String id) {
 		try {
-			UserDTO userdto = UserMapper.UserConvertToUserDTO(userRepository.findByEmail(userid).get());
+			UserDTO userdto = UserMapper.UserConvertToUserDTO(userRepository.findByEmail(id).get());
+			System.out.println("Check >>" + userdto);
 			return ResponseEntity.ok(userdto);
+		} catch (Exception e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
+	@GetMapping("/mentor/{Mentorid}")
+	public ResponseEntity<MentorDTO> getMentor(@PathVariable String Mentorid) {
+		try {
+			MentorDTO result = UserMapper.UserConvertToMentorDTO(userRepository.findById(Mentorid).get());
+			return ResponseEntity.ok(result);
 		} catch (Exception e) {
 			return ResponseEntity.notFound().build();
 		}
@@ -267,4 +281,8 @@ public class UserRestController {
 
 	}
 
+	@GetMapping("test")
+	public ResponseEntity<?> testAPI(){
+		return ResponseEntity.ok(relationresp.findRelationshipWithFriendWithStatus("Aa127", "Aa123", 3));
+	}
 }

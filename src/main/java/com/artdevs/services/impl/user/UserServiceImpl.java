@@ -145,14 +145,16 @@ public class UserServiceImpl implements UserService {
 		User mentor = findUserById(mentorID);
 		Wallet walletUserLogin = wallectservice.FindByUser(userlogin);
 
+		System.out.println("userlogin"+ userlogin.getUserId());
+		System.out.println("mentor"+ mentor.getUserId());
 		
 		//Nếu Ví tiến User đang đăng nhập >= giá match của mentor
 		if(walletUserLogin.getSurplus()  >=  mentor.getMatchPrice() && mentor.getRole().getId() == 3) {
 			result.setMentor(mentor);
 			result.setUserlogin(userlogin);
 			//Save MQH với mentor
-			if(relationrepository.findByUserOneIdAndUserTwoIdAndStatus(userlogin, mentor,2)== null
-				&& 	relationrepository.findByUserOneIdAndUserTwoIdAndStatus(userlogin, mentor,3)== null
+			if(relationrepository.findByUserOneIdAndUserTwoIdAndStatus(userlogin, mentor,2).isEmpty()
+				&& 	relationrepository.findByUserOneIdAndUserTwoIdAndStatus(userlogin, mentor,3).isEmpty()
 					) {
 				RelationShip relation = new RelationShip();
 				relation.setTimeRelation(new Date());
@@ -162,8 +164,9 @@ public class UserServiceImpl implements UserService {
 				relation.setStatus(2);
 				relationrepository.save(relation);
 				
-			}else if(relationrepository.findByUserOneIdAndUserTwoIdAndStatus(userlogin, mentor,3) != null) {
+			}else if(!relationrepository.findByUserOneIdAndUserTwoIdAndStatus(userlogin, mentor,3).isEmpty()) {
 				RelationShip relation = relationrepository.findRelationshipWithFriendWithStatus(userlogin.getUserId(), mentor.getUserId(),3);
+				System.out.println("check Relation :"+relationrepository.findByUserOneIdAndUserTwoIdAndStatus(userlogin, mentor,3));
 				relation.setStatus(2);
 				relationrepository.save(relation);
 			}
@@ -256,7 +259,7 @@ public class UserServiceImpl implements UserService {
 	public User setIsReady() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User mentor = findByEmail(auth.getName());
-		if(mentor.getIsReady()==true) {
+		if(mentor.getIsReady()==true || mentor.getIsReady()== null) {
 			mentor.setIsReady(false);
 		}else {
 			mentor.setIsReady(true);
