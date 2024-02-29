@@ -11,6 +11,7 @@ import com.artdevs.domain.entities.user.Picture;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.UserRegisterDTO;
 import com.artdevs.dto.user.MentorDTO;
+import com.artdevs.dto.user.SuggestFriendDTO;
 import com.artdevs.dto.user.UserDTO;
 import com.artdevs.repositories.user.SkillRepository;
 
@@ -30,6 +31,12 @@ public class UserMapper {
 		return userDTO;
 	}
 
+	public static SuggestFriendDTO UserConvertToSuggestFriendDTO(User user) {
+		SuggestFriendDTO suggest = modelMapper.map(user, SuggestFriendDTO.class);
+		suggest.setFullname(user.getFirstName() + " " + user.getMiddleName() + " " + user.getLastName());
+		return suggest;
+	}
+
 	public static User UserDTOconvertToUser(UserDTO userDTO) {
 		User user = modelMapper.map(userDTO, User.class);
 		user.setRole(userDTO.getRole());
@@ -42,13 +49,13 @@ public class UserMapper {
 		return userDTO;
 	}
 
-//	public static UserRegisterDTO UserDTOconvertToRegisterDTO(User user) {
-//		UserRegisterDTO registerDTO = modelMapper.map(user, UserRegisterDTO.class);
-//		registerDTO.setListSkillOfUser(getSkill(user));
-//		registerDTO.setListDemandOfUser(getDemand(user));
-//		return registerDTO;
-//	}
-//	
+	// public static UserRegisterDTO UserDTOconvertToRegisterDTO(User user) {
+	// UserRegisterDTO registerDTO = modelMapper.map(user, UserRegisterDTO.class);
+	// registerDTO.setListSkillOfUser(getSkill(user));
+	// registerDTO.setListDemandOfUser(getDemand(user));
+	// return registerDTO;
+	// }
+	//
 
 	public static User RegisterDTOconvertToUser(UserRegisterDTO RegisterDTO) {
 		RegisterDTO.setPassword(new BCryptPasswordEncoder().encode(RegisterDTO.getPassword()));
@@ -92,9 +99,9 @@ public class UserMapper {
 
 	private static String getAvatar(User user, boolean positon) {
 		// System.out.println(user.getUserId());
-		List<Picture> listPic = !user.getUserPicture().isEmpty()?user.getUserPicture().stream()
+		List<Picture> listPic = !user.getUserPicture().isEmpty() ? user.getUserPicture().stream()
 				.sorted((o1, o2) -> o2.getTime().compareTo(o1.getTime()))
-				.filter(t -> t.isPositionOfPicture() == positon).toList():null;
+				.filter(t -> t.isPositionOfPicture() == positon).toList() : null;
 
 		return listPic != null ? listPic.get(0).getImageUrl() : null;
 	}

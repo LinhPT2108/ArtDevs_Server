@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.artdevs.domain.entities.post.DetailHashtag;
 import com.artdevs.repositories.post.DetailHashtagRepository;
 import com.artdevs.services.DetailHashTagService;
+
 @Service
 public class DetailHashTagServiceImpl implements DetailHashTagService {
 
@@ -43,9 +44,17 @@ public class DetailHashTagServiceImpl implements DetailHashTagService {
         detailHashtagRepository.delete(detailHashtag);
     }
 
-	@Override
-	public Optional<Page<DetailHashtag>> findbyKeyword(String keyword, Pageable pageable) {
-		// TODO Auto-generated method stub
-		return detailHashtagRepository.findByKeyword(keyword, pageable);
-	}
+    @Override
+    public Optional<Page<DetailHashtag>> findbyKeyword(String keyword, Pageable pageable) {
+        // TODO Auto-generated method stub
+        return detailHashtagRepository.findByKeyword(keyword, pageable);
+    }
+
+    @Override
+    public DetailHashtag findDetaiHashTagByName(String detailHashTagText) {
+
+        DetailHashtag result = detailHashtagRepository.findByHashtagText(detailHashTagText).get(0);
+
+        return result;
+    }
 }

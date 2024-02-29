@@ -25,9 +25,29 @@ public interface UserRepository extends JpaRepository<User, String> {
 	@Query("SELECT p FROM User p " + "WHERE (p.firstName LIKE %:keyword%" + " OR  p.middleName LIKE %:keyword%"
 			+ " OR  p.lastName LIKE %:keyword% )" + " AND p.role.id = 3")
 	Optional<Page<User>> searchMentorByKeyword(@Param("keyword") String keyword, Pageable pageable);
+
 	List<User> findByRole(Role role);
-	List<User> findByRoleAndIsReadyAndIsOnline(Role role,Boolean Ready,Boolean online);
+
+	List<User> findByRoleAndIsReadyAndIsOnline(Role role, Boolean Ready, Boolean online);
 
 	Optional<User> findByEmailAndProvider(String email, String provider);
-	
+
+	// Câu query dùng để truy vấn cho gợi ý bạn bè cùng demand
+
+	// @Query("SELECT DISTINCT u FROM User u " +
+	// "JOIN u.userDemand d " +
+	// "WHERE u.email != :currentUserEmail AND d.language.languageName IN
+	// :currentUserDemands")
+	// List<User> findUsersWithSimilarDemands(@Param("currentUserEmail") String
+	// currentUserEmail,
+	// @Param("currentUserDemands") List<String> currentUserDemands);
+
+	// @Query("SELECT DISTINCT u FROM User u " +
+	// "JOIN u.userDemand d " +
+	// "WHERE u.email != :currentUserEmail AND d.language.languageName IN
+	// :currentUserDemands")
+	// List<User> findUsersWithSimilarDemands(@Param("currentUserEmail") String
+	// currentUserEmail,
+	// @Param("currentUserDemands") List<String> currentUserDemands);
+
 }
