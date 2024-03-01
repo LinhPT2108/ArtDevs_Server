@@ -2,6 +2,7 @@ package com.artdevs.services.impl.user;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,7 @@ import com.artdevs.domain.entities.user.Skill;
 import com.artdevs.domain.entities.user.TransitionInfo;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.domain.entities.user.Wallet;
+import com.artdevs.dto.CustomDTO.UserGetRelationDTO;
 import com.artdevs.dto.user.MentorDTO;
 import com.artdevs.repositories.message.RelationshipRepository;
 import com.artdevs.repositories.user.RoleRepository;
@@ -47,7 +49,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findUserById(String userId) {
 		Optional<User> userOptional = userRepository.findById(userId);
-		System.out.println(userOptional);
+		System.out.println("check User"+userOptional);
 		return userOptional.get();
 	}
 
@@ -103,6 +105,61 @@ public class UserServiceImpl implements UserService {
 				}
 			}
 		}
+		return result;
+	}
+	
+	@Override
+	public List<User> findSuitableFriend(){
+		//Tạo List Result kiểu User
+		List<User> result = new ArrayList<>();
+		
+		//Lấy UserLogin từ Token
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User userlogin = findByEmail(auth.getName());
+		
+		//Tạo List Tất cả user
+		List<User> allUser = userRepository.findAll();
+		
+		//Tạo list Chứa User Có Relationship với UserLogin
+		List<User> isUserRelationShipOfUserLogin = new ArrayList<>();
+
+		//Query Các Relation của userLogin & chạy for nếu userOneId == userLogin => isUserRelationShipOfUserLogin thêm vào userOneId và ngược lại
+		List<RelationShip> isRelationshipWithUserLogin = relationrepository.findAllRequestedForFriendUsers(userlogin.getUserId());
+		for (RelationShip relationShip : isRelationshipWithUserLogin) {
+			if(relationShip.getUserOneId() == userlogin) {
+				isUserRelationShipOfUserLogin.add(relationShip.getUserTwoId());
+			}else {
+				isUserRelationShipOfUserLogin.add(relationShip.getUserOneId());
+			}
+		}
+		
+		// Tạo danh sách mới chứa tất cả người dùng trừ đi những người có mối quan hệ
+		List<User> usersWithoutRelationship = new ArrayList<>(allUser);
+		usersWithoutRelationship.removeAll(isUserRelationShipOfUserLogin);
+		
+		//Lấy ra List ProgamingLangue Demand của user login
+		List<ProgramingLanguage> demandOfUserLogin = new ArrayList<>();
+		for (Demand demand : userlogin.getUserDemand()) {
+			demandOfUserLogin.add(demand.getLanguage());
+		}
+		
+		
+		for (User userSuitable : usersWithoutRelationship) {
+			List<ProgramingLanguage> DemandOfuserSuitable = new ArrayList<>();
+			// Tao list chua demand của userSuitable
+			for (Demand demand : userSuitable.getUserDemand()) {
+				DemandOfuserSuitable.add(demand.getLanguage());
+			}
+			// neu Demand co trong list demand add UserSuitable vao result
+				for (ProgramingLanguage programingLanguage : DemandOfuserSuitable) {
+					if (demandOfUserLogin.contains(programingLanguage)) {
+								result.add(userSuitable);
+					}
+				}
+		}
+		
+		result.remove(userlogin);
+		
 		return result;
 	}
 

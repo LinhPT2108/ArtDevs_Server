@@ -9,9 +9,11 @@ import org.modelmapper.ModelMapper;
 import com.artdevs.domain.entities.message.Message;
 import com.artdevs.domain.entities.message.RelationShip;
 import com.artdevs.domain.entities.user.User;
+import com.artdevs.dto.CustomDTO.UserGetRelationDTO;
 import com.artdevs.dto.message.MessageDTO;
 import com.artdevs.dto.message.RelationShipDTO;
 import com.artdevs.services.UserService;
+import com.artdevs.utils.CustomContructor;
 
 public class RelationShipMapper {
     private static final ModelMapper modelMapper = new ModelMapper();
@@ -21,7 +23,7 @@ public class RelationShipMapper {
         RelationShipDTO relationShipDTO = new RelationShipDTO();
         relationShipDTO.setId(relationShip.getId());
         relationShipDTO.setTimeRelation(relationShip.getTimeRelation());
-        relationShipDTO.setUserActionID(relationShip.getActionUser().getUserId());
+        relationShipDTO.setUserAction(setUserGetRelation(relationShip.getActionUser()));
         relationShipDTO.setUserID1(relationShip.getUserOneId().getUserId());
         relationShipDTO.setUserID2(relationShip.getUserTwoId().getUserId());
         return relationShipDTO;
@@ -47,7 +49,7 @@ public class RelationShipMapper {
 
     public static RelationShip convertToRelationShip(RelationShipDTO relationShipDTO, UserService userservice) {
         RelationShip relationShip = modelMapper.map(relationShipDTO, RelationShip.class);
-        relationShip.setActionUser(setUser(relationShipDTO.getUserActionID(), userservice));
+        relationShip.setActionUser(setUser(relationShipDTO.getUserAction().getUserId(), userservice));
         relationShip.setUserOneId(setUser(relationShipDTO.getUserID1(), userservice));
         relationShip.setUserTwoId(setUser(relationShipDTO.getUserID2(), userservice));
         relationShip.setRelationMessage(null);
@@ -76,5 +78,14 @@ public class RelationShipMapper {
     private static User setUser(String userid, UserService userservice) {
         return userservice.findUserById(userid);
 
+    }
+    
+    public static UserGetRelationDTO setUserGetRelation(User user) {
+    	UserGetRelationDTO result = new UserGetRelationDTO();
+    	result.setUserId(user.getUserId());
+    	result.setUsername(user.getUsername());
+    	result.setProfilePicUrl(user.getProfilePicUrl());
+    	result.setFullname(CustomContructor.getFullname(user));
+    	return result;
     }
 }

@@ -10,9 +10,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.artdevs.domain.entities.user.Picture;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.UserRegisterDTO;
+import com.artdevs.dto.CustomDTO.UserGetRelationDTO;
 import com.artdevs.dto.user.MentorDTO;
 import com.artdevs.dto.user.UserDTO;
 import com.artdevs.repositories.user.SkillRepository;
+import com.artdevs.utils.CustomContructor;
 
 public class UserMapper {
 
@@ -98,5 +100,9 @@ public class UserMapper {
 
 		return listPic != null ? listPic.get(0).getImageUrl() : null;
 	}
-
+	 public static UserGetRelationDTO UserConvertToUserGetDTO (User user) {
+		 UserGetRelationDTO result = modelMapper.map(user, UserGetRelationDTO.class);
+		 result.setFullname(user.getFirstName()+" " + user.getMiddleName() + " " + user.getLastName());
+		 return result;
+	 }
 }

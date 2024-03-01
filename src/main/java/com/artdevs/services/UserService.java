@@ -47,4 +47,6 @@ public interface UserService {
 
 	Boolean CancelSendMatchMentor(String userid);
 
+	List<User> findSuitableFriend();
+
 }

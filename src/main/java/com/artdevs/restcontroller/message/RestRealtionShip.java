@@ -16,14 +16,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artdevs.domain.entities.message.RelationShip;
+import com.artdevs.domain.entities.user.User;
+import com.artdevs.dto.CustomDTO.UserGetRelationDTO;
 import com.artdevs.dto.message.RelationShipDTO;
 import com.artdevs.dto.user.UserDTO;
 import com.artdevs.mapper.UserMapper;
 import com.artdevs.mapper.message.RelationShipMapper;
+import com.artdevs.mapper.post.PostMapper;
 import com.artdevs.repositories.message.RelationshipRepository;
 import com.artdevs.services.RelationshipService;
 import com.artdevs.services.UserService;
 import com.artdevs.utils.Global;
+import com.artdevs.utils.CustomContructor;
 
 @RestController
 @RequestMapping(Global.path_api)
@@ -54,17 +58,29 @@ public class RestRealtionShip {
 //	public ResponseEntity<RelationShip> setRelationship(@RequestBody RelationShipDTO relationshipdto) {
 //		return ResponseEntity.ok(RelationShipMapper.convertToRelationShip(relationshipdto, userservice));
 //	}
-
+	@GetMapping("/get-listfriend-suitable")
+	public ResponseEntity<List<UserGetRelationDTO>> getListSuitableFriend(){
+		List<UserGetRelationDTO> result = new ArrayList<>();
+		//Lấy UserLogin từ Token
+				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+				User userlogin = userservice.findByEmail(auth.getName());
+		List<User> UserSuitable = userservice.findSuitableFriend();
+		UserSuitable.remove(userlogin);
+		return ResponseEntity.ok( UserSuitable.stream().distinct().map(t -> UserMapper.UserConvertToUserGetDTO(t)).collect(Collectors.toList()));
+	}
+	
 	@GetMapping("/get-request-friend")
 	public ResponseEntity<List<RelationShipDTO>> Getrequestfriend() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println("check Usetloger" + auth.getName());
 		String LoggerUserID = userservice.findByEmail(auth.getName()).getUserId();
+		
 		List<RelationShip> listrelation;
 		try {
 			listrelation = relationservice.findRelationshipByUserIdAndStatus(LoggerUserID);
 			return ResponseEntity
 					.ok(listrelation.stream().map(t -> new RelationShipDTO(t.getId(), t.getStatus(), t.getTimeRelation(),
-							t.getActionUser().getUserId(), t.getUserOneId().getUserId(), t.getUserTwoId().getUserId())).collect(Collectors.toList()));
+							RelationShipMapper.setUserGetRelation(t.getActionUser()), t.getUserOneId().getUserId(), t.getUserTwoId().getUserId())).collect(Collectors.toList()));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			
