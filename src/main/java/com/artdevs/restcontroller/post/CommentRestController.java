@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,28 +49,27 @@ public class CommentRestController {
 	ImageOfCommentService imgservice;
 
 	@PostMapping("/comment")
-	public ResponseEntity<CommentToGetDTO> postComment(@ModelAttribute CommentToPostDTO CommentToPostDTO) {
+	public ResponseEntity<CommentToGetDTO> postComment(@RequestBody CommentToPostDTO CommentToPostDTO) {
 		Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
-		System.out.println(authenticate.getName());
 		User user = userservice.findByEmail(authenticate.getName());
-		CommentToPostDTO.setUserID(user.getUserId());
+		CommentToPostDTO.setUserToPost(user.getUserId());
 		CommentToPostDTO.setTimeComment(new Date());
 		Comment cmt = commentService.saveComment(CommentMapper.convertToEntity(CommentToPostDTO, userservice, postservice));
-		if (CommentToPostDTO.getListImageofComment() != null) {
-			List<PictureOfComment> listimg = new ArrayList<>();
-			MultipartFile[] listImg = CommentToPostDTO.getListImageofComment();
-			for (MultipartFile multipart : listImg) {
-				try {
-					PictureOfComment imgofcmt = imgservice.saveImageOfComment(cmt.getId(), multipart);
-					listimg.add(imgofcmt);
-				} catch (Exception e) {
-					// TODO: handle exception
-					System.out.println(e);
-					e.printStackTrace();
-				}
-			}
-			cmt.setListPictureOfComment(listimg);
-		}
+//		if (CommentToPostDTO.getListImageofComment() != null) {
+//			List<PictureOfComment> listimg = new ArrayList<>();
+//			MultipartFile[] listImg = CommentToPostDTO.getListImageofComment();
+//			for (MultipartFile multipart : listImg) {
+//				try {
+//					PictureOfComment imgofcmt = imgservice.saveImageOfComment(cmt.getId(), multipart);
+//					listimg.add(imgofcmt);
+//				} catch (Exception e) {
+//					// TODO: handle exception
+//					System.out.println(e);
+//					e.printStackTrace();
+//				}
+//			}
+//			cmt.setListPictureOfComment(listimg);
+//		}
 		return ResponseEntity.ok(CommentMapper.convertToCommentToGetDTO(cmt));
 	}
 	

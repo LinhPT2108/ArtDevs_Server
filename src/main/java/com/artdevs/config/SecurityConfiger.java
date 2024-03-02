@@ -148,7 +148,7 @@ public class SecurityConfiger {
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/*"),
 							AntPathRequestMatcher.antMatcher("/account/login"),
 							AntPathRequestMatcher.antMatcher("/product"), AntPathRequestMatcher.antMatcher("/product/**"),
-							AntPathRequestMatcher.antMatcher("/api/login"))
+							AntPathRequestMatcher.antMatcher("/api/login"),AntPathRequestMatcher.antMatcher("/api/**"))
 					.permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher(Global.path_api + "/cart"),
 							AntPathRequestMatcher.antMatcher(Global.path_api + "/cart/**"))

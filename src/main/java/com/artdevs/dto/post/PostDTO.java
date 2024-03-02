@@ -24,7 +24,7 @@ public class PostDTO {
 //	private Long totalShare;
 //	private List<ReportDTO> listReportPost;
 //	private Long totalComment;
-	private MultipartFile[] listImageofPost;
+//	private MultipartFile[] listImageofPost;
 	private long privacyPostDetails;
 	private List<Integer> listHashtag;
 }

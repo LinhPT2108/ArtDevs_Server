@@ -22,7 +22,7 @@ public class CommentMapper {
 
     public static CommentToPostDTO convertToCommentToPostDTO(Comment comment) {
         CommentToPostDTO CommentToPostDTO = modelMapper.map(comment, CommentToPostDTO.class);
-        CommentToPostDTO.setPostID(comment.getPostCommentId().getPostId());
+        CommentToPostDTO.setPostToPost(comment.getPostCommentId().getPostId());
         return CommentToPostDTO;
     }
     
@@ -34,10 +34,12 @@ public class CommentMapper {
     }
     
 
-    public static Comment convertToEntity(CommentToPostDTO CommentToPostDTO,UserService userservice,PostService postservice) {
-    	Comment comment = modelMapper.map(CommentToPostDTO, Comment.class);
-    	comment.setPostCommentId(postservice.findPostById(CommentToPostDTO.getPostID()));
-    	comment.setUserReportId(userservice.findUserById(CommentToPostDTO.getUserID()));
+    public static Comment convertToEntity(CommentToPostDTO commentToPostDTO,UserService userservice,PostService postservice) {
+    	System.out.println(">> check comdto :"+ commentToPostDTO);
+    	Comment comment = modelMapper.map(commentToPostDTO, Comment.class);
+
+    	comment.setPostCommentId(postservice.findPostById(commentToPostDTO.getPostToPost()));
+    	comment.setUserReportId(userservice.findUserById(commentToPostDTO.getUserToPost()));
         return comment;
     }
 
@@ -51,10 +53,10 @@ public class CommentMapper {
         return modelMapper.map(CommentToPostDTOs, new TypeToken<List<Comment>>() {}.getType());
     }
     
-	private static List<ImageOfCommentDTO> getImage(Comment comment) {
+    private static List<ImageOfCommentDTO> getImage(Comment comment) {
 		List<PictureOfComment> imageOfCMT = comment.getListPictureOfComment();
 		List<ImageOfCommentDTO> imageOfCommentDTOs = new ArrayList<>();
-		if (imageOfCommentDTOs !=null) {
+		if (imageOfCMT != null) {
 			for (PictureOfComment i : imageOfCMT) {
 				imageOfCommentDTOs.add(ImageOfCommentMapper.convertToImageOfCommentDTO(i));
 			}
