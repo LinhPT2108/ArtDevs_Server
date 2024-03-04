@@ -3,6 +3,9 @@ package com.artdevs.dto.message;
 import java.util.Date;
 import java.util.List;
 
+import com.artdevs.dto.CustomDTO.UserGetRelationDTO;
+import com.artdevs.dto.post.UserPostDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +32,7 @@ public class RelationShipDTO {
 
 //    private List<MessageDTO> listRelationMessage;
 
-    private String userActionID;
+    private UserGetRelationDTO userAction;
 
     private String UserID1;
 

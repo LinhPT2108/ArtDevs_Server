@@ -52,8 +52,7 @@ public class User implements UserDetails {
 	@Column
 	private String address;
 
-	@Column
-	private String BackgroundImageUrl;
+	
 
 	@Nationalized
 	@Column
@@ -100,8 +99,7 @@ public class User implements UserDetails {
 	@Column 
 	private Boolean isReady;
 	
-	@Column
-	private String profilePicUrl;
+
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
@@ -248,7 +246,7 @@ public class User implements UserDetails {
 		this.email = email;
 		this.firstName = firstName;
 		this.provider = provider;
-		this.profilePicUrl = profilePicUrl;
+		
 		this.username = username;
 		this.role = role;
 	}

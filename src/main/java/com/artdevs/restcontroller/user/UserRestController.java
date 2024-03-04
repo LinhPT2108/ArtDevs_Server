@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artdevs.config.auth.AuthenticationResponse;
+import com.artdevs.domain.entities.message.RelationShip;
 import com.artdevs.domain.entities.user.Demand;
 import com.artdevs.domain.entities.user.Role;
 import com.artdevs.domain.entities.user.Skill;
@@ -30,11 +31,14 @@ import com.artdevs.dto.UserRegisterDTO;
 import com.artdevs.dto.user.MentorDTO;
 import com.artdevs.dto.user.UserDTO;
 import com.artdevs.mapper.UserMapper;
+import com.artdevs.mapper.message.RelationShipMapper;
+import com.artdevs.repositories.message.RelationshipRepository;
 import com.artdevs.repositories.user.DemandRepository;
 import com.artdevs.repositories.user.PrograminglanguageRepository;
 import com.artdevs.repositories.user.SkillRepository;
 import com.artdevs.repositories.user.UserRepository;
 import com.artdevs.service.JwtTokenProvider;
+import com.artdevs.services.RelationshipService;
 import com.artdevs.services.UserService;
 import com.artdevs.services.WalletService;
 import com.artdevs.utils.Global;
@@ -55,7 +59,12 @@ public class UserRestController {
 
 	@Autowired
 	JwtTokenProvider jwtService;
+	
+	
+	@Autowired RelationshipRepository relationresp;
 
+	@Autowired RelationshipService relationshipservice;
+	
 	@Autowired
 	PrograminglanguageRepository programingrepositories;
 
@@ -146,11 +155,22 @@ public class UserRestController {
 		}
 	}
 
-	@GetMapping("/user/{userid}")
-	public ResponseEntity<UserDTO> getUser(@PathVariable String userid) {
+	@GetMapping("/user/{id}")
+	public ResponseEntity<UserDTO> getUser(@PathVariable String id) {
 		try {
-			UserDTO userdto = UserMapper.UserConvertToUserDTO(userRepository.findByEmail(userid).get());
+			UserDTO userdto = UserMapper.UserConvertToUserDTO(userRepository.findByEmail(id).get());
+			System.out.println("Check >>" + userdto);
 			return ResponseEntity.ok(userdto);
+		} catch (Exception e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
+	@GetMapping("/mentor/{Mentorid}")
+	public ResponseEntity<MentorDTO> getMentor(@PathVariable String Mentorid) {
+		try {
+			MentorDTO result = UserMapper.UserConvertToMentorDTO(userRepository.findById(Mentorid).get());
+			return ResponseEntity.ok(result);
 		} catch (Exception e) {
 			return ResponseEntity.notFound().build();
 		}
@@ -217,16 +237,16 @@ public class UserRestController {
 //	}
 
 	@GetMapping("/get-match-from-user")
-	public ResponseEntity<List<UserDTO>> getmatchfromuser() {
-		List<User> listuser = userservice.getListMatchbyUser();
+	public ResponseEntity<?> getmatchfromuser() {
+		List<RelationShip> listuser = userservice.getListMatchbyUser();
 		return ResponseEntity.ok(
-				listuser.stream().distinct().map(u -> UserMapper.UserConvertToUserDTO(u)).collect(Collectors.toList()));
+				listuser.stream().distinct().map(u -> RelationShipMapper.convertToRelationShipDTO(u)).collect(Collectors.toList()));
 	}
 
 	@GetMapping("/get-mentor-isready")
-	public ResponseEntity<List<MentorDTO>> getmenotrisready() {
+	public ResponseEntity<?> getmenotrisready() {
 		List<User> listuser = userservice.FindMentorIsReady();
-		return ResponseEntity.ok(listuser.stream().distinct().map(u -> UserMapper.UserConvertToMentorDTO(u))
+		return ResponseEntity.ok(listuser.stream().distinct().map(u -> UserMapper.UserConvertToUserGetDTO(u))
 				.collect(Collectors.toList()));
 	}
 
@@ -243,6 +263,8 @@ public class UserRestController {
 
 	@PostMapping("/cancel-sendmatch/{userid}")
 	public ResponseEntity<?> cancelsendmatch(@PathVariable("userid") String userid) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
 		return ResponseEntity.ok(userservice.CancelSendMatchMentor(userid));
 	}
 
@@ -267,4 +289,8 @@ public class UserRestController {
 
 	}
 
+	@GetMapping("/test")
+	public ResponseEntity<?> testAPI(){
+		return ResponseEntity.ok(relationresp.findRelationshipWithFriendWithStatus("Aa124", "Aa123", 2));
+	}
 }

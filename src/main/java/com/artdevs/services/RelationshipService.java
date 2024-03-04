@@ -35,7 +35,11 @@ public interface RelationshipService {
 	boolean createRequestForAddingFriend(String loggedInUserId, String friendCandidateId) throws Exception;
 
 
+
 	List<User> getFriendOnline();
 	
 	List<User> getAllFriend();
+
+
+	boolean removeUserOfListSuitable(String loggedInUserId, String friendId, int Status);
 }

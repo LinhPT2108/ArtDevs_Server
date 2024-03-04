@@ -10,9 +10,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.artdevs.domain.entities.user.Picture;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.UserRegisterDTO;
+import com.artdevs.dto.CustomDTO.UserGetRelationDTO;
 import com.artdevs.dto.user.MentorDTO;
 import com.artdevs.dto.user.UserDTO;
 import com.artdevs.repositories.user.SkillRepository;
+import com.artdevs.utils.CustomContructor;
 
 public class UserMapper {
 
@@ -90,13 +92,21 @@ public class UserMapper {
 	// return listSkill;
 	// }
 
-	private static String getAvatar(User user, boolean positon) {
+	public static final String getAvatar(User user, boolean positon) {
 		// System.out.println(user.getUserId());
-		List<Picture> listPic = !user.getUserPicture().isEmpty()?user.getUserPicture().stream()
+		List<Picture> listPic = !user.getUserPicture().isEmpty() ?user.getUserPicture().stream()
 				.sorted((o1, o2) -> o2.getTime().compareTo(o1.getTime()))
 				.filter(t -> t.isPositionOfPicture() == positon).toList():null;
-
-		return listPic != null ? listPic.get(0).getImageUrl() : null;
+		return listPic!=null  ? listPic.get(0).getImageUrl() : null;
 	}
 
+	 public static UserGetRelationDTO UserConvertToUserGetDTO (User user) {
+		 
+		 
+		 UserGetRelationDTO result = modelMapper.map(user, UserGetRelationDTO.class);
+		 result.setProfilePicUrl(getAvatar(user,true));
+		 result.setFullname(user.getFirstName()+" " + user.getMiddleName() + " " + user.getLastName());
+		 return result;
+	 }
+	 
 }

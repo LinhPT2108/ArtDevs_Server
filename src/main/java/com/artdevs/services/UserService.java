@@ -41,10 +41,12 @@ public interface UserService {
 
 	Boolean AcceptMatchMentor(String mentorID);
 
-	List<User> getListMatchbyUser();
+	List<RelationShip> getListMatchbyUser();
 
 	User setIsReady();
 
 	Boolean CancelSendMatchMentor(String userid);
+
+	List<User> findSuitableFriend();
 
 }
