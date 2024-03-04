@@ -16,6 +16,4 @@ public class UserPostDTO {
     private String fullname;
 
     private String profilePicUrl;
-    
-    private String fullname;
 }
