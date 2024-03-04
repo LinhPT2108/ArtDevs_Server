@@ -2,9 +2,15 @@ package com.artdevs.restcontroller.message;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,9 +19,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artdevs.domain.entities.message.RelationShip;
+import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.CustomDTO.UserGetRelationDTO;
 import com.artdevs.dto.message.RelationShipDTO;
@@ -59,27 +67,68 @@ public class RestRealtionShip {
 //		return ResponseEntity.ok(RelationShipMapper.convertToRelationShip(relationshipdto, userservice));
 //	}
 	@GetMapping("/get-listfriend-suitable")
-	public ResponseEntity<List<UserGetRelationDTO>> getListSuitableFriend(){
-		List<UserGetRelationDTO> result = new ArrayList<>();
+	public ResponseEntity<?> getListSuitableFriend(@RequestParam("page") Optional<Integer> p){
+		
 		//Lấy UserLogin từ Token
 				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 				User userlogin = userservice.findByEmail(auth.getName());
 		List<User> UserSuitable = userservice.findSuitableFriend();
+		
 		UserSuitable.remove(userlogin);
-		return ResponseEntity.ok( UserSuitable.stream().distinct().map(t -> UserMapper.UserConvertToUserGetDTO(t)).collect(Collectors.toList()));
+		List<User> resultTemp = UserSuitable.stream()
+                .distinct()
+                .collect(Collectors.toList());
+		Pageable pageable = PageRequest.of(p.orElse(0), 12);
+		int start = (int) pageable.getOffset();
+		int ListSize = resultTemp.size();
+		int end = Math.min((start + pageable.getPageSize()), resultTemp.size());
+//		System.out.println("Check End"  + end);
+//		System.out.println("Check start"  + start);
+//		System.out.println("Check ListSize"  + ListSize);
+		 
+	try {
+		if( end > ListSize) {
+			int EndTemp = resultTemp.size();
+			
+			Page<User> userPage = new PageImpl<>(resultTemp.subList(start, EndTemp), pageable, resultTemp.size());
+			return ResponseEntity.ok( userPage.stream().map(t -> UserMapper.UserConvertToUserGetDTO(t)).collect(Collectors.toList()));
+		}else {
+	
+			
+			Page<User> userPage = new PageImpl<>(resultTemp.subList(start, end), pageable, resultTemp.size());
+			return ResponseEntity.ok( userPage.stream().map(t -> UserMapper.UserConvertToUserGetDTO(t)).collect(Collectors.toList()));
+		}
+	} catch (Exception e) {
+		// TODO: handle exception
+		System.out.println(e);
+		return ResponseEntity.badRequest().build();
+	}
+		
+	
 	}
 	
 	@GetMapping("/get-request-friend")
-	public ResponseEntity<List<RelationShipDTO>> Getrequestfriend() {
+	public ResponseEntity<?> Getrequestfriend(@RequestParam("page") Optional<Integer> p) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		System.out.println("check Usetloger" + auth.getName());
 		String LoggerUserID = userservice.findByEmail(auth.getName()).getUserId();
 		
-		List<RelationShip> listrelation;
+		List<RelationShip> listrelation ;
+		
+		
+		
 		try {
 			listrelation = relationservice.findRelationshipByUserIdAndStatus(LoggerUserID);
+			Pageable pageable = PageRequest.of(p.orElse(0), 12);
+			int start = (int) pageable.getOffset();
+			int ListSize = listrelation.size();
+			int end = Math.min((start + pageable.getPageSize()), listrelation.size());
+		
+			List<RelationShip> result = listrelation.subList(start, end);
+			Page<RelationShip> FriendPage = new PageImpl<>(result, pageable, listrelation.size());
+		
 			return ResponseEntity
-					.ok(listrelation.stream().map(t -> new RelationShipDTO(t.getId(), t.getStatus(), t.getTimeRelation(),
+					.ok(FriendPage.stream().map(t -> new RelationShipDTO(t.getId(), t.getStatus(), t.getTimeRelation(),
 							RelationShipMapper.setUserGetRelation(t.getActionUser()), t.getUserOneId().getUserId(), t.getUserTwoId().getUserId())).collect(Collectors.toList()));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -112,6 +161,20 @@ public class RestRealtionShip {
 		
 		try {
 			return ResponseEntity.ok(relationservice.createRequestForAddingFriend(LoggerUserID, ToUserID));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println(e);
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	@PostMapping("/remove-user-of-listfriend-suitable/{UserID}")
+	public ResponseEntity<?> removeUserOfList(@PathVariable("UserID") String ToUserID){
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String LoggerUserID = userservice.findByEmail(auth.getName()).getUserId();
+		
+		try {
+			return ResponseEntity.ok(relationservice.removeUserOfListSuitable(LoggerUserID, ToUserID,9));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

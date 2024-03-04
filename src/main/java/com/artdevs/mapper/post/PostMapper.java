@@ -24,6 +24,7 @@ import com.artdevs.dto.post.PostDTO;
 import com.artdevs.dto.post.PostToGetDTO;
 import com.artdevs.dto.post.PrivacyPostDetailDTO;
 import com.artdevs.dto.post.UserPostDTO;
+import com.artdevs.mapper.UserMapper;
 import com.artdevs.services.HashTagService;
 import com.artdevs.services.UserService;
 import com.artdevs.utils.CustomContructor;
@@ -97,7 +98,7 @@ public class PostMapper {
 
 		PostToGetDTO postdto = modelMapper.map(post, PostToGetDTO.class);
 //		postdto.setListCommentPost(getComment(post));
-		postdto.setUserPost(new UserPostDTO(post.getUser().getUserId(),post.getUser().getUsername(),post.getUser().getProfilePicUrl(),CustomContructor.getFullname(post.getUser())));
+		postdto.setUserPost(new UserPostDTO(post.getUser().getUserId(),post.getUser().getUsername(),UserMapper.getAvatar(post.getUser(), true),CustomContructor.getFullname(post.getUser())));
 		postdto.setListHashtag(getHashtag(post, hashtagSerivce));
 		postdto.setListImageofPost(getImage(post));
 		postdto.setTotalLike(gettotalLike(post));
@@ -111,7 +112,7 @@ public class PostMapper {
 	private static List<PrivacyPostDetailDTO> getListPrivacyPostDetails(Post post) {
 		List<PrivacyPostDetail> privacyPosts = post.getPrivacyPostDetails();
 		List<PrivacyPostDetailDTO> privacyPostDetailDTOs = new ArrayList<>();
-		if (privacyPosts !=null) {
+		if (privacyPosts != null) {
 			for (PrivacyPostDetail p : privacyPosts) {
 				privacyPostDetailDTOs.add(PrivacyPostDetailMapper.convertToPrivacyPostDetailDTO(p));
 			}
@@ -134,26 +135,25 @@ public class PostMapper {
 
 	private static List<Comment> getComment(Post post) {
 		return post.getListCommentPost().stream().map(cmt -> new Comment(cmt.getId(), cmt.getContent(),
-				 cmt.getTimeComment(), cmt.getUserReportId(), post, null, null))
-				.collect(Collectors.toList());
+				cmt.getTimeComment(), cmt.getUserReportId(), post, null, null)).collect(Collectors.toList());
 	}
 
 	private static List<HashTagDTO> getHashtag(Post post, HashTagService hashtagSerivce) {
 		List<HashTagDTO> listHashtagdto = new ArrayList<>();
 		List<HashTag> listHashTag = post.getListHashtag();
-		if (listHashTag !=null) {
+		if (listHashTag != null) {
 			for (HashTag hashTag : listHashTag) {
 				listHashtagdto.add(HashTagMapper.convertToHashTagDTO(hashTag));
 			}
-		} 
-			return listHashtagdto;
-		
+		}
+		return listHashtagdto;
+
 	}
 
 	private static List<ImageOfPostDTO> getImage(Post post) {
 		List<ImageOfPost> imageOfPosts = post.getListImage();
 		List<ImageOfPostDTO> imageOfPostDTOs = new ArrayList<>();
-		if (imageOfPosts !=null) {
+		if (imageOfPosts != null) {
 			for (ImageOfPost i : imageOfPosts) {
 				imageOfPostDTOs.add(ImageOfPostMapper.convertToImageOfPostDTO(i));
 			}
@@ -162,7 +162,7 @@ public class PostMapper {
 	}
 
 	private static Long gettotalLike(Post post) {
-		return  post.getListLikePost()!=null?(long)post.getListLikePost().size():0;
+		return post.getListLikePost() != null ? (long) post.getListLikePost().size() : 0;
 	}
 
 //	private static List<Report> getReportpost(Post post) {
@@ -171,18 +171,17 @@ public class PostMapper {
 //	}
 
 	private static Long gettotalShare(Post post) {
-		return  post.getListSharePost()!=null? (long) post.getListSharePost().size():0;
+		return post.getListSharePost() != null ? (long) post.getListSharePost().size() : 0;
 	}
 
-
 	private static List<Report> getReportpost(Post post) {
-		return post
-				.getListReportPost().stream().map(rp -> new Report(rp.getId(),
-						rp.getReportDetail(), rp.getTimeCreate(), rp.getUserReportId(), post)).collect(Collectors.toList());
+		return post.getListReportPost().stream()
+				.map(rp -> new Report(rp.getId(), rp.getReportDetail(), rp.getTimeCreate(), rp.getUserReportId(), post))
+				.collect(Collectors.toList());
 	}
 
 	private static Long gettotalComment(Post post) {
-		return  post.getListCommentPost()!=null?(long)post.getListCommentPost().size():0;
+		return post.getListCommentPost() != null ? (long) post.getListCommentPost().size() : 0;
 
 	}
 
@@ -190,5 +189,5 @@ public class PostMapper {
 		System.out.println(userservice.findUserById(postdto.getUserId()));
 		return userservice.findUserById(postdto.getUserId());
 	}
-	
+
 }

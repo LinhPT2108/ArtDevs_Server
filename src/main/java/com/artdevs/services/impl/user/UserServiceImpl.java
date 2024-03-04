@@ -105,6 +105,27 @@ public class UserServiceImpl implements UserService {
 				}
 			}
 		}
+		List<User> ListMentorAccept = new ArrayList<>();
+		List<User> ListMentorSendmatch = new ArrayList<>();
+		
+		List<RelationShip> Accept = relationrepository.findRelationshipByUserIdAndStatus(userlogin.getUserId(), 3);
+		List<RelationShip> Matching = relationrepository.findRelationshipByUserIdAndStatus(userlogin.getUserId(), 2);
+		for (RelationShip relationShip : Accept) {
+			if(relationShip.getUserOneId() != userlogin) {
+				ListMentorAccept.add(relationShip.getUserOneId());
+			}else {
+				ListMentorAccept.add(relationShip.getUserTwoId());
+			}
+		}
+		for (RelationShip relationShip : Matching) {
+			if(relationShip.getUserOneId() != userlogin) {
+				ListMentorAccept.add(relationShip.getUserOneId());
+			}else {
+				ListMentorAccept.add(relationShip.getUserTwoId());
+			}
+		}
+		result.removeAll(ListMentorAccept);
+		result.removeAll(ListMentorSendmatch);
 		return result;
 	}
 	
@@ -122,9 +143,14 @@ public class UserServiceImpl implements UserService {
 		
 		//Tạo list Chứa User Có Relationship với UserLogin
 		List<User> isUserRelationShipOfUserLogin = new ArrayList<>();
+		
+		
 
 		//Query Các Relation của userLogin & chạy for nếu userOneId == userLogin => isUserRelationShipOfUserLogin thêm vào userOneId và ngược lại
 		List<RelationShip> isRelationshipWithUserLogin = relationrepository.findAllRequestedForFriendUsers(userlogin.getUserId());
+		
+		//List Mentor 
+		List<User> allMentor = userRepository.findByRole(rolerepository.findById(3).get());
 		for (RelationShip relationShip : isRelationshipWithUserLogin) {
 			if(relationShip.getUserOneId() == userlogin) {
 				isUserRelationShipOfUserLogin.add(relationShip.getUserTwoId());
@@ -136,6 +162,7 @@ public class UserServiceImpl implements UserService {
 		// Tạo danh sách mới chứa tất cả người dùng trừ đi những người có mối quan hệ
 		List<User> usersWithoutRelationship = new ArrayList<>(allUser);
 		usersWithoutRelationship.removeAll(isUserRelationShipOfUserLogin);
+		usersWithoutRelationship.removeAll(allMentor);
 		
 		//Lấy ra List ProgamingLangue Demand của user login
 		List<ProgramingLanguage> demandOfUserLogin = new ArrayList<>();
@@ -158,7 +185,7 @@ public class UserServiceImpl implements UserService {
 				}
 		}
 		
-		result.remove(userlogin);
+
 		
 		return result;
 	}
@@ -202,8 +229,8 @@ public class UserServiceImpl implements UserService {
 		User mentor = findUserById(mentorID);
 		Wallet walletUserLogin = wallectservice.FindByUser(userlogin);
 
-		System.out.println("userlogin"+ userlogin.getUserId());
-		System.out.println("mentor"+ mentor.getUserId());
+		System.out.println("userlogin"+ walletUserLogin.getSurplus());
+		System.out.println("mentor"+  mentor.getMatchPrice());
 		
 		//Nếu Ví tiến User đang đăng nhập >= giá match của mentor
 		if(walletUserLogin.getSurplus()  >=  mentor.getMatchPrice() && mentor.getRole().getId() == 3) {
@@ -245,6 +272,7 @@ public class UserServiceImpl implements UserService {
 		Wallet walletMentor = wallectservice.FindByUser(mentorlogin );
 		
 		//Nếu Ví tiến User đang đăng nhập >= giá match của mentor
+		System.out.println("check Mentor ID:"+ auth.getAuthorities());
 		if( mentorlogin.getRole().getId() == 3) {
 			//set và Save Mentor
 			result.setPrice_match(mentorlogin.getMatchPrice());
@@ -282,20 +310,19 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public List<User> getListMatchbyUser(){
+	public List<RelationShip> getListMatchbyUser(){
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User mentor = findByEmail(auth.getName());
-		List<RelationShip> listrelation = relationrepository.findRelationshipByUserIdAndStatusAndOnline(mentor.getUserId(), 2, true);
-		List<User> result = new ArrayList<User>();
-		for (RelationShip relation : listrelation) {
-			if(mentor != relation.getUserOneId()) {
-				result.add(relation.getUserOneId());
-			}else {
-				result.add(relation.getUserTwoId());
+//		List<RelationShip> listrelation = relationrepository.findRelationshipByUserIdAndStatusAndOnline(mentor.getUserId(), 2, true);
+		List<RelationShip> result = new ArrayList<>();
+		List<RelationShip> temp  = relationrepository.findRelationshipByUserIdAndStatus(mentor.getUserId(), 2);
+		for (RelationShip relationShip : temp) {
+			if(relationShip.getActionUser().getUserId() != mentor.getUserId()) {
+				result.add(relationShip);
 			}
 		}
-		
+		System.out.println( "check result" + result);
 		return result;
 	}
 	
@@ -303,6 +330,8 @@ public class UserServiceImpl implements UserService {
 	public Boolean CancelSendMatchMentor(String userid){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User mentor = findByEmail(auth.getName());
+		System.out.println("check Mentor" + mentor.getUserId());
+		System.out.println("check userid"+ userid );
 		RelationShip result = relationrepository.findRelationshipWithFriendWithStatus(mentor.getUserId(), userid, 2);
 		if(result != null) {
 			relationrepository.delete(result);

@@ -12,6 +12,7 @@ import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.CustomDTO.UserGetRelationDTO;
 import com.artdevs.dto.message.MessageDTO;
 import com.artdevs.dto.message.RelationShipDTO;
+import com.artdevs.mapper.UserMapper;
 import com.artdevs.services.UserService;
 import com.artdevs.utils.CustomContructor;
 
@@ -22,7 +23,7 @@ public class RelationShipMapper {
 
         RelationShipDTO relationShipDTO = new RelationShipDTO();
         relationShipDTO.setId(relationShip.getId());
-        relationShipDTO.setTimeRelation(relationShip.getTimeRelation());
+        relationShipDTO.setStatus(relationShip.getStatus());        relationShipDTO.setTimeRelation(relationShip.getTimeRelation());
         relationShipDTO.setUserAction(setUserGetRelation(relationShip.getActionUser()));
         relationShipDTO.setUserID1(relationShip.getUserOneId().getUserId());
         relationShipDTO.setUserID2(relationShip.getUserTwoId().getUserId());
@@ -84,7 +85,7 @@ public class RelationShipMapper {
     	UserGetRelationDTO result = new UserGetRelationDTO();
     	result.setUserId(user.getUserId());
     	result.setUsername(user.getUsername());
-    	result.setProfilePicUrl(user.getProfilePicUrl());
+    	result.setProfilePicUrl(UserMapper.getAvatar(user, true));
     	result.setFullname(CustomContructor.getFullname(user));
     	return result;
     }

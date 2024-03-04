@@ -26,6 +26,8 @@ public interface RelationshipRepository extends JpaRepository<RelationShip, Inte
 //
 	RelationShip findAllByUserOneIdOrUserTwoId(User userOneId, User userTwoId);
 
+	
+	
 	@Query(value = "" + "SELECT r FROM RelationShip AS r "
 			+ "WHERE ((r.userOneId.userId = :id1 AND r.userTwoId.userId = :id2) "
 			+ "OR ( r.userTwoId.userId = :id1 AND r.userOneId.userId = :id2)) " + "AND r.status = :status")
@@ -74,7 +76,7 @@ public interface RelationshipRepository extends JpaRepository<RelationShip, Inte
 	            "WHERE (r.userOneId.userId = :id OR r.userTwoId.userId = :id) " )
 	    List<RelationShip> findAllRequestedForFriendUsers(@Param(value = "id") String id);
 
-	List<RelationShip> findAllByUserOneIdAndStatus(User user, int status);
+
 
 	@Query(value = "" + "SELECT r FROM RelationShip AS r "
 			+ "WHERE (r.userOneId.userId = :id OR r.userTwoId.userId = :id ) " + "AND r.status = :status")
