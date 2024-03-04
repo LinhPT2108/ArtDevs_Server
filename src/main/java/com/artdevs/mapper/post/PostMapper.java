@@ -96,7 +96,8 @@ public class PostMapper {
 
 		PostToGetDTO postdto = modelMapper.map(post, PostToGetDTO.class);
 //		postdto.setListCommentPost(getComment(post));
-		postdto.setUserPost(new UserPostDTO(post.getUser().getUserId(),post.getUser().getUsername(),post.getUser().getProfilePicUrl()));
+		
+		postdto.setUserPost(new UserPostDTO(post.getUser().getUserId(),post.getUser().getFirstName()+" "+post.getUser().getMiddleName()+" "+post.getUser().getLastName(),post.getUser().getProfilePicUrl()));
 		postdto.setListHashtag(getHashtag(post, hashtagSerivce));
 		postdto.setListImageofPost(getImage(post));
 		postdto.setTotalLike(gettotalLike(post));
@@ -107,15 +108,18 @@ public class PostMapper {
 		return postdto;
 	}
 
-	private static List<PrivacyPostDetailDTO> getListPrivacyPostDetails(Post post) {
+	private static PrivacyPostDetailDTO getListPrivacyPostDetails(Post post) {
 		List<PrivacyPostDetail> privacyPosts = post.getPrivacyPostDetails();
-		List<PrivacyPostDetailDTO> privacyPostDetailDTOs = new ArrayList<>();
+		PrivacyPostDetailDTO privacyPostDetailDTO = new PrivacyPostDetailDTO();
 		if (privacyPosts !=null) {
 			for (PrivacyPostDetail p : privacyPosts) {
-				privacyPostDetailDTOs.add(PrivacyPostDetailMapper.convertToPrivacyPostDetailDTO(p));
+				if(p.isStatus()) {
+					return PrivacyPostDetailMapper.convertToPrivacyPostDetailDTO(p);
+					
+				}
 			}
 		}
-		return privacyPostDetailDTOs;
+		return null;
 	}
 
 	public static Post convertToPost(PostDTO postdto, UserService userservice) {

@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,6 +52,7 @@ import com.artdevs.utils.Global;
 
 @RestController
 @RequestMapping(Global.path_api)
+@CrossOrigin("*")
 public class PostRestController {
 
 	@Autowired
@@ -85,7 +87,7 @@ public class PostRestController {
 		List<Post> posts = postsv.findAll().stream()
 				.filter(post -> !post.isDel() && post.getUser().getUserId() != userLogged.getUserId())
 				.collect(Collectors.toList());
-		
+
 		System.out.println(posts.size());
 		List<PostToGetDTO> listpost = new ArrayList<>();
 		for (Post post : page) {
@@ -173,20 +175,19 @@ public class PostRestController {
 									.anyMatch(detail -> detail.isStatus() && detail.getPrivacyPost().getId() == 1))
 					.collect(Collectors.toList());
 
-				for (Demand d : demandsUser) {
-					Optional<List<Post>> postMatchDemand = postsv.findbyKeyword(d.getLanguage().getLanguageName());
-					if (postMatchDemand.isPresent()) {
-						System.out.println(">>demand: " + postMatchDemand.isPresent());
-						listPostNewsFeed.addAll(postMatchDemand.get());
-					}
+			for (Demand d : demandsUser) {
+				Optional<List<Post>> postMatchDemand = postsv.findbyKeyword(d.getLanguage().getLanguageName());
+				if (postMatchDemand.isPresent()) {
+					System.out.println(">>demand: " + postMatchDemand.isPresent());
+					listPostNewsFeed.addAll(postMatchDemand.get());
 				}
-				for (SearchHistory s : userLogged.getUserSearchHistory()) {
-					Optional<List<Post>> postMatchSearchHistory = postsv.findbyKeyword(s.getKeyword());
-					if (postMatchSearchHistory.isPresent()) {
-						listPostNewsFeed.addAll(postMatchSearchHistory.get());
-					}
+			}
+			for (SearchHistory s : userLogged.getUserSearchHistory()) {
+				Optional<List<Post>> postMatchSearchHistory = postsv.findbyKeyword(s.getKeyword());
+				if (postMatchSearchHistory.isPresent()) {
+					listPostNewsFeed.addAll(postMatchSearchHistory.get());
 				}
-			
+			}
 
 			int pageSize = Global.size_page;
 			int currentPage = p.orElse(0);
@@ -201,18 +202,19 @@ public class PostRestController {
 
 			return ResponseEntity.ok(postPage.get()
 					.filter(t -> !t.isDel() && t.getPrivacyPostDetails().stream()
-							.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1)).distinct()
-					.map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce)));
+							.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1))
+					.distinct().map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce)));
 		} else {
 			return ResponseEntity.ok(HttpStatus.SC_UNAUTHORIZED);
 		}
 	}
 
-	@GetMapping("/post/{postId}")
-	public ResponseEntity<PostToGetDTO> getPostById(@PathVariable("postId") String postId) {
+	@GetMapping("/post-with-id")
+	public ResponseEntity<PostToGetDTO> getPostById(@RequestParam("postId") String postId) {
 		Post post = postsv.findPostById(postId);
 		return ResponseEntity.ok(PostMapper.convertoGetDTO(post, hashtagSerivce));
 	}
+
 	@GetMapping("/post")
 	public ResponseEntity<?> getPostAll() {
 		return ResponseEntity.ok(postsv.findAll());
@@ -225,8 +227,9 @@ public class PostRestController {
 		if (!authenticate.getName().equals("anonymousUser")) {
 			String loggedInUserEmail = authenticate.getName();
 			User user = userservice.findByEmail(loggedInUserEmail);
+			System.out.println(">>> check user: " + user.getUserId());
 			Pageable pageable = PageRequest.of(p.orElse(0), 7, Sort.by("time").descending());
-			Optional<Page<Post>> list = postsv.findPostByUser(user, pageable);
+			Optional<Page<Post>> list = postsv.findByUserAndIsDel(user, false, pageable);
 			List<PostToGetDTO> listpost = new ArrayList<>();
 			for (Post post : list.get()) {
 				listpost.add(PostMapper.convertoGetDTO(post, hashtagSerivce));
@@ -289,7 +292,7 @@ public class PostRestController {
 		}
 		return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce));
 	}
-	
+
 	@PostMapping("/post-new")
 	public ResponseEntity<PostToGetDTO> CreateNewPost(@RequestBody PostDTO postdto) {
 		Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
@@ -300,7 +303,7 @@ public class PostRestController {
 		post.setTime(new Date());
 		post.setTimelineUserId(new Date());
 		Post postsave = postsv.savePost(post);
-		System.out.println(">> check post: "+post.getContent());
+		System.out.println(">> check post: " + post.getContent());
 
 		PrivacyPostDetail privacyPost = new PrivacyPostDetail();
 		privacyPost.setPost(postsave);
@@ -312,7 +315,6 @@ public class PostRestController {
 		privacyPostDetails.add(privacyPost);
 		postsave.setPrivacyPostDetails(privacyPostDetails);
 
-		
 		if (postdto.getListHashtag() != null) {
 			List<HashTag> hashTags = new ArrayList<>();
 			for (Integer h : postdto.getListHashtag()) {
@@ -328,12 +330,12 @@ public class PostRestController {
 		}
 		return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce));
 	}
-	
 
-	@PutMapping("/update-post/{id}")
+	@PutMapping("/post/{id}/hidden")
 	public ResponseEntity<?> putMethodName(@PathVariable("id") String id) {
-		// TODO: process PUT request
-
-		return ResponseEntity.ok().build();
+		Post post = postsv.findPostById(id);
+		post.setDel(true);
+		return ResponseEntity.ok(postsv.savePost(post));
 	}
+
 }

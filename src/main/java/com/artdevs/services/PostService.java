@@ -13,7 +13,8 @@ public interface PostService {
     Post findPostById(String postId);
     
     Optional<Page<Post>> findPostByUser(User user, Pageable pageable);
-    
+
+    Optional<Page<Post>> findByUserAndIsDel(User user,boolean del, Pageable pageable);
 
     Optional<Page<Post>> findPostByContent(String keyword, Pageable pageable);
 

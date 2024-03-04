@@ -192,7 +192,7 @@ public class UserRestController {
 			}
 		}
 		role = user.getRole();
-		UserDTO userdto = UserMapper.UserRegisterConvertToUserDTO(RegisterDTO);
+		UserDTO userdto = UserMapper.UserConvertToUserDTO(user);
 		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
 		String jwtToken = jwtService.generateToken(user, authorities);

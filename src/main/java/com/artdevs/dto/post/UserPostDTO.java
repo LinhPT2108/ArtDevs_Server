@@ -13,7 +13,7 @@ public class UserPostDTO {
 	
     private String userId;
 
-    private String username;
+    private String fullname;
 
     private String profilePicUrl;
 }

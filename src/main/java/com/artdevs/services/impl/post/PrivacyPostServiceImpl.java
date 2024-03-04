@@ -19,4 +19,10 @@ public class PrivacyPostServiceImpl implements PrivacyPostService{
 		return privacyPostResponsitory.findById(id).get();
 	}
 
+	@Override
+	public PrivacyPost findByNamePrivacy(String namePrivacy) {
+		// TODO Auto-generated method stub
+		return privacyPostResponsitory.findByNamePrivacy(namePrivacy);
+	}
+
 }
