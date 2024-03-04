@@ -24,6 +24,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @AllArgsConstructor
@@ -49,6 +50,7 @@ public class Post {
 	@Column
 	private boolean isDel;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private User user;
@@ -80,4 +82,13 @@ public class Post {
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "post")
 	private List<PrivacyPostDetail> privacyPostDetails;
+
+	@Override
+	public String toString() {
+		return "Post [postId=" + postId + ", content=" + content + ", time=" + time + ", isDel=" + isDel + ", user="
+				+ user.getRole().getId() + ", listLikePost=" + listLikePost.size() + ", listSharePost=" + listSharePost.size() + ", listReportPost="
+				+ listReportPost.size() + ", listCommentPost=" + listCommentPost.size() + ", listImage=" + listImage.size()
+				+ ", listHashtag=" + listHashtag.size() + ", privacyPostDetails=" + privacyPostDetails.size() + "]";
+	}
+
 }

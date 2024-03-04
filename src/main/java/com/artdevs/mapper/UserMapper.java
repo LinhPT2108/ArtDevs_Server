@@ -23,7 +23,6 @@ public class UserMapper {
 
 	public static UserDTO UserConvertToUserDTO(User user) {
 		UserDTO userDTO = modelMapper.map(user, UserDTO.class);
-		
 		userDTO.setListDemandOfUser(getDemand(user));
 		userDTO.setBackgroundImageUrl(getAvatar(user, false));
 		userDTO.setProfileImageUrl(getAvatar(user, true));
@@ -90,15 +89,12 @@ public class UserMapper {
 	// return listSkill;
 	// }
 	
-	private static String getAvatar(User user, boolean positon) {
+	public static final String getAvatar(User user, boolean positon) {
 		// System.out.println(user.getUserId());
-		System.out.println(user.getUserPicture().size());
 		List<Picture> listPic = !user.getUserPicture().isEmpty() ?user.getUserPicture().stream()
 				.sorted((o1, o2) -> o2.getTime().compareTo(o1.getTime()))
 				.filter(t -> t.isPositionOfPicture() == positon).toList():null;
-
-		return listPic != null ? listPic.get(0).getImageUrl() : null;
-
+		return listPic!=null  ? listPic.get(0).getImageUrl() : null;
 	}
 
 }

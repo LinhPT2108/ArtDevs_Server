@@ -1,6 +1,8 @@
 package com.artdevs.services.impl.post;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ import com.artdevs.services.CloudinaryValidationService;
 import com.artdevs.services.CommentService;
 import com.artdevs.services.ImageOfCommentService;
 import com.artdevs.services.ReplyCommentService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ImageOfCommentImpl implements ImageOfCommentService {
@@ -41,7 +45,6 @@ public class ImageOfCommentImpl implements ImageOfCommentService {
 		if (cmt == null) {
 			return null;
 		}
-
 		String cloudinaryPublicId = UUID.randomUUID().toString();
 		Map uploadMap = this.cloudinaryService.uploadImage(file, cloudinaryPublicId);
 
@@ -84,5 +87,45 @@ public class ImageOfCommentImpl implements ImageOfCommentService {
 //		picture.setPostImage(post);
 //		picture.setTime(new Date());
 		return this.pictureOfCommentrepository.save(picture);
+	}
+
+	@Transactional
+	@Override
+	public void deleteImageOfComment(PictureOfComment pictureOfComment) {
+		// TODO Auto-generated method stub
+		try {
+			pictureOfCommentrepository.delete(pictureOfComment);			
+		} catch (Exception e) {
+			System.out.println(e);
+			throw e;
+		}
+	}
+
+	@Override
+	public PictureOfComment findImageUrl(String ImageUrl) {
+		try {
+			PictureOfComment pictureOfComment = pictureOfCommentrepository.findByImageUrl(ImageUrl);
+			return pictureOfComment;
+		} catch (Exception e) {
+			System.out.println("109: "+e);
+			return null;
+		}
+	}
+
+	@Transactional
+	@Override
+	public void deleteImgOfCmtByCommentId(Comment comment) throws Exception {
+		List<PictureOfComment> imgs =comment.getListPictureOfComment();
+		try {
+			if(!imgs.isEmpty()) {
+				for (PictureOfComment i : imgs) {
+					cloudinaryService.deleteImage(i.getCloudinaryPublicId());
+				}
+			}
+			pictureOfCommentrepository.deleteByPictureOfCommentId(comment);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
 	}
 }

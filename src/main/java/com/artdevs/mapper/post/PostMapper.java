@@ -27,10 +27,11 @@ import com.artdevs.dto.post.PostDTO;
 import com.artdevs.dto.post.PostToGetDTO;
 import com.artdevs.dto.post.PrivacyPostDetailDTO;
 import com.artdevs.dto.post.UserPostDTO;
+import com.artdevs.mapper.UserMapper;
 import com.artdevs.services.HashTagService;
 import com.artdevs.services.LikesService;
-import com.artdevs.services.ShareService;
 import com.artdevs.services.UserService;
+import com.artdevs.utils.Global;
 
 public class PostMapper {
 
@@ -102,13 +103,13 @@ public class PostMapper {
 		PostToGetDTO postdto = modelMapper.map(post, PostToGetDTO.class);
 		
 		postdto.setUserPost(new UserPostDTO(
-			    safeTrim(post.getUser().getUserId()),
-			    safeTrim(post.getUser().getUsername()),
-			    safeTrim(post.getUser().getProfilePicUrl()),
+			    Global.safeTrim(post.getUser().getUserId()),
+			    Global.safeTrim(post.getUser().getUsername()),
+			    Global.safeTrim(UserMapper.getAvatar(post.getUser(), true)),
 			    String.join(" ", 
-			        safeTrim(post.getUser().getFirstName()), 
-			        safeTrim(post.getUser().getMiddleName()), 
-			        safeTrim(post.getUser().getLastName())
+			    		Global.safeTrim(post.getUser().getFirstName()), 
+			    		Global.safeTrim(post.getUser().getMiddleName()), 
+			    		Global.safeTrim(post.getUser().getLastName())
 			    )
 			));
 		postdto.setListHashtag(getHashtag(post, hashtagSerivce));
@@ -120,14 +121,6 @@ public class PostMapper {
 		postdto.setLikeByUserLogged(isLikeByUserLogged(post.getPostId(), userService, likesService));
 		postdto.setTypePost("post");
 		return postdto;
-	}
-	
-	private static String safeTrim(String input) {
-	    if (input == null) {
-	        return ""; 
-	    } else {
-	        return input.trim(); 
-	    }
 	}
 
 	private static boolean isLikeByUserLogged(String postId, UserService userService, LikesService likesService) {
@@ -168,7 +161,7 @@ public class PostMapper {
 
 	private static List<Comment> getComment(Post post) {
 		return post.getListCommentPost().stream().map(cmt -> new Comment(cmt.getId(), cmt.getContent(),
-				cmt.getTimeComment(), cmt.getUserReportId(), post, null, null)).collect(Collectors.toList());
+				cmt.getTimeComment(), cmt.getUserReportId(),cmt.getUserReceive(), post, null, null)).collect(Collectors.toList());
 	}
 
 	private static List<HashTagDTO> getHashtag(Post post, HashTagService hashtagSerivce) {

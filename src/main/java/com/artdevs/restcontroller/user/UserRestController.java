@@ -151,6 +151,7 @@ public class UserRestController {
 			UserDTO userdto = UserMapper.UserConvertToUserDTO(userRepository.findByEmail(userid).get());
 			return ResponseEntity.ok(userdto);
 		} catch (Exception e) {
+			System.out.println(e);
 			return ResponseEntity.notFound().build();
 		}
 	}

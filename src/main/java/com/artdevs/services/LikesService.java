@@ -21,7 +21,7 @@ public interface LikesService {
 
     void deleteLikes(Likes likes);
 
-	boolean addLike(String postId) throws Exception;
+	boolean addLike(Post postId, User user) throws Exception;
 
 	boolean unLike(String postId) throws Exception;
 	

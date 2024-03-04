@@ -1,11 +1,13 @@
 package com.artdevs.restcontroller.post;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +117,7 @@ public class PostRestController {
 				if (!u.getUserPost().isEmpty()) {
 					listPostFriend.addAll(u.getUserPost());
 				}
-				if(!u.getListShare().isEmpty()) {
+				if (!u.getListShare().isEmpty()) {
 					listPostFriend.addAll(u.getListShare());
 				}
 			}
@@ -130,25 +132,20 @@ public class PostRestController {
 			System.out.println(listPostFriend.size());
 			Pageable pageable = PageRequest.of(currentPage, pageSize);
 			Page<Object> postPage = new PageImpl<>(sublist, pageable, listPostFriend.size());
-			return ResponseEntity.ok(
-				    postPage.get()
-				        .filter(t -> {
-				            if (t instanceof Post) {
-				                return !((Post) t).isDel() && ((Post) t).getPrivacyPostDetails().stream()
-				                    .anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1);
-				            } else {
-				                return true; // Bạn có thể điều chỉnh điều kiện này tùy vào logic của bạn.
-				            }
-				        })
-				        .map(t -> {
-				            if (t instanceof Post) {
-				                return (Object) PostMapper.convertoGetDTO((Post) t, hashtagSerivce, userservice, likesService);
-				            } else {
-				                return (Object) ShareMapper.convertToShareDTO((Share) t, hashtagSerivce, userservice, likesService);
-				            }
-				        })
-				        .collect(Collectors.toList())
-				);
+			return ResponseEntity.ok(postPage.get().filter(t -> {
+				if (t instanceof Post) {
+					return !((Post) t).isDel() && ((Post) t).getPrivacyPostDetails().stream()
+							.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1);
+				} else {
+					return true; // Bạn có thể điều chỉnh điều kiện này tùy vào logic của bạn.
+				}
+			}).map(t -> {
+				if (t instanceof Post) {
+					return (Object) PostMapper.convertoGetDTO((Post) t, hashtagSerivce, userservice, likesService);
+				} else {
+					return (Object) ShareMapper.convertToShareDTO((Share) t, hashtagSerivce, userservice, likesService);
+				}
+			}).collect(Collectors.toList()));
 		} else {
 			return ResponseEntity.ok(HttpStatus.SC_UNAUTHORIZED);
 		}
@@ -188,45 +185,58 @@ public class PostRestController {
 
 	@GetMapping("/news-feed")
 	public ResponseEntity<?> getMethodName(@RequestParam("page") Optional<Integer> p) {
+		System.out.println(p.orElse(null));
 		Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
-		if (!authenticate.getName().equals("anonymousUser")) {
-			User userLogged = userservice.findByEmail(authenticate.getName());
-			List<Post> listPostNewsFeed = new ArrayList<>();
 
-			List<Demand> demandsUser = userLogged.getUserDemand();
-
-			for (Demand d : demandsUser) {
-				Optional<List<Post>> postMatchDemand = postsv.findbyKeyword(d.getLanguage().getLanguageName());
-				if (postMatchDemand.isPresent()) {
-					listPostNewsFeed.addAll(postMatchDemand.get());
-				}
-			}
-			for (SearchHistory s : userLogged.getUserSearchHistory()) {
-				Optional<List<Post>> postMatchSearchHistory = postsv.findbyKeyword(s.getKeyword());
-				if (postMatchSearchHistory.isPresent()) {
-					listPostNewsFeed.addAll(postMatchSearchHistory.get());
-				}
-			}
-
-			int pageSize = Global.size_page;
-			int currentPage = p.orElse(0);
-
-			int start = currentPage * pageSize;
-			int end = Math.min((start + pageSize), listPostNewsFeed.size());
-
-			List<Post> sublist = listPostNewsFeed.subList(start, end);
-
-			Pageable pageable = PageRequest.of(currentPage, pageSize, Sort.by("time").descending());
-			Page<Post> postPage = new PageImpl<>(sublist, pageable, listPostNewsFeed.size());
-
-			return ResponseEntity.ok(postPage.get()
-					.filter(t -> !t.isDel() && t.getPrivacyPostDetails().stream()
-							.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1))
-					.distinct().map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce, userservice, likesService))
-					.collect(Collectors.toList()));
-		} else {
+		if (authenticate.getName().equals("anonymousUser")) {
 			return ResponseEntity.ok(HttpStatus.SC_UNAUTHORIZED);
 		}
+
+		User userLogged = userservice.findByEmail(authenticate.getName());
+
+		List<Demand> demandsUser = userLogged.getUserDemand();
+
+		List<Post> listPostNewsFeed = demandsUser.stream().flatMap(demand -> {
+			List<Post> postsByKeyword = postsv.findbyKeyword(demand.getLanguage().getLanguageName())
+					.orElse(Collections.emptyList());
+
+			List<Post> postsByDetailHashtag = detailHashTagService
+					.findByKeywordNonePage(demand.getLanguage().getLanguageName())
+					.map(detailHashtags -> detailHashtags.stream()
+							.flatMap(detailHashtag -> detailHashtag.getListHashtagOfDetail().stream()
+									.map(HashTag::getPostHashtag))
+							.collect(Collectors.toList()))
+					.orElse(Collections.emptyList());
+
+			return Stream.concat(postsByKeyword.stream(), postsByDetailHashtag.stream());
+		}).distinct().collect(Collectors.toList());
+		for (SearchHistory searchHistory : userLogged.getUserSearchHistory()) {
+			List<Post> postsBySearchHistory = postsv.findbyKeyword(searchHistory.getKeyword())
+					.orElse(Collections.emptyList());
+
+			listPostNewsFeed.addAll(postsBySearchHistory);
+		}
+		int pageSize = Global.size_page;
+		int currentPage = p.orElse(0);
+
+		int start = currentPage * pageSize;
+		int end = Math.min((start + pageSize), listPostNewsFeed.size());
+
+		List<Post> sublist = listPostNewsFeed.subList(start, end);
+
+		Pageable pageable = PageRequest.of(currentPage, pageSize, Sort.by("time").descending());
+		Page<Post> postPage = new PageImpl<>(sublist, pageable, listPostNewsFeed.size());
+		System.out.println("229: " +listPostNewsFeed.size());
+		for (Post post : listPostNewsFeed) {
+			System.out.println(post.toString());
+		}
+		return ResponseEntity.ok(listPostNewsFeed.stream()
+				.filter(t -> t.getUser().getRole().getId() == 2 && t.getUser().getUserId() != userLogged.getUserId()
+						&& !t.isDel()
+						&& t.getPrivacyPostDetails().stream()
+								.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1))
+				.distinct().map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce, userservice, likesService))
+				.collect(Collectors.toList()));
 	}
 
 	@GetMapping("/post/{postId}")

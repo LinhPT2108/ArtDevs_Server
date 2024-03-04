@@ -33,8 +33,20 @@ public class Notification {
 	@Nationalized
 	private String message;
 	
+	@Column
+	@Nationalized
+	private String type;
+	
+	@Column
+	@Nationalized
+	private String postId;
+	
 	@Column 
 	private boolean isRead = false;
+	
+	@Column
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createDate = new Date();
 	
 	@JsonIgnore
 	@ManyToOne
@@ -46,8 +58,6 @@ public class Notification {
 	@JoinColumn(name = "receiver")
 	private User receiver;
 	
-	@Column
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date createDate = new Date();
+	
 	
 }

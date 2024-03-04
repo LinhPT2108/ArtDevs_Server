@@ -34,17 +34,16 @@ public class ShareRestController {
 	@PostMapping("/share/{postid}")
 	public ResponseEntity<?> addShare(@PathVariable("postid") String postid) {
 		try {
-
 			return ResponseEntity.ok(shareService.addShare(postid));
 		} catch (Exception e) {
 			System.out.println(e);
 			return ResponseEntity.ok(FAILURE_SAVING_SHARE_POST);
 		}
 	}
+
 	@PostMapping("/deleteshare/{postid}")
 	public ResponseEntity<?> unShare(@PathVariable("postid") String postid) {
 		try {
-
 			return ResponseEntity.ok(shareService.unShare(postid));
 		} catch (Exception e) {
 			System.out.println(e);

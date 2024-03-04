@@ -97,9 +97,6 @@ public class User implements UserDetails {
 	@Column 
 	private Boolean isReady;
 	
-	@Column
-	private String profilePicUrl;
-	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date birthday;
@@ -238,14 +235,13 @@ public class User implements UserDetails {
 		return true;
 	}
 
-	public User(String userId, String email, String firstName, String provider, String profilePicUrl, String username,
+	public User(String userId, String email, String firstName, String provider, String username,
 			Role role) {
 		super();
 		this.userId = userId;
 		this.email = email;
 		this.firstName = firstName;
 		this.provider = provider;
-		this.profilePicUrl = profilePicUrl;
 		this.username = username;
 		this.role = role;
 	}

@@ -4,6 +4,7 @@ package com.artdevs.services.impl.post;
 
 import static com.artdevs.utils.ReponseMessageConstants.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,21 +59,15 @@ public class LikeServiceImpl implements LikesService {
     }
     
     @Override
-    public boolean addLike(String postId) throws Exception {
-        Post post = this.postrepository.findById(postId).orElse(null);
-        
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        
-        User user = userservice.findByEmail(auth.getName());
-
+    public boolean addLike(Post post, User user) throws Exception {
 
         Likes likeByUserAndPost = this.likesRepository.findLikesByUserIDandPostID(user, post);
         System.out.println(likeByUserAndPost);
-        if (likeByUserAndPost == null) {
+        if (likeByUserAndPost == null) {	
             Likes like = new Likes();
             like.setUserLikeId(user);
             like.setPostLikeId(post);
-
+            like.setTimeCreate(new Date());
 
             return this.likesRepository.save(like) != null;
         } else {

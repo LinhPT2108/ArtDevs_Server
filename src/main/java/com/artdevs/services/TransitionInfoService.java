@@ -5,7 +5,7 @@ import java.util.List;
 import com.artdevs.domain.entities.user.TransitionInfo;
 
 public interface TransitionInfoService {
-    TransitionInfo findTransitionInfoById(String transitionInfoId);
+    TransitionInfo findTransitionInfoById(Long transitionInfoId);
 
     List<TransitionInfo> findAll();
 
