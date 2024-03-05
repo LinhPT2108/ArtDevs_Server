@@ -11,9 +11,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserPostDTO {
 	
-    private String userId;
+
+	private String userId;
 
     private String fullname;
 
     private String profilePicUrl;
+    
+    private String fullname;
 }

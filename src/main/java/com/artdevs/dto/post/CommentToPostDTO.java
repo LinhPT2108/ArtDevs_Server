@@ -1,6 +1,7 @@
 package com.artdevs.dto.post;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,17 +17,13 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class CommentToPostDTO {
-
-//    private long id;
-
+//private long id;
     private String content;
-
-//    private MultipartFile[] listImageofComment;
-
-    private Date timeComment;
 
     private String userToPost;
 
+    private String userReceive;
+    
     private String postToPost;
 
 }

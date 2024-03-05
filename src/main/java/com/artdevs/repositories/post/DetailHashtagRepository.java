@@ -1,5 +1,6 @@
 package com.artdevs.repositories.post;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -15,4 +16,8 @@ public interface DetailHashtagRepository extends JpaRepository<DetailHashtag, In
 	
 	@Query("SELECT d FROM DetailHashtag d WHERE d.hashtagText LIKE %:keyword%")
 	Optional<Page<DetailHashtag>> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
+	
+
+	@Query("SELECT d FROM DetailHashtag d WHERE d.hashtagText LIKE %:keyword%")
+	Optional<List<DetailHashtag>> findByKeywordNonPage(@Param("keyword") String keyword);
 }

@@ -16,13 +16,13 @@ public class CommentToGetDTO {
 
 	    private String content;
 
-	    private List<ImageOfCommentDTO> listImageofComment;
-
-	    private long Count;
+	    private List<String> listImageofComment;
 
 	    private Date timeComment;
 
-	    private String UserID;
-
-	    private String PostID;
+	    private UserPostDTO UserID;
+	    
+	    private UserPostDTO userReceiveDto;
+	    
+	    private List<ReplyCommentToGetDTO> listReplyComment;
 }

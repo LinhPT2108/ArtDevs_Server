@@ -31,35 +31,22 @@ public class ShareRestController {
 	@Autowired
 	ShareRepository shareRepository;
 
-	@GetMapping("/share")
-	public ResponseEntity<List<ShareDTO>> getShare() {
-		List<ShareDTO> listShareDTO = new ArrayList<>();
-		List<Share> listShare = shareRepository.findAll();
-		for (Share share : listShare) {
-			listShareDTO.add(ShareMapper.convertToShareDTO(share));
-		}
-		return ResponseEntity.ok(listShareDTO);
-	}
-
 	@PostMapping("/share/{postid}")
 	public ResponseEntity<?> addShare(@PathVariable("postid") String postid) {
 		try {
-
 			return ResponseEntity.ok(shareService.addShare(postid));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
 			return ResponseEntity.ok(FAILURE_SAVING_SHARE_POST);
 		}
 	}
+
 	@PostMapping("/deleteshare/{postid}")
 	public ResponseEntity<?> unShare(@PathVariable("postid") String postid) {
 		try {
-
 			return ResponseEntity.ok(shareService.unShare(postid));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
 			return ResponseEntity.ok(FAILURE_SAVING_UNSHARE_POST);
 		}
 	}

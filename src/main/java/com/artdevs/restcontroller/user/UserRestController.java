@@ -162,6 +162,7 @@ public class UserRestController {
 			System.out.println("Check >>" + userdto);
 			return ResponseEntity.ok(userdto);
 		} catch (Exception e) {
+			System.out.println(e);
 			return ResponseEntity.notFound().build();
 		}
 	}

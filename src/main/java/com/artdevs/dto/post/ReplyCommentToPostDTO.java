@@ -9,22 +9,22 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class ReplyCommentToPostDTO {
-
-    private long id;
 
     private String content;
 
-    private MultipartFile[] listImageOfComment;
+//    private MultipartFile[] listImageOfComment;
 
-    private Date timeComment;
+    private String userToPost;
 
-    private String UserID;
-
-    private Long commentID;
+    private String userReceive;
+    
+    private Long commentToPost;
 }

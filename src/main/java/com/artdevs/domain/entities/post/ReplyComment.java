@@ -52,10 +52,17 @@ public class ReplyComment {
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "userReceive")
+	private User userReceive;
+	
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "commentId")
 	private Comment commentId;
 	
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "pictureOfReplyCommentId")
 	private List<PictureOfComment> listPictureOfComment;
+	
+	
 }

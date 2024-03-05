@@ -32,19 +32,15 @@ public class UserDTO {
 	
 	private String profileImageUrl;
 
+	private String profileImageUrl;
+
 	private String city;
 
 	private String district;
 
 	private String ward;
 
-	private boolean isCreadentialsNonExprired;
-
-	private boolean isDelete;
-
 	private String email;
-
-	private boolean isEnabled;
 
 	private String firstName;
 

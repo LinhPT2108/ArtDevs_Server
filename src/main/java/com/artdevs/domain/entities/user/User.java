@@ -52,8 +52,6 @@ public class User implements UserDetails {
 	@Column
 	private String address;
 
-	
-
 	@Nationalized
 	@Column
 	private String city;
@@ -98,8 +96,6 @@ public class User implements UserDetails {
 	
 	@Column 
 	private Boolean isReady;
-	
-
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
@@ -239,14 +235,13 @@ public class User implements UserDetails {
 		return true;
 	}
 
-	public User(String userId, String email, String firstName, String provider, String profilePicUrl, String username,
+	public User(String userId, String email, String firstName, String provider, String username,
 			Role role) {
 		super();
 		this.userId = userId;
 		this.email = email;
 		this.firstName = firstName;
 		this.provider = provider;
-		
 		this.username = username;
 		this.role = role;
 	}

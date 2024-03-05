@@ -75,5 +75,11 @@ public class ShareServiceImpl implements ShareService {
 			throw new CustomException(FAILURE_SAVING_UNSHARE_POST);
 		}
     }
+
+	@Override
+	public Optional<List<Share>> findByUser(User user) {
+		// TODO Auto-generated method stub
+		return shareRepository.findByUserShareId(user);
+	}
     
 }

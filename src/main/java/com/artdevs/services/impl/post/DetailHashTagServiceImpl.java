@@ -48,4 +48,9 @@ public class DetailHashTagServiceImpl implements DetailHashTagService {
 		// TODO Auto-generated method stub
 		return detailHashtagRepository.findByKeyword(keyword, pageable);
 	}
+
+	@Override
+	public Optional<List<DetailHashtag>> findByKeywordNonePage(String keyword) {
+		return detailHashtagRepository.findByKeywordNonPage(keyword);
+	}
 }

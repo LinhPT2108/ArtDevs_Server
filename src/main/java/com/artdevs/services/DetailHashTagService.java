@@ -20,4 +20,6 @@ public interface DetailHashTagService {
     void deleteDetailHashtag(DetailHashtag detailHashtag);
     
     Optional<Page<DetailHashtag>> findbyKeyword(String keyword, Pageable pageable);
+    
+    Optional<List<DetailHashtag>> findByKeywordNonePage(String keyword);
 }
