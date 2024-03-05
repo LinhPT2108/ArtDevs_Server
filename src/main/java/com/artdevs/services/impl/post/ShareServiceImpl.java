@@ -40,23 +40,17 @@ public class ShareServiceImpl implements ShareService {
     }
 
     @Override
-    public boolean addShare(String postId) throws Exception {
+    public boolean addShare(String postId, String content) throws Exception {
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	User user = userservice.findByEmail(auth.getName());
     	
     	Post post = postservice.findPostById(postId);
     	
-    	Share sharebyUserandPost = shareRepository.findShareByUserIDandPostID(user, post);
-    	
-    	if(sharebyUserandPost == null) {
     		Share share = new Share();
     		share.setPostShareId(post);
     		share.setUserShareId(user);
-    
+    		share.setContent(content);
     		return shareRepository.save(share) != null;
-    	}else {
-			throw new CustomException(FAILURE_SAVING_SHARE_POST);
-		}
     }
     
     @Override

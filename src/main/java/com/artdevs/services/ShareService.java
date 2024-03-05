@@ -11,7 +11,7 @@ public interface ShareService {
 
     List<Share> findAll();
 
-	boolean addShare(String postId) throws Exception;
+	boolean addShare(String postId, String content) throws Exception;
 
 	boolean unShare(String postId) throws Exception;
 

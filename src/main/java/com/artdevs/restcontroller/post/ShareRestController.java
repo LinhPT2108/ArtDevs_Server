@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artdevs.domain.entities.post.Share;
@@ -32,12 +33,12 @@ public class ShareRestController {
 	ShareRepository shareRepository;
 
 	@PostMapping("/share/{postid}")
-	public ResponseEntity<?> addShare(@PathVariable("postid") String postid) {
+	public ResponseEntity<?> addShare(@PathVariable("postid") String postid, @RequestParam("content") String content) {
 		try {
-			return ResponseEntity.ok(shareService.addShare(postid));
+			return ResponseEntity.ok(shareService.addShare(postid, content));
 		} catch (Exception e) {
 			System.out.println(e);
-			return ResponseEntity.ok(FAILURE_SAVING_SHARE_POST);
+			return ResponseEntity.ok(false);
 		}
 	}
 
