@@ -104,22 +104,19 @@ public class PostMapper {
 //		postdto.setListCommentPost(getComment(post));
 
 		// main
-		// postdto.setUserPost(new UserPostDTO(post.getUser().getUserId(),post.getUser().getFirstName()+" "+post.getUser().getMiddleName()+" "+post.getUser().getLastName(),UserMapper.getAvatar(post.getUser(),true)));
+		// postdto.setUserPost(new
+		// UserPostDTO(post.getUser().getUserId(),post.getUser().getFirstName()+"
+		// "+post.getUser().getMiddleName()+"
+		// "+post.getUser().getLastName(),UserMapper.getAvatar(post.getUser(),true)));
 
-		
 // origin/nguyentcpc04750
-		postdto.setUserPost(new UserPostDTO(
-			    Global.safeTrim(post.getUser().getUserId()),
-			    Global.safeTrim(post.getUser().getUsername()),
-			    Global.safeTrim(UserMapper.getAvatar(post.getUser(), true)),
-			    String.join(" ", 
-			    		Global.safeTrim(post.getUser().getFirstName()), 
-			    		Global.safeTrim(post.getUser().getMiddleName()), 
-			    		Global.safeTrim(post.getUser().getLastName())
-			    )
-			));
+		postdto.setUserPost(new UserPostDTO(Global.safeTrim(post.getUser().getUserId()),
+				Global.safeTrim(post.getUser().getUsername()),
+				Global.safeTrim(UserMapper.getAvatar(post.getUser(), true)),
+				String.join(" ", Global.safeTrim(post.getUser().getFirstName()),
+						Global.safeTrim(post.getUser().getMiddleName()),
+						Global.safeTrim(post.getUser().getLastName()))));
 
-			
 		postdto.setListHashtag(getHashtag(post, hashtagSerivce));
 		postdto.setListImageofPost(getImage(post));
 		postdto.setTotalLike(gettotalLike(post));
@@ -130,7 +127,6 @@ public class PostMapper {
 		postdto.setTypePost("post");
 		return postdto;
 	}
-
 
 	private static boolean isLikeByUserLogged(String postId, UserService userService, LikesService likesService) {
 		Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
@@ -144,10 +140,9 @@ public class PostMapper {
 		return false;
 	}
 
-	private static List<PrivacyPostDetailDTO> getListPrivacyPostDetails(Post post) {
+	private static PrivacyPostDetailDTO getListPrivacyPostDetails(Post post) {
 		List<PrivacyPostDetail> privacyPosts = post.getPrivacyPostDetails();
-		List<PrivacyPostDetailDTO> privacyPostDetailDTOs = new ArrayList<>();
-		if (privacyPosts != null) {
+		if (privacyPosts !=null) {
 			for (PrivacyPostDetail p : privacyPosts) {
 				if(p.isStatus()) {
 					return PrivacyPostDetailMapper.convertToPrivacyPostDetailDTO(p);
@@ -172,8 +167,10 @@ public class PostMapper {
 	}
 
 	private static List<Comment> getComment(Post post) {
-		return post.getListCommentPost().stream().map(cmt -> new Comment(cmt.getId(), cmt.getContent(),
-				cmt.getTimeComment(), cmt.getUserReportId(),cmt.getUserReceive(), post, null, null)).collect(Collectors.toList());
+		return post
+				.getListCommentPost().stream().map(cmt -> new Comment(cmt.getId(), cmt.getContent(),
+						cmt.getTimeComment(), cmt.getUserReportId(), cmt.getUserReceive(), post, null, null))
+				.collect(Collectors.toList());
 	}
 
 	private static List<HashTagDTO> getHashtag(Post post, HashTagService hashtagSerivce) {

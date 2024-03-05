@@ -40,9 +40,10 @@ public class CommentServiceImpl implements CommentService {
 
         return commentRepository.findByPostCommentId(postid);
     }
-    public Page<Comment> findpagecommentbyPostID(String postid,int pagenumber){
-    	return commentRepository.findPageByPostCommentId(postid,PageRequest.of(pagenumber, Global.size_page,Sort.by("timeComment").descending()));
-    }
+    
+//    public Page<Comment> findpagecommentbyPostID(String postid,int pagenumber){
+//    	return commentRepository.findPageByPostCommentId(postid,PageRequest.of(pagenumber, Global.size_page,Sort.by("timeComment").descending()));
+//    }
 
     @Override
     public Page<Comment> findpagecommentbyPostID(String postid, int pagenumber) {

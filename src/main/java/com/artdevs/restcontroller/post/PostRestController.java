@@ -264,7 +264,7 @@ public class PostRestController {
 			Optional<Page<Post>> list = postsv.findByUserAndIsDel(user, false, pageable);
 			List<PostToGetDTO> listpost = new ArrayList<>();
 			for (Post post : list.get()) {
-				listpost.add(PostMapper.convertoGetDTO(post, hashtagSerivce));
+				listpost.add(PostMapper.convertoGetDTO(post, hashtagSerivce, userservice, likesService));
 			}
 			return ResponseEntity.ok(listpost);
 		} else {
@@ -397,7 +397,7 @@ public class PostRestController {
 
 			postsave.setListHashtag(hashTags);
 		}
-		return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce));
+		return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce, userservice, likesService));
 	}
 
 	@PutMapping("/post/{id}/hidden")

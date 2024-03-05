@@ -32,8 +32,6 @@ public class UserDTO {
 	
 	private String profileImageUrl;
 
-	private String profileImageUrl;
-
 	private String city;
 
 	private String district;

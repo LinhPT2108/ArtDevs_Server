@@ -14,7 +14,7 @@ public class UserPostDTO {
 
 	private String userId;
 
-    private String fullname;
+    private String username;
 
     private String profilePicUrl;
     
