@@ -224,12 +224,28 @@ public class RestRealtionShip {
 	}
 	
 	@GetMapping("/get-list-friend")
-	public ResponseEntity<List<UserDTO>> allfriend(){
+	public ResponseEntity<?> allfriend(){
 //		System.out.println(relationrepository.findRelationshipByUserIdAndStatusAndOnline("Aa127", 1, true));
-		List<UserDTO> result = relationservice.getAllFriend()
+		
+		
+		List<UserGetRelationDTO> result = relationservice.getAllFriend()
 		        .stream()
-		        .map(user -> UserMapper.UserConvertToUserDTO(user))
+		        .map(user -> UserMapper.UserConvertToUserGetDTO(user))
 		        .collect(Collectors.toList());
+		System.out.println("check Result" + result);
+		return ResponseEntity.ok(result);
+	}
+	
+	@GetMapping("/get-list-mentor-match")
+	public ResponseEntity<?> allmentormatch(){
+//		System.out.println(relationrepository.findRelationshipByUserIdAndStatusAndOnline("Aa127", 1, true));
+		
+		
+		List<UserGetRelationDTO> result = relationservice.getAllMentor()
+		        .stream()
+		        .map(user -> UserMapper.UserConvertToUserGetDTO(user))
+		        .collect(Collectors.toList());
+		System.out.println("check Result" + result);
 		return ResponseEntity.ok(result);
 	}
 }

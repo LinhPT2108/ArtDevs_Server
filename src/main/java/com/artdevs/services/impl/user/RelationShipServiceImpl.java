@@ -241,6 +241,33 @@ public class RelationShipServiceImpl implements RelationshipService {
 		}
 		return false;
 	}
+
+	@Override
+	public List<User> getAllMentor() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User userlogin = userservice.findByEmail(auth.getName());
+		List<User> Result = new ArrayList<>();
+		List<User> user1 = new ArrayList<>();
+		List<User> user2 = new ArrayList<>();
+		List<RelationShip> listFriendRelationship = relationshipRepository
+				.findRelationshipByUserIdAndStatus(userlogin.getUserId(), 3);
+		for (RelationShip relation : listFriendRelationship) {
+			user1.add(relation.getUserOneId());
+			user2.add(relation.getUserTwoId());
+		}
+		for (User user : user1) {
+			if (user.getUserId() != userlogin.getUserId()) {
+				Result.add(user);
+			}
+		}
+		for (User user : user2) {
+			if (user.getUserId() != userlogin.getUserId()) {
+				Result.add(user);
+			}
+		}
+		return Result;
+
+	}
 	
 	
 
