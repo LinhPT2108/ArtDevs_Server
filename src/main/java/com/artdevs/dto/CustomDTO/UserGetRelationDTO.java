@@ -22,4 +22,6 @@ public class UserGetRelationDTO {
 	    private String profilePicUrl;
 	    
 	    private String fullname;
+	    
+	    private boolean isOnline;
 }

@@ -39,6 +39,8 @@ public interface RelationshipService {
 	List<User> getFriendOnline();
 	
 	List<User> getAllFriend();
+	
+	List<User> getAllMentor();
 
 
 	boolean removeUserOfListSuitable(String loggedInUserId, String friendId, int Status);
