@@ -11,13 +11,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.artdevs.domain.entities.post.DetailHashtag;
+
 @Repository
 public interface DetailHashtagRepository extends JpaRepository<DetailHashtag, Integer> {
-	
-	@Query("SELECT d FROM DetailHashtag d WHERE d.hashtagText LIKE %:keyword%")
-	Optional<Page<DetailHashtag>> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
-	
 
 	@Query("SELECT d FROM DetailHashtag d WHERE d.hashtagText LIKE %:keyword%")
+	Optional<Page<DetailHashtag>> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
+	@Query("SELECT d FROM DetailHashtag d WHERE d.hashtagText LIKE %:keyword%")
 	Optional<List<DetailHashtag>> findByKeywordNonPage(@Param("keyword") String keyword);
+	List<DetailHashtag> findByHashtagText(String hashtagText);
 }

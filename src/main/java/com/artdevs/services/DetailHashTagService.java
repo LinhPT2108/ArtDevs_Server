@@ -11,6 +11,8 @@ import com.artdevs.domain.entities.post.DetailHashtag;
 public interface DetailHashTagService {
     DetailHashtag findDetailHashtagById(Integer detailHashTagId);
 
+    DetailHashtag findDetaiHashTagByName(String detailHashTagText);
+
     List<DetailHashtag> findAll();
 
     DetailHashtag saveDetailHashtag(DetailHashtag detailHashtag);
@@ -18,7 +20,7 @@ public interface DetailHashTagService {
     DetailHashtag updateDetailHashtag(DetailHashtag detailHashtag);
 
     void deleteDetailHashtag(DetailHashtag detailHashtag);
-    
+
     Optional<Page<DetailHashtag>> findbyKeyword(String keyword, Pageable pageable);
     
     Optional<List<DetailHashtag>> findByKeywordNonePage(String keyword);

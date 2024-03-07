@@ -7,10 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.artdevs.domain.entities.message.RelationShip;
-import com.artdevs.domain.entities.user.TransitionInfo;
 import com.artdevs.domain.entities.user.User;
-import com.google.protobuf.Option;
 
 @Service
 public interface UserService {
@@ -25,17 +22,16 @@ public interface UserService {
 	User updateUser(User user);
 
 	void deleteUser(User user);
-	
 
-    Optional<Page<User>> findUserByKeyword(String keyword, Pageable pageable);
-    
-    Optional<Page<User>> findMentorByKeyword(String keyword, Pageable pageable);
+	Optional<Page<User>> findUserByKeyword(String keyword, Pageable pageable);
+
+	Optional<Page<User>> findMentorByKeyword(String keyword, Pageable pageable);
 
 	List<User> findMentor();
-	
-	List<User> FindMentorIsReady();
-	
 
+	List<User> findUserDemand();
+
+	List<User> FindMentorIsReady();
 
 	Boolean SendMatchMentor(String mentorID);
 

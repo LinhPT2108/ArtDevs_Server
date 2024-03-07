@@ -2,6 +2,7 @@ package com.artdevs.restcontroller.user;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,7 @@ import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.ErrorResponseDTO;
 import com.artdevs.dto.UserRegisterDTO;
 import com.artdevs.dto.user.MentorDTO;
+import com.artdevs.dto.user.SuggestFriendDTO;
 import com.artdevs.dto.user.UserDTO;
 import com.artdevs.mapper.UserMapper;
 import com.artdevs.mapper.message.RelationShipMapper;
@@ -178,18 +180,29 @@ public class UserRestController {
 	}
 
 	@GetMapping("/get-mentor")
-	public ResponseEntity<List<MentorDTO>> getmenotr() {
+	public ResponseEntity<List<MentorDTO>> getmentor() {
 		List<User> listuser = userservice.findMentor();
 		return ResponseEntity.ok(
-				listuser.stream().distinct().map(u -> UserMapper.UserConvertToMentorDTO(u)).collect(Collectors.toList()));
+				listuser.stream().distinct().map(u -> UserMapper.UserConvertToMentorDTO(u))
+						.collect(Collectors.toList()));
 	}
 
-//	@PostMapping("/user-social")
-//	public ResponseEntity<?> getUserByEmailAndProvidere(@RequestParam("email") String email,
-//			@RequestParam("provider") String provider, @RequestBody UserRegisterDTO RegisterDTO) {
-//		User user = userRepository.findByEmailAndProvider(email, provider).orElse(null);
-//		return ResponseEntity.ok(user);
-//	}
+	@GetMapping("/get-userOfDemand")
+	public ResponseEntity<List<SuggestFriendDTO>> getUserOfDemand() {
+		List<User> listUserDemand = userservice.findUserDemand();
+		return ResponseEntity.ok(
+				listUserDemand.stream().distinct().map(u -> UserMapper.UserConvertToSuggestFriendDTO(u))
+						.collect(Collectors.toList()));
+	}
+	// @PostMapping("/user-social")
+	// public ResponseEntity<?> getUserByEmailAndProvidere(@RequestParam("email")
+	// String email,
+	// @RequestParam("provider") String provider, @RequestBody UserRegisterDTO
+	// RegisterDTO) {
+	// User user = userRepository.findByEmailAndProvider(email,
+	// provider).orElse(null);
+	// return ResponseEntity.ok(user);
+	// }
 
 	@PostMapping("/user-social")
 	public ResponseEntity<AuthenticationResponse> getUserByEmailAndProvider(@RequestBody UserRegisterDTO RegisterDTO) {
@@ -222,20 +235,22 @@ public class UserRestController {
 				AuthenticationResponse.builder().token(jwtToken).refeshToken(jwtRefeshToken).userdto(userdto).build());
 	}
 
-//	@GetMapping("/user/{userid}")
-//	public ResponseEntity<UserDTO> getUser(@PathVariable String userid) {
-//		try {
-//			UserDTO userdto = UserMapper.UserConvertToUserDTO(userRepository.findById(userid).get());
-//			return ResponseEntity.ok(userdto);
-//		} catch (Exception e) {
-//			return ResponseEntity.notFound().build();
-//		}
-//	}
-//	@GetMapping("/get-mentor")
-//	public ResponseEntity<List<MentorDTO>> getmenotr(){
-//		List<User> listuser = userservice.findMentor();
-//		return ResponseEntity.ok(listuser.stream().distinct().map(u -> UserMapper.UserConvertToMentorDTO(u)).collect(Collectors.toList()));
-//	}
+	// @GetMapping("/user/{userid}")
+	// public ResponseEntity<UserDTO> getUser(@PathVariable String userid) {
+	// try {
+	// UserDTO userdto =
+	// UserMapper.UserConvertToUserDTO(userRepository.findById(userid).get());
+	// return ResponseEntity.ok(userdto);
+	// } catch (Exception e) {
+	// return ResponseEntity.notFound().build();
+	// }
+	// }
+	// @GetMapping("/get-mentor")
+	// public ResponseEntity<List<MentorDTO>> getmenotr(){
+	// List<User> listuser = userservice.findMentor();
+	// return ResponseEntity.ok(listuser.stream().distinct().map(u ->
+	// UserMapper.UserConvertToMentorDTO(u)).collect(Collectors.toList()));
+	// }
 
 	@GetMapping("/get-match-from-user")
 	public ResponseEntity<?> getmatchfromuser() {
@@ -294,4 +309,42 @@ public class UserRestController {
 	public ResponseEntity<?> testAPI(){
 		return ResponseEntity.ok(relationresp.findRelationshipWithFriendWithStatus("Aa124", "Aa123", 2));
 	}
+
+	private List<String> getCurrentUserDemands(Authentication auth) {
+		// Lấy danh sách yêu cầu của người dùng hiện tại từ cơ sở dữ liệu
+		User currentUser = userRepository.findByEmail(auth.getName()).orElse(null);
+
+		if (currentUser != null) {
+			List<Demand> userDemands = currentUser.getUserDemand();
+
+			// Chuyển đổi danh sách yêu cầu thành danh sách tên ngôn ngữ
+			return userDemands.stream()
+					.map(demand -> demand.getLanguage().getLanguageName())
+					.collect(Collectors.toList());
+		} else {
+			// Nếu không tìm thấy người dùng, trả về danh sách trống
+			return Collections.emptyList();
+		}
+	}
+
+	// @GetMapping("/suggest-friends")
+	// public ResponseEntity<List<UserDTO>> suggestFriends() {
+	// Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+	// // Lấy danh sách yêu cầu (demands) của người dùng hiện tại
+	// List<String> currentUserDemands = getCurrentUserDemands(auth);
+
+	// // Lấy danh sách người dùng có yêu cầu tương tự
+	// List<User> suggestedFriends =
+	// userRepository.findUsersWithSimilarDemands(auth.getName(),
+	// currentUserDemands);
+
+	// // Chuyển đổi danh sách người dùng sang DTO
+	// List<UserDTO> suggestedFriendsDTO = suggestedFriends.stream()
+	// .map(UserMapper::UserConvertToUserDTO)
+	// .collect(Collectors.toList());
+
+	// return ResponseEntity.ok(suggestedFriendsDTO);
+
+	// }
 }
