@@ -22,7 +22,7 @@ public class PostToGetDTO {
 	private Long totalShare;
 	private Long totalComment;
 	private List<ImageOfPostDTO> listImageofPost;
-	private PrivacyPostDetailDTO privacyPostDetails;
+	private List<PrivacyPostDetailDTO> privacyPostDetails;
 	private List<HashTagDTO> listHashtag;
 	private String typePost;
 	private boolean isLikeByUserLogged;

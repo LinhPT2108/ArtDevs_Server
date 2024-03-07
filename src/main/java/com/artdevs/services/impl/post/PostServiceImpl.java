@@ -97,4 +97,9 @@ public class PostServiceImpl implements PostService {
 		return postRepository.findByUser(user, pageable);
 	}
 
+	@Override
+	public Optional<Page<Post>> findPostByUserAndIsDel(User user, boolean del, Pageable pageable) {
+		return postRepository.findByUserAndIsDel(user,del, pageable);
+	}
+
 }

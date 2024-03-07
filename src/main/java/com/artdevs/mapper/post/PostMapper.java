@@ -140,17 +140,17 @@ public class PostMapper {
 		return false;
 	}
 
-	private static PrivacyPostDetailDTO getListPrivacyPostDetails(Post post) {
+	private static List<PrivacyPostDetailDTO> getListPrivacyPostDetails(Post post) {
 		List<PrivacyPostDetail> privacyPosts = post.getPrivacyPostDetails();
-		if (privacyPosts !=null) {
+		List<PrivacyPostDetailDTO> newPrivacyPosts = new ArrayList<>();
+		if (privacyPosts != null) {
 			for (PrivacyPostDetail p : privacyPosts) {
-				if(p.isStatus()) {
-					return PrivacyPostDetailMapper.convertToPrivacyPostDetailDTO(p);
-					
+				if (p.isStatus()) {
+					newPrivacyPosts.add(PrivacyPostDetailMapper.convertToPrivacyPostDetailDTO(p));
 				}
 			}
 		}
-		return null;
+		return newPrivacyPosts;
 	}
 
 	public static Post convertToPost(PostDTO postdto, UserService userservice) {

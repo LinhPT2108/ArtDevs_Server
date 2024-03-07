@@ -259,14 +259,39 @@ public class PostRestController {
 		if (!authenticate.getName().equals("anonymousUser")) {
 			String loggedInUserEmail = authenticate.getName();
 			User user = userservice.findByEmail(loggedInUserEmail);
-			System.out.println(">>> check user: " + user.getUserId());
 			Pageable pageable = PageRequest.of(p.orElse(0), 7, Sort.by("time").descending());
-			Optional<Page<Post>> list = postsv.findByUserAndIsDel(user, false, pageable);
+			Optional<Page<Post>> list = postsv.findPostByUserAndIsDel(user, false, pageable);
 			List<PostToGetDTO> listpost = new ArrayList<>();
 			for (Post post : list.get()) {
 				listpost.add(PostMapper.convertoGetDTO(post, hashtagSerivce, userservice, likesService));
 			}
-			return ResponseEntity.ok(listpost);
+			
+			List<ShareDTO> listposts = listpost.stream()
+					.map(t -> ShareMapper.convertToShareDTOByPost(t, hashtagSerivce, userservice, likesService))
+					.collect(Collectors.toList());
+			
+			List<Share> shares = shareService.findByUser(user).orElse(null);
+
+			List<Object> mergedList = new ArrayList<>();
+
+			if (!shares.isEmpty()) {
+				List<ShareDTO> shareDTOs = shares.stream()
+						.map(t -> ShareMapper.convertToShareDTO(t, hashtagSerivce, userservice, likesService))
+						.collect(Collectors.toList());
+
+				mergedList.addAll(listposts);
+				mergedList.addAll(shareDTOs);
+				mergedList.sort(Comparator.comparing(obj -> {
+					if (obj instanceof PostDTO) {
+						return ((PostDTO) obj).getTime();
+					} else if (obj instanceof ShareDTO) {
+						return ((ShareDTO) obj).getTimeCreate();
+					}
+					return null;
+				}, Comparator.nullsLast(Comparator.reverseOrder())));
+			}
+
+			return ResponseEntity.ok(mergedList);
 		} else {
 			return ResponseEntity.ok(HttpStatus.SC_UNAUTHORIZED);
 		}
