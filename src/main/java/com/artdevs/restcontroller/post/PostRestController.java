@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -226,7 +227,7 @@ public class PostRestController {
 
 		Pageable pageable = PageRequest.of(currentPage, pageSize, Sort.by("time").descending());
 		Page<Post> postPage = new PageImpl<>(sublist, pageable, listPostNewsFeed.size());
-		System.out.println("229: " +listPostNewsFeed.size());
+		System.out.println("229: " + listPostNewsFeed.size());
 		for (Post post : listPostNewsFeed) {
 			System.out.println(post.toString());
 		}
@@ -262,22 +263,22 @@ public class PostRestController {
 
 			List<Object> mergedList = new ArrayList<>();
 
+			mergedList.addAll(listpost);
 			if (!shares.isEmpty()) {
 				List<ShareDTO> shareDTOs = shares.stream()
 						.map(t -> ShareMapper.convertToShareDTO(t, hashtagSerivce, userservice, likesService))
 						.collect(Collectors.toList());
 
-				mergedList.addAll(listpost);
 				mergedList.addAll(shareDTOs);
-				mergedList.sort(Comparator.comparing(obj -> {
-					if (obj instanceof PostDTO) {
-						return ((PostDTO) obj).getTime();
-					} else if (obj instanceof ShareDTO) {
-						return ((ShareDTO) obj).getTimeCreate();
-					}
-					return null;
-				}, Comparator.nullsLast(Comparator.reverseOrder())));
 			}
+			mergedList.sort(Comparator.comparing(obj -> {
+				if (obj instanceof PostDTO) {
+					return ((PostDTO) obj).getTime();
+				} else if (obj instanceof ShareDTO) {
+					return ((ShareDTO) obj).getTimeCreate();
+				}
+				return null;
+			}, Comparator.nullsLast(Comparator.reverseOrder())));
 
 			return ResponseEntity.ok(mergedList);
 		} else {
@@ -286,56 +287,83 @@ public class PostRestController {
 	}
 
 	@PostMapping("/post")
-	public ResponseEntity<PostToGetDTO> CreatePost(@ModelAttribute PostDTO postdto) {
+	public ResponseEntity<PostToGetDTO> CreatePost(@RequestPart("postDTO") PostDTO postdto,
+			@RequestPart("listImageofPost") Optional<List<MultipartFile>> listImageofPost) {
 		Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
-		String loggedInUserEmail = authenticate.getName();
-		User user = userservice.findByEmail(loggedInUserEmail);
-		Post post = PostMapper.convertToPost(postdto, userservice);
-		post.setUser(user);
-		post.setTime(new Date());
-		post.setTimelineUserId(new Date());
-		Post postsave = postsv.savePost(post);
+		if (authenticate.getName().equals("anonymousUser")) {
+			return ResponseEntity.status(HttpStatus.SC_UNAUTHORIZED).build();
+		}
+		try {
+			User user = userservice.findByEmail(authenticate.getName());
+			System.out.println(postdto.toString());
+			if (listImageofPost.isPresent()) {
+				System.out.println(listImageofPost.get().size());
+			} else {
+				System.out.println("empty pic");
+			}
+			Post post = PostMapper.convertToPost(postdto, userservice);
+			post.setUser(user);
+			post.setTime(new Date());
+			post.setTimelineUserId(new Date());
+			Post postsave = postsv.savePost(post);
 
-		PrivacyPostDetail privacyPost = new PrivacyPostDetail();
-		privacyPost.setPost(postsave);
-		privacyPost.setStatus(true);
-		privacyPost.setCreateDate(new Date());
-		privacyPost.setPrivacyPost(privacyPostService.findById(postdto.getPrivacyPostDetails()));
-		privacyPostDetailService.savePrivacyPostDetail(privacyPost);
-		List<PrivacyPostDetail> privacyPostDetails = new ArrayList<>();
-		privacyPostDetails.add(privacyPost);
-		postsave.setPrivacyPostDetails(privacyPostDetails);
-
-		if (postdto.getListImageofPost() != null) {
-			List<ImageOfPost> imageOfPosts = new ArrayList<>();
-			MultipartFile[] listImg = postdto.getListImageofPost();
-			for (MultipartFile m : listImg) {
-				try {
-					ImageOfPost imageOfPost = imgservice.saveImageOfPost(postsave.getPostId(), m);
-					imageOfPosts.add(imageOfPost);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					System.out.println(e);
-					e.printStackTrace();
+			PrivacyPostDetail privacyPost = new PrivacyPostDetail();
+			privacyPost.setPost(postsave);
+			privacyPost.setStatus(true);
+			privacyPost.setCreateDate(new Date());
+			privacyPost.setPrivacyPost(privacyPostService.findById(postdto.getPrivacyPostDetails()));
+			privacyPostDetailService.savePrivacyPostDetail(privacyPost);
+			List<PrivacyPostDetail> privacyPostDetails = new ArrayList<>();
+			privacyPostDetails.add(privacyPost);
+			postsave.setPrivacyPostDetails(privacyPostDetails);
+//			System.out.println(listImageofPost.get());
+			if (listImageofPost.isPresent()) {
+				List<ImageOfPost> imageOfPosts = new ArrayList<>();
+				List<MultipartFile> listImg = listImageofPost.get();
+				for (MultipartFile m : listImg) {
+					try {
+						ImageOfPost imageOfPost = imgservice.saveImageOfPost(postsave.getPostId(), m);
+						imageOfPosts.add(imageOfPost);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						System.out.println(e);
+						e.printStackTrace();
+					}
 				}
-			}
-			postsave.setListImage(imageOfPosts);
-		}
-
-		if (postdto.getListHashtag() != null) {
-			List<HashTag> hashTags = new ArrayList<>();
-			for (Integer h : postdto.getListHashtag()) {
-				DetailHashtag detailHashtag = detailHashTagService.findDetailHashtagById(h);
-				HashTag hashtagSave = new HashTag();
-				hashtagSave.setHashtagDetail(detailHashtag);
-				hashtagSave.setPostHashtag(postsave);
-				hashtagSerivce.saveHashTag(hashtagSave);
-				hashTags.add(hashtagSave);
+				postsave.setListImage(imageOfPosts);
 			}
 
-			postsave.setListHashtag(hashTags);
+			if (postdto.getListHashtag() != null) {
+				List<HashTag> hashTags = new ArrayList<>();
+				for (String h : postdto.getListHashtag()) {
+					Optional<DetailHashtag> detailHashtag = detailHashTagService.findByHashtagText(h);
+					if (detailHashtag.isPresent()) {
+						HashTag hashtagSave = new HashTag();
+						hashtagSave.setHashtagDetail(detailHashtag.get());
+						hashtagSave.setPostHashtag(postsave);
+						hashtagSerivce.saveHashTag(hashtagSave);
+						hashTags.add(hashtagSave);
+					} else {
+						DetailHashtag newDetailHashtag = new DetailHashtag();
+						newDetailHashtag.setHashtagText(h);
+						newDetailHashtag.setTimeCreate(new Date());
+						newDetailHashtag.setUserCreate(user);
+						DetailHashtag saveNewDetailHashtag = detailHashTagService.saveDetailHashtag(newDetailHashtag);
+						HashTag hashtagSave = new HashTag();
+						hashtagSave.setHashtagDetail(saveNewDetailHashtag);
+						hashtagSave.setPostHashtag(postsave);
+						hashtagSerivce.saveHashTag(hashtagSave);
+						hashTags.add(hashtagSave);
+					}
+				}
+
+				postsave.setListHashtag(hashTags);
+			}
+			return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce, userservice, likesService));
+		} catch (Exception e) {
+			System.out.println(e);
+			return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).build();
 		}
-		return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce, userservice, likesService));
 	}
 
 	@PutMapping("/update-post/{id}")

@@ -12,6 +12,8 @@ public interface DetailHashTagService {
     DetailHashtag findDetailHashtagById(Integer detailHashTagId);
 
     List<DetailHashtag> findAll();
+    
+    Optional<DetailHashtag> findByHashtagText(String hashtagText);
 
     DetailHashtag saveDetailHashtag(DetailHashtag detailHashtag);
 

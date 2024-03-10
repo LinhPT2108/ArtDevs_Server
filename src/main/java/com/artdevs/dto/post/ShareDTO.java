@@ -17,7 +17,7 @@ public class ShareDTO {
 
     private String typePost;
     
-    private String username;
+    private UserPostDTO userPostDto;
     
     private String content;
 

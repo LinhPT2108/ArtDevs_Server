@@ -53,4 +53,10 @@ public class DetailHashTagServiceImpl implements DetailHashTagService {
 	public Optional<List<DetailHashtag>> findByKeywordNonePage(String keyword) {
 		return detailHashtagRepository.findByKeywordNonPage(keyword);
 	}
+
+	@Override
+	public Optional<DetailHashtag> findByHashtagText(String hashtagText) {
+		// TODO Auto-generated method stub
+		return detailHashtagRepository.findByHashtagText(hashtagText);
+	}
 }
