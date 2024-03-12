@@ -17,7 +17,13 @@ public interface DetailHashtagRepository extends JpaRepository<DetailHashtag, In
 
 	@Query("SELECT d FROM DetailHashtag d WHERE d.hashtagText LIKE %:keyword%")
 	Optional<Page<DetailHashtag>> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
+
+	@Query("SELECT d FROM DetailHashtag d WHERE d.hashtagText LIKE %:keyword%")
+	Optional<Page<DetailHashtag>> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 	@Query("SELECT d FROM DetailHashtag d WHERE d.hashtagText LIKE %:keyword%")
 	Optional<List<DetailHashtag>> findByKeywordNonPage(@Param("keyword") String keyword);
-	List<DetailHashtag> findByHashtagText(String hashtagText);
+	
+	// List<DetailHashtag> findByHashtagText(String hashtagText);
+
+	Optional<DetailHashtag> findByHashtagText(String hashtagText);
 }

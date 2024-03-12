@@ -25,19 +25,25 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class ImageOfCommentImpl implements ImageOfCommentService {
-	
-	@Autowired CommentRepository commentreposiroty;
-	
-	@Autowired CommentService commentservice;
-	
-	@Autowired CloudinaryService cloudinaryService;
-	
-	@Autowired CloudinaryValidationService cloudinaryValidation;
-	
-	@Autowired PictureOfCommentRepository pictureOfCommentrepository;
-	
-	@Autowired ReplyCommentService replycmtservice;
-	
+
+	@Autowired
+	CommentRepository commentreposiroty;
+
+	@Autowired
+	CommentService commentservice;
+
+	@Autowired
+	CloudinaryService cloudinaryService;
+
+	@Autowired
+	CloudinaryValidationService cloudinaryValidation;
+
+	@Autowired
+	PictureOfCommentRepository pictureOfCommentrepository;
+
+	@Autowired
+	ReplyCommentService replycmtservice;
+
 	@Override
 	public PictureOfComment saveImageOfComment(long CommentId, MultipartFile file) throws Exception {
 		Comment cmt = this.commentservice.findCommentById(CommentId);
@@ -52,17 +58,17 @@ public class ImageOfCommentImpl implements ImageOfCommentService {
 			return null;
 		}
 
-	 PictureOfComment picture = new PictureOfComment();
-	 	picture.setImageUrl(uploadMap.get("url").toString());
-	 	picture.setPictureOfCommentId(cmt);
-	 	picture.setPictureOfReplyCommentId(null);
+		PictureOfComment picture = new PictureOfComment();
+		picture.setImageUrl(uploadMap.get("url").toString());
+		picture.setPictureOfCommentId(cmt);
+		picture.setPictureOfReplyCommentId(null);
 		picture.setCloudinaryPublicId(uploadMap.get("public_id").toString());
 //		picture.setImageOfPostUrl(uploadMap.get("url").toString());
 //		picture.setPostImage(post);
 //		picture.setTime(new Date());
 		return this.pictureOfCommentrepository.save(picture);
 	}
-	
+
 	@Override
 	public PictureOfComment saveImageOfReplyComment(long RepCommentId, MultipartFile file) throws Exception {
 		ReplyComment repcmt = replycmtservice.findByReplyCommentID(RepCommentId);
@@ -78,10 +84,10 @@ public class ImageOfCommentImpl implements ImageOfCommentService {
 			return null;
 		}
 
-	 PictureOfComment picture = new PictureOfComment();
-	 	picture.setImageUrl(uploadMap.get("url").toString());
-	 	picture.setPictureOfCommentId(null);
-	 	picture.setPictureOfReplyCommentId(repcmt);
+		PictureOfComment picture = new PictureOfComment();
+		picture.setImageUrl(uploadMap.get("url").toString());
+		picture.setPictureOfCommentId(null);
+		picture.setPictureOfReplyCommentId(repcmt);
 		picture.setCloudinaryPublicId(uploadMap.get("public_id").toString());
 //		picture.setImageOfPostUrl(uploadMap.get("url").toString());
 //		picture.setPostImage(post);
@@ -94,10 +100,10 @@ public class ImageOfCommentImpl implements ImageOfCommentService {
 	public void deleteImageOfComment(PictureOfComment pictureOfComment) {
 		// TODO Auto-generated method stub
 		try {
-			pictureOfCommentrepository.delete(pictureOfComment);			
+			cloudinaryService.deleteImage(pictureOfComment.getCloudinaryPublicId());
+			pictureOfCommentrepository.delete(pictureOfComment);
 		} catch (Exception e) {
 			System.out.println(e);
-			throw e;
 		}
 	}
 
@@ -107,7 +113,7 @@ public class ImageOfCommentImpl implements ImageOfCommentService {
 			PictureOfComment pictureOfComment = pictureOfCommentrepository.findByImageUrl(ImageUrl);
 			return pictureOfComment;
 		} catch (Exception e) {
-			System.out.println("109: "+e);
+			System.out.println("109: " + e);
 			return null;
 		}
 	}
@@ -115,9 +121,9 @@ public class ImageOfCommentImpl implements ImageOfCommentService {
 	@Transactional
 	@Override
 	public void deleteImgOfCmtByCommentId(Comment comment) throws Exception {
-		List<PictureOfComment> imgs =comment.getListPictureOfComment();
+		List<PictureOfComment> imgs = comment.getListPictureOfComment();
 		try {
-			if(!imgs.isEmpty()) {
+			if (!imgs.isEmpty()) {
 				for (PictureOfComment i : imgs) {
 					cloudinaryService.deleteImage(i.getCloudinaryPublicId());
 				}
@@ -126,6 +132,22 @@ public class ImageOfCommentImpl implements ImageOfCommentService {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		
+
+	}
+	@Transactional
+	@Override
+	public void deleteImgOfReplyCmtByCommentId(ReplyComment replycomment) throws Exception {
+
+		List<PictureOfComment> imgs = replycomment.getListPictureOfComment();
+		try {
+			if (!imgs.isEmpty()) {
+				for (PictureOfComment i : imgs) {
+					cloudinaryService.deleteImage(i.getCloudinaryPublicId());
+				}
+			}
+			pictureOfCommentrepository.deleteByPictureOfReplyCommentId(replycomment);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 }

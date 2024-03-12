@@ -2,6 +2,7 @@ package com.artdevs.services.impl.post;
 
 import static com.artdevs.utils.ReponseMessageConstants.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +51,7 @@ public class ShareServiceImpl implements ShareService {
     		share.setPostShareId(post);
     		share.setUserShareId(user);
     		share.setContent(content);
+    		share.setTimeCreate(new Date());
     		return shareRepository.save(share) != null;
     }
     

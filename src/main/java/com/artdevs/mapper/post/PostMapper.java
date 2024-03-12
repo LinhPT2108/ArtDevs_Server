@@ -87,7 +87,7 @@ public class PostMapper {
 
 		PostDTO postdto = modelMapper.map(post, PostDTO.class);
 //		postdto.setListCommentPost(getComment(post));
-		postdto.setUserId(post.getUser().getUserId());
+//		postdto.setUserId(post.getUser().getUserId());
 //		postdto.setListHashtag(getHashtag(post, hashtagSerivce));
 //		postdto.setListImageofPost(getImage(post));
 //		postdto.setTotalLike(gettotalLike(post));
@@ -158,10 +158,6 @@ public class PostMapper {
 		Post post = modelMapper.map(postdto, Post.class);
 //		System.out.println( "post userid"+postdto.getUserId());
 		post.setPostId(postid);
-		post.setListLikePost(null);
-		post.setListSharePost(null);
-		post.setListCommentPost(null);
-		post.setListReportPost(null);
 //		post.setUser(setUser(postdto, userservice));
 		return post;
 	}
@@ -220,8 +216,8 @@ public class PostMapper {
 
 	}
 
-	private static User setUser(PostDTO postdto, UserService userservice) {
-		System.out.println(userservice.findUserById(postdto.getUserId()));
-		return userservice.findUserById(postdto.getUserId());
-	}
+//	private static User setUser(PostDTO postdto, UserService userservice) {
+//		System.out.println(userservice.findUserById(postdto.getUserId()));
+//		return userservice.findUserById(postdto.getUserId());
+//	}
 }

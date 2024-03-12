@@ -78,6 +78,17 @@ public class ImageOfPostServiceImpl implements ImageOfPostService {
 
 	@Override
 	public void deleteImageOfPost(ImageOfPost imageofpost) {
+		try {
+			cloudinaryService.deleteImage(imageofpost.getCloudinaryPublicId());
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 		imageofpostRepository.delete(imageofpost);
+	}
+
+	@Override
+	public ImageOfPost findImageOfPostByUrl(String imageUrl) {
+		// TODO Auto-generated method stub
+		return imageofpostRepository.findByImageOfPostUrl(imageUrl);
 	}
 }

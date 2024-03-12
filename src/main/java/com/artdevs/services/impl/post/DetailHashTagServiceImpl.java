@@ -63,4 +63,10 @@ public class DetailHashTagServiceImpl implements DetailHashTagService {
 		// TODO Auto-generated method stub
 		return Optional.empty();
 	}
+
+	@Override
+	public Optional<DetailHashtag> findByHashtagText(String hashtagText) {
+		// TODO Auto-generated method stub
+		return detailHashtagRepository.findByHashtagText(hashtagText);
+	}
 }

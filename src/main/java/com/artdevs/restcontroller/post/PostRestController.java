@@ -28,12 +28,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.artdevs.domain.entities.post.DetailHashtag;
 import com.artdevs.domain.entities.post.HashTag;
 import com.artdevs.domain.entities.post.ImageOfPost;
+import com.artdevs.domain.entities.post.PictureOfComment;
 import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.post.PrivacyPostDetail;
 import com.artdevs.domain.entities.post.Share;
@@ -228,7 +230,7 @@ public class PostRestController {
 
 		Pageable pageable = PageRequest.of(currentPage, pageSize, Sort.by("time").descending());
 		Page<Post> postPage = new PageImpl<>(sublist, pageable, listPostNewsFeed.size());
-		System.out.println("229: " +listPostNewsFeed.size());
+		System.out.println("229: " + listPostNewsFeed.size());
 		for (Post post : listPostNewsFeed) {
 			System.out.println(post.toString());
 		}
@@ -316,22 +318,22 @@ public class PostRestController {
 
 			List<Object> mergedList = new ArrayList<>();
 
+			mergedList.addAll(listpost.stream().filter(t->!t.isDel()).collect(Collectors.toList()));
 			if (!shares.isEmpty()) {
 				List<ShareDTO> shareDTOs = shares.stream()
 						.map(t -> ShareMapper.convertToShareDTO(t, hashtagSerivce, userservice, likesService))
-						.collect(Collectors.toList());
+						.filter(t -> !t.getPostId().isDel()).collect(Collectors.toList());
 
-				mergedList.addAll(listpost);
 				mergedList.addAll(shareDTOs);
-				mergedList.sort(Comparator.comparing(obj -> {
-					if (obj instanceof PostDTO) {
-						return ((PostDTO) obj).getTime();
-					} else if (obj instanceof ShareDTO) {
-						return ((ShareDTO) obj).getTimeCreate();
-					}
-					return null;
-				}, Comparator.nullsLast(Comparator.reverseOrder())));
 			}
+			mergedList.sort(Comparator.comparing(obj -> {
+				if (obj instanceof PostDTO) {
+					return ((PostDTO) obj).getTime();
+				} else if (obj instanceof ShareDTO) {
+					return ((ShareDTO) obj).getTimeCreate();
+				}
+				return null;
+			}, Comparator.nullsLast(Comparator.reverseOrder())));
 
 			return ResponseEntity.ok(mergedList);
 		} else {
@@ -340,56 +342,123 @@ public class PostRestController {
 	}
 
 	@PostMapping("/post")
-	public ResponseEntity<PostToGetDTO> CreatePost(@RequestBody PostDTO postdto) {
+	// public ResponseEntity<PostToGetDTO> CreatePost(@RequestBody PostDTO postdto) {
+	public ResponseEntity<PostToGetDTO> CreatePost(@RequestPart("postDTO") PostDTO postdto,
+			@RequestPart("listImageofPost") Optional<List<MultipartFile>> listImageofPost) {
 		Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
-		String loggedInUserEmail = authenticate.getName();
-		User user = userservice.findByEmail(loggedInUserEmail);
-		Post post = PostMapper.convertToPost(postdto, userservice);
-		post.setUser(user);
-		post.setTime(new Date());
-		post.setTimelineUserId(new Date());
-		Post postsave = postsv.savePost(post);
+		if (authenticate.getName().equals("anonymousUser")) {
+			return ResponseEntity.status(HttpStatus.SC_UNAUTHORIZED).build();
+		}
+		try {
+			User user = userservice.findByEmail(authenticate.getName());
+			System.out.println(postdto.toString());
+			if (listImageofPost.isPresent()) {
+				System.out.println(listImageofPost.get().size());
+			} else {
+				System.out.println("empty pic");
+			}
+			Post post = PostMapper.convertToPost(postdto, userservice);
+			post.setUser(user);
+			post.setTime(new Date());
+			post.setTimelineUserId(new Date());
+			Post postsave = postsv.savePost(post);
 
-		PrivacyPostDetail privacyPost = new PrivacyPostDetail();
-		privacyPost.setPost(postsave);
-		privacyPost.setStatus(true);
-		privacyPost.setCreateDate(new Date());
-		privacyPost.setPrivacyPost(privacyPostService.findById(postdto.getPrivacyPostDetails()));
-		privacyPostDetailService.savePrivacyPostDetail(privacyPost);
-		List<PrivacyPostDetail> privacyPostDetails = new ArrayList<>();
-		privacyPostDetails.add(privacyPost);
-		postsave.setPrivacyPostDetails(privacyPostDetails);
 
-//		if (postdto.getListImageofPost() != null) {
-//			List<ImageOfPost> imageOfPosts = new ArrayList<>();
-//			MultipartFile[] listImg = postdto.getListImageofPost();
-//			for (MultipartFile m : listImg) {
-//				try {
-//					ImageOfPost imageOfPost = imgservice.saveImageOfPost(postsave.getPostId(), m);
-//					imageOfPosts.add(imageOfPost);
-//				} catch (Exception e) {
-//					// TODO Auto-generated catch block
-//					System.out.println(e);
-//					e.printStackTrace();
-//				}
-//			}
-//			postsave.setListImage(imageOfPosts);
-//		}
+// 		PrivacyPostDetail privacyPost = new PrivacyPostDetail();
+// 		privacyPost.setPost(postsave);
+// 		privacyPost.setStatus(true);
+// 		privacyPost.setCreateDate(new Date());
+// 		privacyPost.setPrivacyPost(privacyPostService.findById(postdto.getPrivacyPostDetails()));
+// 		privacyPostDetailService.savePrivacyPostDetail(privacyPost);
+// 		List<PrivacyPostDetail> privacyPostDetails = new ArrayList<>();
+// 		privacyPostDetails.add(privacyPost);
+// 		postsave.setPrivacyPostDetails(privacyPostDetails);
 
-		if (postdto.getListHashtag() != null) {
-			List<HashTag> hashTags = new ArrayList<>();
-			for (Integer h : postdto.getListHashtag()) {
-				DetailHashtag detailHashtag = detailHashTagService.findDetailHashtagById(h);
-				HashTag hashtagSave = new HashTag();
-				hashtagSave.setHashtagDetail(detailHashtag);
-				hashtagSave.setPostHashtag(postsave);
-				hashtagSerivce.saveHashTag(hashtagSave);
-				hashTags.add(hashtagSave);
+// //		if (postdto.getListImageofPost() != null) {
+// //			List<ImageOfPost> imageOfPosts = new ArrayList<>();
+// //			MultipartFile[] listImg = postdto.getListImageofPost();
+// //			for (MultipartFile m : listImg) {
+// //				try {
+// //					ImageOfPost imageOfPost = imgservice.saveImageOfPost(postsave.getPostId(), m);
+// //					imageOfPosts.add(imageOfPost);
+// //				} catch (Exception e) {
+// //					// TODO Auto-generated catch block
+// //					System.out.println(e);
+// //					e.printStackTrace();
+// //				}
+// //			}
+// //			postsave.setListImage(imageOfPosts);
+// //		}
+
+// 		if (postdto.getListHashtag() != null) {
+// 			List<HashTag> hashTags = new ArrayList<>();
+// 			for (Integer h : postdto.getListHashtag()) {
+// 				DetailHashtag detailHashtag = detailHashTagService.findDetailHashtagById(h);
+// 				HashTag hashtagSave = new HashTag();
+// 				hashtagSave.setHashtagDetail(detailHashtag);
+// 				hashtagSave.setPostHashtag(postsave);
+// 				hashtagSerivce.saveHashTag(hashtagSave);
+// 				hashTags.add(hashtagSave);
+
+
+			PrivacyPostDetail privacyPost = new PrivacyPostDetail();
+			privacyPost.setPost(postsave);
+			privacyPost.setStatus(true);
+			privacyPost.setCreateDate(new Date());
+			privacyPost.setPrivacyPost(privacyPostService.findById(postdto.getPrivacyPostDetails()));
+			privacyPostDetailService.savePrivacyPostDetail(privacyPost);
+			List<PrivacyPostDetail> privacyPostDetails = new ArrayList<>();
+			privacyPostDetails.add(privacyPost);
+			postsave.setPrivacyPostDetails(privacyPostDetails);
+//			System.out.println(listImageofPost.get());
+			if (listImageofPost.isPresent()) {
+				List<ImageOfPost> imageOfPosts = new ArrayList<>();
+				List<MultipartFile> listImg = listImageofPost.get();
+				for (MultipartFile m : listImg) {
+					try {
+						ImageOfPost imageOfPost = imgservice.saveImageOfPost(postsave.getPostId(), m);
+						imageOfPosts.add(imageOfPost);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						System.out.println(e);
+						e.printStackTrace();
+					}
+				}
+				postsave.setListImage(imageOfPosts);
+// >>>>>>> nguyentcpc04750
 			}
 
-			postsave.setListHashtag(hashTags);
+			if (postdto.getListHashtag() != null) {
+				List<HashTag> hashTags = new ArrayList<>();
+				for (String h : postdto.getListHashtag()) {
+					Optional<DetailHashtag> detailHashtag = detailHashTagService.findByHashtagText(h);
+					if (detailHashtag.isPresent()) {
+						HashTag hashtagSave = new HashTag();
+						hashtagSave.setDetailHashtag(detailHashtag.get());
+						hashtagSave.setPostHashtag(postsave);
+						hashtagSerivce.saveHashTag(hashtagSave);
+						hashTags.add(hashtagSave);
+					} else {
+						DetailHashtag newDetailHashtag = new DetailHashtag();
+						newDetailHashtag.setHashtagText(h);
+						newDetailHashtag.setTimeCreate(new Date());
+						newDetailHashtag.setUserCreate(user);
+						DetailHashtag saveNewDetailHashtag = detailHashTagService.saveDetailHashtag(newDetailHashtag);
+						HashTag hashtagSave = new HashTag();
+						hashtagSave.setDetailHashtag(saveNewDetailHashtag);
+						hashtagSave.setPostHashtag(postsave);
+						hashtagSerivce.saveHashTag(hashtagSave);
+						hashTags.add(hashtagSave);
+					}
+				}
+
+				postsave.setListHashtag(hashTags);
+			}
+			return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce, userservice, likesService));
+		} catch (Exception e) {
+			System.out.println(e);
+			return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).build();
 		}
-		return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce, userservice, likesService));
 	}
 
 	@PostMapping("/post-new")
@@ -428,6 +497,183 @@ public class PostRestController {
 			postsave.setListHashtag(hashTags);
 		}
 		return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce, userservice, likesService));
+		
+	@PutMapping("/update-post/{id}")
+	public ResponseEntity<?> putMethodName(@PathVariable("id") String id, @RequestPart("postDTO") PostDTO postdto,
+			@RequestPart("listImageofPost") Optional<List<MultipartFile>> listImageofPost) {
+		Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
+		if (authenticate.getName().equals("anonymousUser")) {
+			return ResponseEntity.status(HttpStatus.SC_UNAUTHORIZED).build();
+		}
+		try {
+			User user = userservice.findByEmail(authenticate.getName());
+			System.out.println(postdto.toString());
+			if (listImageofPost.isPresent()) {
+				System.out.println(listImageofPost.get().size());
+			} else {
+				System.out.println("empty pic");
+			}
+			Post postUpdate = postsv.findPostById(postdto.getPostId());
+			postUpdate.setPostId(postdto.getPostId());
+			postUpdate.setContent(postdto.getContent());
+			postUpdate.setUser(user);
+			postUpdate.setTime(new Date());
+			postUpdate.setTimelineUserId(new Date());
+			System.out.println(postUpdate.toString());
+			Post postsave = postsv.savePost(postUpdate); // ****
+			// update privacy detail
+			List<PrivacyPostDetail> privacyPostDetail = privacyPostDetailService.findByPost(postUpdate).stream()
+					.filter(t -> t.isStatus()).collect(Collectors.toList());
+			if (privacyPostDetail.get(0).getPrivacyPost().getId() != postdto.getPrivacyPostDetails()) {
+				for (PrivacyPostDetail p : privacyPostDetail) {
+					p.setStatus(false);
+					privacyPostDetailService.savePrivacyPostDetail(p);
+				}
+				PrivacyPostDetail privacyPostDetailSave = new PrivacyPostDetail();
+				privacyPostDetailSave.setCreateDate(new Date());
+				privacyPostDetailSave.setPost(postUpdate);
+				privacyPostDetailSave.setStatus(true);
+				privacyPostDetailSave.setPrivacyPost(privacyPostService.findById(postdto.getPrivacyPostDetails()));
+				privacyPostDetailSave = privacyPostDetailService.savePrivacyPostDetail(privacyPostDetailSave);
+				List<PrivacyPostDetail> privacyPostDetails = new ArrayList<>();
+				privacyPostDetails.add(privacyPostDetailSave);
+				postsave.setPrivacyPostDetails(privacyPostDetails);
+			}
+
+			// updatePic
+			if (listImageofPost.isPresent()) {
+				List<ImageOfPost> imageOfPostsReturn = new ArrayList<>();
+				List<MultipartFile> listImg = listImageofPost.get();
+				if (!postUpdate.getListImage().isEmpty()) {
+					for (ImageOfPost imgPostPresent : postUpdate.getListImage()) {
+						boolean isImgExist = false;
+						for (MultipartFile pic : listImg) {
+							System.out.println(pic.getName());
+							if (imgPostPresent.getImageOfPostUrl().equals(pic.getOriginalFilename())) {
+								isImgExist = true;
+								break;
+							}
+						}
+						if (!isImgExist) {
+							try {
+								imgservice.deleteImageOfPost(imgPostPresent);
+							} catch (Exception e) {
+								System.out.println(e);
+								return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).build();
+							}
+						}
+					}
+				}
+				for (MultipartFile m : listImg) {
+					ImageOfPost checkImgAlive = imgservice.findImageOfPostByUrl(m.getOriginalFilename());
+					try {
+						if (checkImgAlive == null) {
+							ImageOfPost imgofcmt = imgservice.saveImageOfPost(postsave.getPostId(), m);
+							imageOfPostsReturn.add(imgofcmt);
+						} else {
+							imageOfPostsReturn.add(checkImgAlive);
+						}
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						System.out.println(e);
+						e.printStackTrace();
+					}
+				}
+				postsave.setListImage(imageOfPostsReturn);
+			} else {
+				try {
+					for (ImageOfPost p : postUpdate.getListImage()) {
+						imgservice.deleteImageOfPost(p);
+					}
+					postsave.setListImage(Collections.emptyList());
+				} catch (Exception e) {
+					System.out.println(e);
+					return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).build();
+				}
+			}
+
+			// update hashtag
+			if (postdto.getListHashtag() != null) {
+				List<HashTag> hashTags = new ArrayList<>();
+				for (String h : postdto.getListHashtag()) {
+					System.out.println(h);
+					Optional<DetailHashtag> detailHashtag = detailHashTagService.findByHashtagText(h);
+					if (detailHashtag.isPresent()) {
+						Optional<List<HashTag>> aliveHashtag = hashtagSerivce
+								.findbydetailHashtagAndPost(detailHashtag.get(), postsave);
+						if (aliveHashtag.get().size() == 0) {
+							//add new hashtag
+							HashTag hashtagSave = new HashTag();
+							hashtagSave.setDetailHashtag(detailHashtag.get());
+							hashtagSave.setPostHashtag(postsave);
+							HashTag hReturn = hashtagSerivce.saveHashTag(hashtagSave);
+							System.out.println("hreturn: "+hReturn.getDetailHashtag().getHashtagText());
+							hashTags.add(hashtagSave);
+						} else {
+							// delete when hashtag present
+							for (HashTag haPresent : postUpdate.getListHashtag()) {
+								boolean isHashtagExist = false;
+								
+								for (String hn : postdto.getListHashtag()) {
+									if (hn.equals(haPresent.getDetailHashtag().getHashtagText())) {
+										isHashtagExist = true;
+										break;
+									}
+								}
+								if (!isHashtagExist) {
+									try {
+										hashtagSerivce.deleteHashTag(haPresent);
+									} catch (Exception e) {
+										System.out.println(e);
+										return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).build();
+									}
+								}else {
+									hashTags.add(haPresent);
+								}
+							}
+						}
+						
+					} else {
+						DetailHashtag newDetailHashtag = new DetailHashtag();
+						newDetailHashtag.setHashtagText(h);
+						newDetailHashtag.setTimeCreate(new Date());
+						newDetailHashtag.setUserCreate(user);
+						DetailHashtag saveNewDetailHashtag = detailHashTagService.saveDetailHashtag(newDetailHashtag);
+						HashTag hashtagSave = new HashTag();
+						hashtagSave.setDetailHashtag(saveNewDetailHashtag);
+						hashtagSave.setPostHashtag(postsave);
+						hashtagSerivce.saveHashTag(hashtagSave);
+
+						hashTags.add(hashtagSave);
+					}
+				}
+				System.out.println("hashtag size: "+hashTags.size());
+				postsave.setListHashtag(hashTags.stream().distinct().toList());
+				
+			} else {
+				hashtagSerivce.deleteHashTagByPost(postsave);
+			}
+			Post postReturn = postsv.findPostById(postsave.getPostId());
+			System.out.println("size ht post: "+postReturn.getListHashtag().size());
+			return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce, userservice, likesService));
+
+		} catch (Exception e) {
+			System.out.println(e);
+			return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).build();
+		}
+	}
+
+	@PutMapping("/delete-post/{id}")
+	public ResponseEntity<?> deletePost(@PathVariable String id) {
+		try {
+			Post postDel = postsv.findPostById(id);
+			postDel.setDel(true);
+			postsv.savePost(postDel);
+			return ResponseEntity.ok(true);
+		} catch (Exception e) {
+			System.out.println(e);
+			return ResponseEntity.ok(false);
+		}
 	}
 
 	@PutMapping("/post/{id}/hidden")

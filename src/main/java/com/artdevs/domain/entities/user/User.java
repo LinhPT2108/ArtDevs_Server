@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.artdevs.domain.entities.message.Message;
 import com.artdevs.domain.entities.message.RelationShip;
 import com.artdevs.domain.entities.post.Comment;
+import com.artdevs.domain.entities.post.DetailHashtag;
 import com.artdevs.domain.entities.post.Likes;
 import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.post.Report;
@@ -116,6 +117,10 @@ public class User implements UserDetails {
 	@OneToMany(mappedBy = "user")
 	private List<Picture> userPicture;
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "userCreate")
+	private List<DetailHashtag> userDetailHashtag;
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Log> userLog;

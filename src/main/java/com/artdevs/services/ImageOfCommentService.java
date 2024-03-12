@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.artdevs.domain.entities.post.Comment;
 import com.artdevs.domain.entities.post.PictureOfComment;
+import com.artdevs.domain.entities.post.ReplyComment;
 
 @Service
 public interface ImageOfCommentService {
@@ -17,5 +18,6 @@ public interface ImageOfCommentService {
 	
 	void deleteImgOfCmtByCommentId(Comment comment) throws Exception;
 
+	void deleteImgOfReplyCmtByCommentId(ReplyComment replycomment) throws Exception;
 	PictureOfComment findImageUrl(String ImageUrl);
 }

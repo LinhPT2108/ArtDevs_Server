@@ -86,9 +86,7 @@ public class Post {
 	@Override
 	public String toString() {
 		return "Post [postId=" + postId + ", content=" + content + ", time=" + time + ", isDel=" + isDel + ", user="
-				+ user.getRole().getId() + ", listLikePost=" + listLikePost.size() + ", listSharePost=" + listSharePost.size() + ", listReportPost="
-				+ listReportPost.size() + ", listCommentPost=" + listCommentPost.size() + ", listImage=" + listImage.size()
-				+ ", listHashtag=" + listHashtag.size() + ", privacyPostDetails=" + privacyPostDetails.size() + "]";
+				+ user.getRole().getId()+ "]";
 	}
 
 }

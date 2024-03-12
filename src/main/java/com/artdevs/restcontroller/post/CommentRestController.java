@@ -1,6 +1,7 @@
 package com.artdevs.restcontroller.post;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -68,6 +69,7 @@ public class CommentRestController {
 		if (authenticate.getName().equals("anonymousUser")) {
 			return ResponseEntity.status(HttpStatus.SC_UNAUTHORIZED).build();
 		}
+		
 		System.out.println(commentToPostDTO.toString());
 		User userSend = userservice.findByEmail(authenticate.getName());
 		User userReceive = userservice.findUserById(commentToPostDTO.getUserReceive());
@@ -80,11 +82,10 @@ public class CommentRestController {
 		cmtSave.setPostCommentId(post);
 //		CommentToPostDTO.setUserToPost(user.getUserId());
 		Comment cmt = commentService.saveComment(cmtSave);
-		System.out.println(">>name: " + authenticate.getName());
 		if (listImageofComment.isPresent()) {
 			List<PictureOfComment> listimg = new ArrayList<>();
-			List<MultipartFile> listImg = listImageofComment.get();
-			for (MultipartFile multipart : listImg) {
+			List<MultipartFile> listImgNew = listImageofComment.get();
+			for (MultipartFile multipart : listImgNew) {
 				try {
 					PictureOfComment imgofcmt = imgservice.saveImageOfComment(cmt.getId(), multipart);
 					listimg.add(imgofcmt);
@@ -249,6 +250,14 @@ public class CommentRestController {
 
 				commentReturn.setListPictureOfComment(listimgReturn);
 
+			}else {
+				try {
+					imgservice.deleteImgOfCmtByCommentId(commentReturn);
+					commentReturn.setListPictureOfComment(Collections.emptyList());
+				} catch (Exception e) {
+					System.out.println(e);
+					return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).build();
+				}
 			}
 			return ResponseEntity.ok(CommentMapper.convertToCommentToGetDTO(commentReturn));
 		} catch (Exception e) {
@@ -271,7 +280,6 @@ public class CommentRestController {
 			dataCommentUpdate.setContent(content);
 			System.out.println(dataCommentUpdate.toString());
 			ReplyComment replyCommentReturn = repcommentservice.createReplyComment(dataCommentUpdate);
-			System.out.println(listImageofComment.get().size());
 			if (listImageofComment.isPresent()) {
 				List<PictureOfComment> listimgReturn = new ArrayList<>();
 				List<MultipartFile> listImg = listImageofComment.get();
@@ -311,6 +319,15 @@ public class CommentRestController {
 
 				replyCommentReturn.setListPictureOfComment(listimgReturn);
 
+			}else {
+				System.out.println("delete when empty img");
+				try {
+					imgservice.deleteImgOfReplyCmtByCommentId(replyCommentReturn);
+					replyCommentReturn.setListPictureOfComment(Collections.emptyList());
+				} catch (Exception e) {
+					System.out.println(e);
+					return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).build();
+				}
 			}
 			return ResponseEntity.ok(ReplyCommentMapper.convertToGetDTO(replyCommentReturn));
 		} catch (Exception e) {
