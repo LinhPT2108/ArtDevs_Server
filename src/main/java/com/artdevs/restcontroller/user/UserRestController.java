@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.artdevs.config.auth.AuthenticationResponse;
 import com.artdevs.domain.entities.message.RelationShip;
 import com.artdevs.domain.entities.user.Demand;
+import com.artdevs.domain.entities.user.ProgramingLanguage;
 import com.artdevs.domain.entities.user.Role;
 import com.artdevs.domain.entities.user.Skill;
 import com.artdevs.domain.entities.user.User;
@@ -61,12 +63,13 @@ public class UserRestController {
 
 	@Autowired
 	JwtTokenProvider jwtService;
-	
-	
-	@Autowired RelationshipRepository relationresp;
 
-	@Autowired RelationshipService relationshipservice;
-	
+	@Autowired
+	RelationshipRepository relationresp;
+
+	@Autowired
+	RelationshipService relationshipservice;
+
 	@Autowired
 	PrograminglanguageRepository programingrepositories;
 
@@ -168,7 +171,7 @@ public class UserRestController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+
 	@GetMapping("/mentor/{Mentorid}")
 	public ResponseEntity<MentorDTO> getMentor(@PathVariable String Mentorid) {
 		try {
@@ -182,18 +185,17 @@ public class UserRestController {
 	@GetMapping("/get-mentor")
 	public ResponseEntity<List<MentorDTO>> getmentor() {
 		List<User> listuser = userservice.findMentor();
-		return ResponseEntity.ok(
-				listuser.stream().distinct().map(u -> UserMapper.UserConvertToMentorDTO(u))
-						.collect(Collectors.toList()));
+		return ResponseEntity.ok(listuser.stream().distinct().map(u -> UserMapper.UserConvertToMentorDTO(u))
+				.collect(Collectors.toList()));
 	}
 
-	@GetMapping("/get-userOfDemand")
-	public ResponseEntity<List<SuggestFriendDTO>> getUserOfDemand() {
-		List<User> listUserDemand = userservice.findUserDemand();
-		return ResponseEntity.ok(
-				listUserDemand.stream().distinct().map(u -> UserMapper.UserConvertToSuggestFriendDTO(u))
-						.collect(Collectors.toList()));
-	}
+//	@GetMapping("/get-userOfDemand")
+//	public ResponseEntity<List<SuggestFriendDTO>> getUserOfDemand() {
+//		List<User> listUserDemand = userservice.findUserDemand();
+//		return ResponseEntity.ok(
+//				listUserDemand.stream().distinct().map(u -> UserMapper.UserConvertToSuggestFriendDTO(u))
+//						.collect(Collectors.toList()));
+//	}
 	// @PostMapping("/user-social")
 	// public ResponseEntity<?> getUserByEmailAndProvidere(@RequestParam("email")
 	// String email,
@@ -255,8 +257,8 @@ public class UserRestController {
 	@GetMapping("/get-match-from-user")
 	public ResponseEntity<?> getmatchfromuser() {
 		List<RelationShip> listuser = userservice.getListMatchbyUser();
-		return ResponseEntity.ok(
-				listuser.stream().distinct().map(u -> RelationShipMapper.convertToRelationShipDTO(u)).collect(Collectors.toList()));
+		return ResponseEntity.ok(listuser.stream().distinct().map(u -> RelationShipMapper.convertToRelationShipDTO(u))
+				.collect(Collectors.toList()));
 	}
 
 	@GetMapping("/get-mentor-isready")
@@ -280,7 +282,7 @@ public class UserRestController {
 	@PostMapping("/cancel-sendmatch/{userid}")
 	public ResponseEntity<?> cancelsendmatch(@PathVariable("userid") String userid) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		
+
 		return ResponseEntity.ok(userservice.CancelSendMatchMentor(userid));
 	}
 
@@ -305,9 +307,49 @@ public class UserRestController {
 
 	}
 
-	@GetMapping("/test")
-	public ResponseEntity<?> testAPI(){
-		return ResponseEntity.ok(relationresp.findRelationshipWithFriendWithStatus("Aa124", "Aa123", 2));
+	@PutMapping("/user/update-profile")
+	public ResponseEntity<ErrorResponseDTO> updateProfile(@RequestBody UserDTO userProfile) {
+		ErrorResponseDTO res = new ErrorResponseDTO();
+		try {
+			System.out.println(">>> chekc yuser profile: " + userProfile);
+			User user = userservice.findByEmail(userProfile.getEmail());
+			if (user != null) {
+				user.setFirstName(userProfile.getFirstName());
+				user.setMiddleName(userProfile.getMiddleName());
+				user.setLastName(userProfile.getLastName());
+				user.setBirthday(userProfile.getBirthday());
+				user.setGender(userProfile.getGender());
+				user.setCity(userProfile.getCity());
+				user.setDistrict(userProfile.getDistrict());
+				user.setWard(userProfile.getWard());
+				user = userRepository.save(user);
+
+				List<Demand> demands = demandrepositories.findByUser(user);
+				for (Demand demand : demands) {
+					demandrepositories.delete(demand);
+				}
+				
+				for (String demandname : userProfile.getListDemandOfUser()) {
+					ProgramingLanguage language = programingrepositories.findByLanguageName(demandname);
+
+					Demand demand = new Demand();
+					demand.setUser(user);
+					demand.setLanguage(language);
+					demandrepositories.save(demand);
+				}
+				res.setErrorCode(200);
+				res.setMessage("Cập nhật thành công !");
+			} else {
+				res.setErrorCode(400);
+				res.setMessage("Cập nhật thất bại !");
+			}
+		} catch (Exception e) {
+			System.out.println(">>> check e looi :" + e);
+			e.printStackTrace();
+			res.setErrorCode(500);
+			res.setMessage("Cập nhật thất bại !");
+		}
+		return ResponseEntity.ok(res);
 	}
 
 	private List<String> getCurrentUserDemands(Authentication auth) {
@@ -318,8 +360,7 @@ public class UserRestController {
 			List<Demand> userDemands = currentUser.getUserDemand();
 
 			// Chuyển đổi danh sách yêu cầu thành danh sách tên ngôn ngữ
-			return userDemands.stream()
-					.map(demand -> demand.getLanguage().getLanguageName())
+			return userDemands.stream().map(demand -> demand.getLanguage().getLanguageName())
 					.collect(Collectors.toList());
 		} else {
 			// Nếu không tìm thấy người dùng, trả về danh sách trống

@@ -24,65 +24,76 @@ import com.artdevs.domain.entities.post.DetailHashtag;
 import com.artdevs.domain.entities.post.Post;
 import com.artdevs.dto.post.DetailHashtagDTO;
 import com.artdevs.dto.post.PostToGetDTO;
+import com.artdevs.dto.post.ShareDTO;
 import com.artdevs.mapper.post.DetailHashTagMapper;
 import com.artdevs.mapper.post.PostMapper;
+import com.artdevs.mapper.post.ShareMapper;
 import com.artdevs.repositories.post.DetailHashtagRepository;
 import com.artdevs.services.DetailHashTagService;
 import com.artdevs.services.HashTagService;
+import com.artdevs.services.LikesService;
+import com.artdevs.services.UserService;
 import com.artdevs.utils.Global;
 
 @RestController
 @RequestMapping(Global.path_api)
 public class DetailHashTagRestController {
-    @Autowired
-    DetailHashTagService detailHashTagService;
+	@Autowired
+	DetailHashTagService detailHashTagService;
 
-    @Autowired
-    HashTagService hashtagSerivce;
+	@Autowired
+	HashTagService hashtagSerivce;
+	
+	@Autowired
+	LikesService likesService;
+	
+	@Autowired
+	UserService userservice;
 
-    @Autowired
-    DetailHashtagRepository detailHashtagRepository;
+	@Autowired
+	DetailHashtagRepository detailHashtagRepository;
 
-    @PostMapping("/detailhashtag")
-    public ResponseEntity<DetailHashtag> postDetailHashTag(@RequestBody DetailHashtagDTO detailHashtagDTO) {
-        return ResponseEntity
-                .ok(detailHashTagService
-                        .saveDetailHashtag(DetailHashTagMapper.convertTodDetailHashtag(detailHashtagDTO)));
-    }
+	@PostMapping("/detailhashtag")
+	public ResponseEntity<DetailHashtag> postDetailHashTag(@RequestBody DetailHashtagDTO detailHashtagDTO) {
+		return ResponseEntity.ok(
+				detailHashTagService.saveDetailHashtag(DetailHashTagMapper.convertTodDetailHashtag(detailHashtagDTO)));
+	}
 
-    @GetMapping("/detailhashtag")
-    public ResponseEntity<List<DetailHashtagDTO>> getDetailHashTag() {
-        List<DetailHashtagDTO> listDetailHashtagDTO = new ArrayList<>();
-        List<DetailHashtag> listDetailHashtag = detailHashtagRepository.findAll();
-        for (DetailHashtag detail : listDetailHashtag) {
-            listDetailHashtagDTO.add(DetailHashTagMapper.convertToDetailHashTagDTO(detail));
-        }
-        // System.out.println(listDetailHashtagDTO.toString());
-        return ResponseEntity.ok(listDetailHashtagDTO);
-    }
+	@GetMapping("/detailhashtag")
+	public ResponseEntity<List<DetailHashtagDTO>> getDetailHashTag() {
+		List<DetailHashtagDTO> listDetailHashtagDTO = new ArrayList<>();
+		List<DetailHashtag> listDetailHashtag = detailHashtagRepository.findAll();
+		for (DetailHashtag detail : listDetailHashtag) {
+			listDetailHashtagDTO.add(DetailHashTagMapper.convertToDetailHashTagDTO(detail));
+		}
+		// System.out.println(listDetailHashtagDTO.toString());
+		return ResponseEntity.ok(listDetailHashtagDTO);
+	}
 
-    @GetMapping("/detailhashtag/{detaiHashTagText}")
-    public ResponseEntity<List<PostToGetDTO>> getDetailHashTagText(
-            @PathVariable("detaiHashTagText") String detaiHashTagText, @RequestParam("page") Optional<Integer> p) {
+	@GetMapping("/detailhashtag/{detaiHashTagText}")
+	public ResponseEntity<List<ShareDTO>> getDetailHashTagText(
+			@PathVariable("detaiHashTagText") String detaiHashTagText, @RequestParam("page") Optional<Integer> p) {
 
-        List<Post> listPostOfHashTag = detailHashTagService.findDetaiHashTagByName(detaiHashTagText)
-                .getListHashtagOfDetail().stream().map(t -> t.getPostHashtag()).collect(Collectors.toList());
+		List<Post> listPostOfHashTag = detailHashTagService.findDetaiHashTagByName(detaiHashTagText)
+				.getListHashtagOfDetail().stream().map(t -> t.getPostHashtag()).collect(Collectors.toList());
 
-        int pageSize = Global.size_page;
-        int currentPage = p.orElse(0);
+		int pageSize = Global.size_page;
+		int currentPage = p.orElse(0);
 
-        int start = currentPage * pageSize;
-        int end = Math.min((start + pageSize), listPostOfHashTag.size());
+		int start = currentPage * pageSize;
+		int end = Math.min((start + pageSize), listPostOfHashTag.size());
 
-        List<Post> sublist = listPostOfHashTag.subList(start, end);
+		List<Post> sublist = listPostOfHashTag.subList(start, end);
 
-        Pageable pageable = PageRequest.of(currentPage, pageSize, Sort.by("time").descending());
-        Page<Post> postPage = new PageImpl<>(sublist, pageable, listPostOfHashTag.size());
-
-        return ResponseEntity.ok(postPage.get()
-                .filter(t -> !t.isDel() && t.getPrivacyPostDetails().stream()
-                        .anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1))
-                .distinct()
-                .map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce)).collect(Collectors.toList()));
-    }
+		Pageable pageable = PageRequest.of(currentPage, pageSize, Sort.by("time").descending());
+		Page<Post> postPage = new PageImpl<>(sublist, pageable, listPostOfHashTag.size());
+		List<PostToGetDTO> listpost = postPage.get()
+				.filter(t -> !t.isDel() && t.getPrivacyPostDetails().stream()
+						.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1))
+				.distinct().map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce, userservice, likesService))
+				.collect(Collectors.toList());
+		return ResponseEntity.ok(listpost.stream()
+				.map(t -> ShareMapper.convertToShareDTOByPost(t, hashtagSerivce, userservice, likesService))
+				.collect(Collectors.toList()));
+	}
 }

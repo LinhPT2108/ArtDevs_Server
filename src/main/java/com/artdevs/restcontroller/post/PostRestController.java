@@ -232,12 +232,17 @@ public class PostRestController {
 		for (Post post : listPostNewsFeed) {
 			System.out.println(post.toString());
 		}
-		return ResponseEntity.ok(listPostNewsFeed.stream()
+		
+		List<PostToGetDTO> listPosts = listPostNewsFeed.stream()
 				.filter(t -> t.getUser().getRole().getId() == 2 && t.getUser().getUserId() != userLogged.getUserId()
-						&& !t.isDel()
-						&& t.getPrivacyPostDetails().stream()
-								.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1))
-				.distinct().map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce, userservice, likesService))
+				&& !t.isDel()
+				&& t.getPrivacyPostDetails().stream()
+						.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1))
+		.distinct().map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce, userservice, likesService))
+		.collect(Collectors.toList());
+		
+		return ResponseEntity.ok(listPosts.stream()
+				.map(t -> ShareMapper.convertToShareDTOByPost(t, hashtagSerivce, userservice, likesService))
 				.collect(Collectors.toList()));
 	}
 
