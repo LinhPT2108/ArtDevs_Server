@@ -53,6 +53,6 @@ public class DetailHashtag {
 	private User userCreate;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "HashtagDetail")
+	@OneToMany(mappedBy = "detailHashtag")
 	private List<HashTag> ListHashtagOfDetail;
 }

@@ -151,10 +151,6 @@ public class PostMapper {
 		Post post = modelMapper.map(postdto, Post.class);
 //		System.out.println( "post userid"+postdto.getUserId());
 		post.setPostId(postid);
-		post.setListLikePost(null);
-		post.setListSharePost(null);
-		post.setListCommentPost(null);
-		post.setListReportPost(null);
 //		post.setUser(setUser(postdto, userservice));
 		return post;
 	}

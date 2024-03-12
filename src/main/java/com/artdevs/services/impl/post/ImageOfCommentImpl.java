@@ -100,10 +100,10 @@ public class ImageOfCommentImpl implements ImageOfCommentService {
 	public void deleteImageOfComment(PictureOfComment pictureOfComment) {
 		// TODO Auto-generated method stub
 		try {
+			cloudinaryService.deleteImage(pictureOfComment.getCloudinaryPublicId());
 			pictureOfCommentrepository.delete(pictureOfComment);
 		} catch (Exception e) {
 			System.out.println(e);
-			throw e;
 		}
 	}
 

@@ -90,7 +90,6 @@ public class UserMapper {
 	// }
 	
 	public static final String getAvatar(User user, boolean positon) {
-		// System.out.println(user.getUserId());
 		List<Picture> listPic = !user.getUserPicture().isEmpty() ?user.getUserPicture().stream()
 				.sorted((o1, o2) -> o2.getTime().compareTo(o1.getTime()))
 				.filter(t -> t.isPositionOfPicture() == positon).toList():null;

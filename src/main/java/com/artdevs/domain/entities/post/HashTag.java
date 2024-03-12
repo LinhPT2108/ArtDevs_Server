@@ -29,9 +29,8 @@ public class HashTag {
 	@JoinColumn(name = "postId")
 	private Post postHashtag;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "detailhashtagId")
-
-	private DetailHashtag HashtagDetail;
+	private DetailHashtag detailHashtag;
 	
 }
