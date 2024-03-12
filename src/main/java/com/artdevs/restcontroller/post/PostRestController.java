@@ -264,11 +264,11 @@ public class PostRestController {
 
 			List<Object> mergedList = new ArrayList<>();
 
-			mergedList.addAll(listpost);
+			mergedList.addAll(listpost.stream().filter(t->!t.isDel()).collect(Collectors.toList()));
 			if (!shares.isEmpty()) {
 				List<ShareDTO> shareDTOs = shares.stream()
 						.map(t -> ShareMapper.convertToShareDTO(t, hashtagSerivce, userservice, likesService))
-						.collect(Collectors.toList());
+						.filter(t -> !t.getPostId().isDel()).collect(Collectors.toList());
 
 				mergedList.addAll(shareDTOs);
 			}
@@ -470,60 +470,78 @@ public class PostRestController {
 					if (detailHashtag.isPresent()) {
 						Optional<List<HashTag>> aliveHashtag = hashtagSerivce
 								.findbydetailHashtagAndPost(detailHashtag.get(), postsave);
-						System.out.println(aliveHashtag.get().size()==0);
-						if (aliveHashtag.get().size()==0) {
+						if (aliveHashtag.get().size() == 0) {
+							//add new hashtag
 							HashTag hashtagSave = new HashTag();
 							hashtagSave.setDetailHashtag(detailHashtag.get());
 							hashtagSave.setPostHashtag(postsave);
-							hashtagSerivce.saveHashTag(hashtagSave);
+							HashTag hReturn = hashtagSerivce.saveHashTag(hashtagSave);
+							System.out.println("hreturn: "+hReturn.getDetailHashtag().getHashtagText());
 							hashTags.add(hashtagSave);
-						}else {
-							//delete when hashtag present
-							for (HashTag ha : postUpdate.getListHashtag()) {
-								boolean isImgExist = false;
+						} else {
+							// delete when hashtag present
+							for (HashTag haPresent : postUpdate.getListHashtag()) {
+								boolean isHashtagExist = false;
+								
 								for (String hn : postdto.getListHashtag()) {
-									if (hn.equals(ha.getDetailHashtag().getHashtagText())) {
-										isImgExist = true;
+									if (hn.equals(haPresent.getDetailHashtag().getHashtagText())) {
+										isHashtagExist = true;
 										break;
 									}
 								}
-								System.out.println(isImgExist);
-								if (!isImgExist) {
+								if (!isHashtagExist) {
 									try {
-										hashtagSerivce.deleteHashTag(ha);
+										hashtagSerivce.deleteHashTag(haPresent);
 									} catch (Exception e) {
 										System.out.println(e);
 										return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).build();
 									}
+								}else {
+									hashTags.add(haPresent);
 								}
 							}
 						}
+						
 					} else {
 						DetailHashtag newDetailHashtag = new DetailHashtag();
 						newDetailHashtag.setHashtagText(h);
 						newDetailHashtag.setTimeCreate(new Date());
 						newDetailHashtag.setUserCreate(user);
-						
 						DetailHashtag saveNewDetailHashtag = detailHashTagService.saveDetailHashtag(newDetailHashtag);
 						HashTag hashtagSave = new HashTag();
 						hashtagSave.setDetailHashtag(saveNewDetailHashtag);
 						hashtagSave.setPostHashtag(postsave);
 						hashtagSerivce.saveHashTag(hashtagSave);
-						
+
 						hashTags.add(hashtagSave);
 					}
 				}
-
-				postsave.setListHashtag(hashTags);
+				System.out.println("hashtag size: "+hashTags.size());
+				postsave.setListHashtag(hashTags.stream().distinct().toList());
+				
 			} else {
 				hashtagSerivce.deleteHashTagByPost(postsave);
 			}
-			return ResponseEntity.status(HttpStatus.SC_OK).build();
-//			return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce, userservice, likesService));
+			Post postReturn = postsv.findPostById(postsave.getPostId());
+			System.out.println("size ht post: "+postReturn.getListHashtag().size());
+			return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce, userservice, likesService));
 
 		} catch (Exception e) {
 			System.out.println(e);
 			return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).build();
+		}
+	}
+
+	@PutMapping("/delete-post/{id}")
+	public ResponseEntity<?> deletePost(@PathVariable String id) {
+		try {
+			Post postDel = postsv.findPostById(id);
+			postDel.setDel(true);
+			postsv.savePost(postDel);
+			return ResponseEntity.ok(true);
+		} catch (Exception e) {
+			System.out.println(e);
+			return ResponseEntity.ok(false);
 		}
 	}
 }
