@@ -92,14 +92,39 @@ public class UserMapper {
 	// return listSkill;
 	// }
 
-	public static final String getAvatar(User user, boolean positon) {
-		// System.out.println(user.getUserId());
-		List<Picture> listPic = !user.getUserPicture().isEmpty() ?user.getUserPicture().stream()
-				.sorted((o1, o2) -> o2.getTime().compareTo(o1.getTime()))
-				.filter(t -> t.isPositionOfPicture() == positon).toList():null;
-		return listPic!=null  ? listPic.get(0).getImageUrl() : null;
-	}
+//	public static final String getAvatar(User user, boolean positon) {
+//		// System.out.println(user.getUserId());
+//		List<Picture> listPic = !user.getUserPicture().isEmpty() ?user.getUserPicture().stream()
+//				.sorted((o1, o2) -> o2.getTime().compareTo(o1.getTime()))
+//				.filter(t -> t.isPositionOfPicture() == positon).toList():null;
+//		return listPic!=null  ? listPic.get(0).getImageUrl() : null;
+//	}
+	public static final String getAvatar(User user, boolean position) {
+	    // Check if user is null or user's picture list is null
+	    if (user == null || user.getUserPicture() == null) {
+	        return null;  // Handle case where user or picture list is null
+	    }
 
+	    List<Picture> listPic = user.getUserPicture();
+
+	    // Sort pictures by time in descending order (newest first)
+	    listPic = listPic.stream()
+	        .sorted((o1, o2) -> o2.getTime().compareTo(o1.getTime()))
+	        .collect(Collectors.toList());
+
+	    // Filter pictures based on position
+	    List<Picture> filteredList = listPic.stream()
+	        .filter(picture -> picture.isPositionOfPicture() == position)
+	        .collect(Collectors.toList());
+
+	    // Check if any pictures match the position filter
+	    if (filteredList.isEmpty()) {
+	        return null;  // Handle case where no picture matches the position
+	    }
+
+	    // Return the image URL of the first picture (newest)
+	    return filteredList.get(0).getImageUrl();
+	}
 	 public static UserGetRelationDTO UserConvertToUserGetDTO (User user) {
 		 
 		 
