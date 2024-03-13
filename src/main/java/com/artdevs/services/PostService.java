@@ -14,6 +14,8 @@ public interface PostService {
     
     Optional<Page<Post>> findPostByUser(User user, Pageable pageable);
     
+    Optional<List<Post>> findPostByUserNonePage(User user);
+    
 
     Optional<Page<Post>> findPostByContent(String keyword, Pageable pageable);
 

@@ -124,14 +124,19 @@ public class PostRestController {
 				}
 			}
 
-			int pageSize = Global.size_page;
+			int pageSize = 4;
 			int currentPage = p.orElse(0);
 
 			int start = currentPage * pageSize;
 			int end = Math.min((start + pageSize), listPostFriend.size());
-
+			System.out.println("Check End" + end);
+			System.out.println("Check start" + start);
+			System.out.println("Check ListSize" + listPostFriend.size());
+			if(start > end) {
+				start = end;
+			}
 			List<Object> sublist = listPostFriend.subList(start, end);
-			System.out.println(listPostFriend.size());
+			
 			Pageable pageable = PageRequest.of(currentPage, pageSize);
 			Page<Object> postPage = new PageImpl<>(sublist, pageable, listPostFriend.size());
 			return ResponseEntity.ok(postPage.get().filter(t -> {
@@ -218,27 +223,62 @@ public class PostRestController {
 
 			listPostNewsFeed.addAll(postsBySearchHistory);
 		}
-		int pageSize = Global.size_page;
-		int currentPage = p.orElse(0);
 
-		int start = currentPage * pageSize;
-		int end = Math.min((start + pageSize), listPostNewsFeed.size());
-
-		List<Post> sublist = listPostNewsFeed.subList(start, end);
-
-		Pageable pageable = PageRequest.of(currentPage, pageSize, Sort.by("time").descending());
-		Page<Post> postPage = new PageImpl<>(sublist, pageable, listPostNewsFeed.size());
+		Pageable pageable = PageRequest.of(p.orElse(0), Global.size_page, Sort.by("time").descending());
+		int start = (int) pageable.getOffset();
+		int ListSize = listPostNewsFeed.size();
+		int end = Math.min((start + pageable.getPageSize()), listPostNewsFeed.size());
 		System.out.println("229: " + listPostNewsFeed.size());
 		for (Post post : listPostNewsFeed) {
-			System.out.println(post.toString());
+			if(!post.getUser().getUserId().equals(userLogged.getUserId())
+					&& !post.getPrivacyPostDetails().isEmpty()&& post.getUser().getRole().getId()!=1) {
+				System.out.println(post.toString());				
+			}
 		}
-		return ResponseEntity.ok(listPostNewsFeed.stream()
-				.filter(t -> t.getUser().getRole().getId() == 2 && t.getUser().getUserId() != userLogged.getUserId()
-						&& !t.isDel()
-						&& t.getPrivacyPostDetails().stream()
-								.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1))
-				.distinct().map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce, userservice, likesService))
-				.collect(Collectors.toList()));
+		System.out.println("Check End" + end);
+		System.out.println("Check start" + start);
+		System.out.println("Check ListSize" + ListSize);
+		try {
+			if (end >= ListSize) {
+				System.out.println("lon hon");
+				int EndTemp = listPostNewsFeed.size();
+				if(start>=ListSize) {
+					start = ListSize;
+				}
+				System.out.println(start);
+				Page<Post> postPage = new PageImpl<>(listPostNewsFeed.subList(start, EndTemp), pageable,
+						listPostNewsFeed.size());
+				return ResponseEntity.ok(postPage.stream()
+						.filter(t -> t.getUser().getRole().getId() == 2
+								&& t.getUser().getUserId() != userLogged.getUserId() && !t.isDel()
+								&& t.getPrivacyPostDetails().stream()
+										.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1))
+						.distinct().map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce, userservice, likesService))
+						.collect(Collectors.toList()));
+			} else {
+				System.out.println("small");
+				Page<Post> postPage = new PageImpl<>(listPostNewsFeed.subList(start, end), pageable,
+						listPostNewsFeed.size());
+				return ResponseEntity.ok(postPage.stream()
+						.filter(t -> t.getUser().getRole().getId() == 2
+								&& t.getUser().getUserId() != userLogged.getUserId() && !t.isDel()
+								&& t.getPrivacyPostDetails().stream()
+										.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1))
+						.distinct().map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce, userservice, likesService))
+						.collect(Collectors.toList()));
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e);
+			return ResponseEntity.badRequest().build();
+		}
+//		return ResponseEntity.ok(listPostNewsFeed.stream()
+//				.filter(t -> t.getUser().getRole().getId() == 2 && t.getUser().getUserId() != userLogged.getUserId()
+//						&& !t.isDel()
+//						&& t.getPrivacyPostDetails().stream()
+//								.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1))
+//				.distinct().map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce, userservice, likesService))
+//				.collect(Collectors.toList()));
 	}
 
 	@GetMapping("/post/{postId}")
@@ -254,7 +294,7 @@ public class PostRestController {
 		if (!authenticate.getName().equals("anonymousUser")) {
 			String loggedInUserEmail = authenticate.getName();
 			User user = userservice.findByEmail(loggedInUserEmail);
-			Pageable pageable = PageRequest.of(p.orElse(0), 7, Sort.by("time").descending());
+			Pageable pageable = PageRequest.of(p.orElse(0), Global.size_page, Sort.by("time").descending());
 			Optional<Page<Post>> list = postsv.findPostByUser(user, pageable);
 			List<PostToGetDTO> listpost = new ArrayList<>();
 			for (Post post : list.get()) {
@@ -264,7 +304,7 @@ public class PostRestController {
 
 			List<Object> mergedList = new ArrayList<>();
 
-			mergedList.addAll(listpost.stream().filter(t->!t.isDel()).collect(Collectors.toList()));
+			mergedList.addAll(listpost.stream().filter(t -> !t.isDel()).collect(Collectors.toList()));
 			if (!shares.isEmpty()) {
 				List<ShareDTO> shareDTOs = shares.stream()
 						.map(t -> ShareMapper.convertToShareDTO(t, hashtagSerivce, userservice, likesService))
@@ -280,7 +320,7 @@ public class PostRestController {
 				}
 				return null;
 			}, Comparator.nullsLast(Comparator.reverseOrder())));
-
+			System.out.println("mergedList size: " + mergedList.size());
 			return ResponseEntity.ok(mergedList);
 		} else {
 			return ResponseEntity.ok(HttpStatus.SC_UNAUTHORIZED);
@@ -471,18 +511,18 @@ public class PostRestController {
 						Optional<List<HashTag>> aliveHashtag = hashtagSerivce
 								.findbydetailHashtagAndPost(detailHashtag.get(), postsave);
 						if (aliveHashtag.get().size() == 0) {
-							//add new hashtag
+							// add new hashtag
 							HashTag hashtagSave = new HashTag();
 							hashtagSave.setDetailHashtag(detailHashtag.get());
 							hashtagSave.setPostHashtag(postsave);
 							HashTag hReturn = hashtagSerivce.saveHashTag(hashtagSave);
-							System.out.println("hreturn: "+hReturn.getDetailHashtag().getHashtagText());
+							System.out.println("hreturn: " + hReturn.getDetailHashtag().getHashtagText());
 							hashTags.add(hashtagSave);
 						} else {
 							// delete when hashtag present
 							for (HashTag haPresent : postUpdate.getListHashtag()) {
 								boolean isHashtagExist = false;
-								
+
 								for (String hn : postdto.getListHashtag()) {
 									if (hn.equals(haPresent.getDetailHashtag().getHashtagText())) {
 										isHashtagExist = true;
@@ -496,12 +536,12 @@ public class PostRestController {
 										System.out.println(e);
 										return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).build();
 									}
-								}else {
+								} else {
 									hashTags.add(haPresent);
 								}
 							}
 						}
-						
+
 					} else {
 						DetailHashtag newDetailHashtag = new DetailHashtag();
 						newDetailHashtag.setHashtagText(h);
@@ -516,14 +556,14 @@ public class PostRestController {
 						hashTags.add(hashtagSave);
 					}
 				}
-				System.out.println("hashtag size: "+hashTags.size());
+				System.out.println("hashtag size: " + hashTags.size());
 				postsave.setListHashtag(hashTags.stream().distinct().toList());
-				
+
 			} else {
 				hashtagSerivce.deleteHashTagByPost(postsave);
 			}
 			Post postReturn = postsv.findPostById(postsave.getPostId());
-			System.out.println("size ht post: "+postReturn.getListHashtag().size());
+			System.out.println("size ht post: " + postReturn.getListHashtag().size());
 			return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce, userservice, likesService));
 
 		} catch (Exception e) {

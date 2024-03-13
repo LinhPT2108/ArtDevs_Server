@@ -92,4 +92,10 @@ public class PostServiceImpl implements PostService {
 		return postRepository.findbyKeywordNonePage(keyword);
 	}
 
+	@Override
+	public Optional<List<Post>> findPostByUserNonePage(User user) {
+		// TODO Auto-generated method stub
+		return postRepository.findByUser(user);
+	}
+
 }
