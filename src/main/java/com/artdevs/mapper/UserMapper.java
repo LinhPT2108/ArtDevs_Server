@@ -10,10 +10,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.artdevs.domain.entities.user.Picture;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.UserRegisterDTO;
+import com.artdevs.dto.CustomDTO.UserGetRelationDTO;
 import com.artdevs.dto.user.MentorDTO;
-import com.artdevs.dto.user.SuggestFriendDTO;
 import com.artdevs.dto.user.UserDTO;
 import com.artdevs.repositories.user.SkillRepository;
+import com.artdevs.utils.CustomContructor;
 
 public class UserMapper {
 
@@ -31,12 +32,6 @@ public class UserMapper {
 		return userDTO;
 	}
 
-	public static SuggestFriendDTO UserConvertToSuggestFriendDTO(User user) {
-		SuggestFriendDTO suggest = modelMapper.map(user, SuggestFriendDTO.class);
-		suggest.setFullname(user.getFirstName() + " " + user.getMiddleName() + " " + user.getLastName());
-		return suggest;
-	}
-
 	public static User UserDTOconvertToUser(UserDTO userDTO) {
 		User user = modelMapper.map(userDTO, User.class);
 		user.setRole(userDTO.getRole());
@@ -49,13 +44,13 @@ public class UserMapper {
 		return userDTO;
 	}
 
-	// public static UserRegisterDTO UserDTOconvertToRegisterDTO(User user) {
-	// UserRegisterDTO registerDTO = modelMapper.map(user, UserRegisterDTO.class);
-	// registerDTO.setListSkillOfUser(getSkill(user));
-	// registerDTO.setListDemandOfUser(getDemand(user));
-	// return registerDTO;
-	// }
-	//
+//	public static UserRegisterDTO UserDTOconvertToRegisterDTO(User user) {
+//		UserRegisterDTO registerDTO = modelMapper.map(user, UserRegisterDTO.class);
+//		registerDTO.setListSkillOfUser(getSkill(user));
+//		registerDTO.setListDemandOfUser(getDemand(user));
+//		return registerDTO;
+//	}
+//	
 
 	public static User RegisterDTOconvertToUser(UserRegisterDTO RegisterDTO) {
 		RegisterDTO.setPassword(new BCryptPasswordEncoder().encode(RegisterDTO.getPassword()));
@@ -97,13 +92,46 @@ public class UserMapper {
 	// return listSkill;
 	// }
 
-	private static String getAvatar(User user, boolean positon) {
-		// System.out.println(user.getUserId());
-		List<Picture> listPic = !user.getUserPicture().isEmpty() ? user.getUserPicture().stream()
-				.sorted((o1, o2) -> o2.getTime().compareTo(o1.getTime()))
-				.filter(t -> t.isPositionOfPicture() == positon).toList() : null;
+//	public static final String getAvatar(User user, boolean positon) {
+//		// System.out.println(user.getUserId());
+//		List<Picture> listPic = !user.getUserPicture().isEmpty() ?user.getUserPicture().stream()
+//				.sorted((o1, o2) -> o2.getTime().compareTo(o1.getTime()))
+//				.filter(t -> t.isPositionOfPicture() == positon).toList():null;
+//		return listPic!=null  ? listPic.get(0).getImageUrl() : null;
+//	}
+	public static final String getAvatar(User user, boolean position) {
+	    // Check if user is null or user's picture list is null
+	    if (user == null || user.getUserPicture() == null) {
+	        return null;  // Handle case where user or picture list is null
+	    }
 
-		return listPic != null ? listPic.get(0).getImageUrl() : null;
+	    List<Picture> listPic = user.getUserPicture();
+
+	    // Sort pictures by time in descending order (newest first)
+	    listPic = listPic.stream()
+	        .sorted((o1, o2) -> o2.getTime().compareTo(o1.getTime()))
+	        .collect(Collectors.toList());
+
+	    // Filter pictures based on position
+	    List<Picture> filteredList = listPic.stream()
+	        .filter(picture -> picture.isPositionOfPicture() == position)
+	        .collect(Collectors.toList());
+
+	    // Check if any pictures match the position filter
+	    if (filteredList.isEmpty()) {
+	        return null;  // Handle case where no picture matches the position
+	    }
+
+	    // Return the image URL of the first picture (newest)
+	    return filteredList.get(0).getImageUrl();
 	}
-
+	 public static UserGetRelationDTO UserConvertToUserGetDTO (User user) {
+		 
+		 
+		 UserGetRelationDTO result = modelMapper.map(user, UserGetRelationDTO.class);
+		 result.setProfilePicUrl(getAvatar(user,true));
+		 result.setFullname(user.getFirstName()+" " + user.getMiddleName() + " " + user.getLastName());
+		 return result;
+	 }
+	 
 }

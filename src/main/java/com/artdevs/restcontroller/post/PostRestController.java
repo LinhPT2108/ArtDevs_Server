@@ -235,6 +235,22 @@ public class PostRestController {
 			return ResponseEntity.ok(HttpStatus.SC_UNAUTHORIZED);
 		}
 	}
+	
+	@GetMapping("/post-by-mentor-logged/{mentorid}")
+	public ResponseEntity<?> getPostUserLogged(@PathVariable("mentorid") String mentorid,@RequestParam("page") Optional<Integer> p) {
+		User user = userservice.findUserById(mentorid);
+		if (user != null) {
+			Pageable pageable = PageRequest.of(p.orElse(0), 7, Sort.by("time").descending());
+			Optional<Page<Post>> list = postsv.findPostByUser(user, pageable);
+			List<PostToGetDTO> listpost = new ArrayList<>();
+			for (Post post : list.get()) {
+				listpost.add(PostMapper.convertoGetDTO(post, hashtagSerivce));
+			}
+			return ResponseEntity.ok(listpost);
+		} else {
+			return ResponseEntity.ok(HttpStatus.SC_UNAUTHORIZED);
+		}
+	}
 
 	@PostMapping("/post")
 	public ResponseEntity<PostToGetDTO> CreatePost(@ModelAttribute PostDTO postdto) {

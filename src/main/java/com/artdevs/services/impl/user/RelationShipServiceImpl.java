@@ -109,7 +109,14 @@ public class RelationShipServiceImpl implements RelationshipService {
 
 	@Override
 	public List<RelationShip> findRelationshipByUserIdAndStatus(String userId) throws Exception {
-		return relationshipRepository.findRelationshipByUserIdAndStatus(userId, 0);
+		List<RelationShip> result = new ArrayList<>();
+		List<RelationShip> Temp = relationshipRepository.findRelationshipByUserIdAndStatus(userId, 0);
+		for (RelationShip relationShip : Temp) {
+			if(relationShip.getActionUser().getUserId() != userId) {
+				result.add(relationShip);
+			}
+		}
+		return result;
 	}
 
 	@Override
@@ -140,6 +147,7 @@ public class RelationShipServiceImpl implements RelationshipService {
 		}
 
 	}
+	
 
 	@Override
 	public boolean acceptFriend(String loggedInUserId, String friendToAcceptId) throws Exception {
@@ -152,6 +160,9 @@ public class RelationShipServiceImpl implements RelationshipService {
 		// TODO Auto-generated method stub
 		RelationShip relation = relationshipRepository.findRelationshipWithFriendWithStatus(loggedInUserId,
 				friendToRejectId, 0);
+		System.out.println("Check LoginUser" + loggedInUserId);
+		System.out.println("friendToRejectId" + friendToRejectId);
+		System.out.println("Check Relation" + relation);
 		if (relation != null) {
 			relationshipRepository.delete(relation);
 			return true;
@@ -217,5 +228,47 @@ public class RelationShipServiceImpl implements RelationshipService {
 		// TODO Auto-generated method stub
 		return relationshipRepository.findRelationshipWithFriendWithStatus(userOneId.getUserId(), userTwoId.getUserId(), status);
 	}
+
+	@Override
+	public boolean removeUserOfListSuitable(String loggedInUserId, String friendId, int Status) {
+		// TODO Auto-generated method stub
+		
+		try {
+			return addrelation(loggedInUserId, friendId, Status);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public List<User> getAllMentor() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User userlogin = userservice.findByEmail(auth.getName());
+		List<User> Result = new ArrayList<>();
+		List<User> user1 = new ArrayList<>();
+		List<User> user2 = new ArrayList<>();
+		List<RelationShip> listFriendRelationship = relationshipRepository
+				.findRelationshipByUserIdAndStatus(userlogin.getUserId(), 3);
+		for (RelationShip relation : listFriendRelationship) {
+			user1.add(relation.getUserOneId());
+			user2.add(relation.getUserTwoId());
+		}
+		for (User user : user1) {
+			if (user.getUserId() != userlogin.getUserId()) {
+				Result.add(user);
+			}
+		}
+		for (User user : user2) {
+			if (user.getUserId() != userlogin.getUserId()) {
+				Result.add(user);
+			}
+		}
+		return Result;
+
+	}
+	
+	
 
 }
