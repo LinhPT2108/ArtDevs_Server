@@ -1,6 +1,6 @@
 package com.artdevs.dto.post;
 
-import java.util.List;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,4 +18,10 @@ public class DetailHashtagDTO {
     private String hashtagText;
 
     private int countHashtagOfDetail;
+
+    private String description;
+
+    private Date timeCreate;
+
+    private String userCreate;
 }

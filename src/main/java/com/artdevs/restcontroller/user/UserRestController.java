@@ -59,12 +59,13 @@ public class UserRestController {
 
 	@Autowired
 	JwtTokenProvider jwtService;
-	
-	
-	@Autowired RelationshipRepository relationresp;
 
-	@Autowired RelationshipService relationshipservice;
-	
+	@Autowired
+	RelationshipRepository relationresp;
+
+	@Autowired
+	RelationshipService relationshipservice;
+
 	@Autowired
 	PrograminglanguageRepository programingrepositories;
 
@@ -165,7 +166,7 @@ public class UserRestController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+
 	@GetMapping("/mentor/{Mentorid}")
 	public ResponseEntity<MentorDTO> getMentor(@PathVariable String Mentorid) {
 		try {
@@ -180,15 +181,19 @@ public class UserRestController {
 	public ResponseEntity<List<MentorDTO>> getmenotr() {
 		List<User> listuser = userservice.findMentor();
 		return ResponseEntity.ok(
-				listuser.stream().distinct().map(u -> UserMapper.UserConvertToMentorDTO(u)).collect(Collectors.toList()));
+				listuser.stream().distinct().map(u -> UserMapper.UserConvertToMentorDTO(u))
+						.collect(Collectors.toList()));
 	}
 
-//	@PostMapping("/user-social")
-//	public ResponseEntity<?> getUserByEmailAndProvidere(@RequestParam("email") String email,
-//			@RequestParam("provider") String provider, @RequestBody UserRegisterDTO RegisterDTO) {
-//		User user = userRepository.findByEmailAndProvider(email, provider).orElse(null);
-//		return ResponseEntity.ok(user);
-//	}
+	// @PostMapping("/user-social")
+	// public ResponseEntity<?> getUserByEmailAndProvidere(@RequestParam("email")
+	// String email,
+	// @RequestParam("provider") String provider, @RequestBody UserRegisterDTO
+	// RegisterDTO) {
+	// User user = userRepository.findByEmailAndProvider(email,
+	// provider).orElse(null);
+	// return ResponseEntity.ok(user);
+	// }
 
 	@PostMapping("/user-social")
 	public ResponseEntity<AuthenticationResponse> getUserByEmailAndProvider(@RequestBody UserRegisterDTO RegisterDTO) {
@@ -221,26 +226,29 @@ public class UserRestController {
 				AuthenticationResponse.builder().token(jwtToken).refeshToken(jwtRefeshToken).userdto(userdto).build());
 	}
 
-//	@GetMapping("/user/{userid}")
-//	public ResponseEntity<UserDTO> getUser(@PathVariable String userid) {
-//		try {
-//			UserDTO userdto = UserMapper.UserConvertToUserDTO(userRepository.findById(userid).get());
-//			return ResponseEntity.ok(userdto);
-//		} catch (Exception e) {
-//			return ResponseEntity.notFound().build();
-//		}
-//	}
-//	@GetMapping("/get-mentor")
-//	public ResponseEntity<List<MentorDTO>> getmenotr(){
-//		List<User> listuser = userservice.findMentor();
-//		return ResponseEntity.ok(listuser.stream().distinct().map(u -> UserMapper.UserConvertToMentorDTO(u)).collect(Collectors.toList()));
-//	}
+	// @GetMapping("/user/{userid}")
+	// public ResponseEntity<UserDTO> getUser(@PathVariable String userid) {
+	// try {
+	// UserDTO userdto =
+	// UserMapper.UserConvertToUserDTO(userRepository.findById(userid).get());
+	// return ResponseEntity.ok(userdto);
+	// } catch (Exception e) {
+	// return ResponseEntity.notFound().build();
+	// }
+	// }
+	// @GetMapping("/get-mentor")
+	// public ResponseEntity<List<MentorDTO>> getmenotr(){
+	// List<User> listuser = userservice.findMentor();
+	// return ResponseEntity.ok(listuser.stream().distinct().map(u ->
+	// UserMapper.UserConvertToMentorDTO(u)).collect(Collectors.toList()));
+	// }
 
 	@GetMapping("/get-match-from-user")
 	public ResponseEntity<?> getmatchfromuser() {
 		List<RelationShip> listuser = userservice.getListMatchbyUser();
 		return ResponseEntity.ok(
-				listuser.stream().distinct().map(u -> RelationShipMapper.convertToRelationShipDTO(u)).collect(Collectors.toList()));
+				listuser.stream().distinct().map(u -> RelationShipMapper.convertToRelationShipDTO(u))
+						.collect(Collectors.toList()));
 	}
 
 	@GetMapping("/get-mentor-isready")
@@ -264,7 +272,7 @@ public class UserRestController {
 	@PostMapping("/cancel-sendmatch/{userid}")
 	public ResponseEntity<?> cancelsendmatch(@PathVariable("userid") String userid) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		
+
 		return ResponseEntity.ok(userservice.CancelSendMatchMentor(userid));
 	}
 
@@ -290,7 +298,7 @@ public class UserRestController {
 	}
 
 	@GetMapping("/test")
-	public ResponseEntity<?> testAPI(){
+	public ResponseEntity<?> testAPI() {
 		return ResponseEntity.ok(relationresp.findRelationshipWithFriendWithStatus("Aa124", "Aa123", 2));
 	}
 }

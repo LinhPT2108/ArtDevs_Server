@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.artdevs.domain.entities.post.DetailHashtag;
 import com.artdevs.domain.entities.post.Post;
+import com.artdevs.dto.ReponseDTO;
 import com.artdevs.dto.post.DetailHashtagDTO;
 import com.artdevs.dto.post.PostToGetDTO;
 import com.artdevs.mapper.post.DetailHashTagMapper;
@@ -51,14 +52,21 @@ public class DetailHashTagRestController {
     }
 
     @GetMapping("/detailhashtag")
-    public ResponseEntity<List<DetailHashtagDTO>> getDetailHashTag() {
+    public ResponseEntity<ReponseDTO> getDetailHashTag() {
+        ReponseDTO reponseDTO = new ReponseDTO<>();
+
         List<DetailHashtagDTO> listDetailHashtagDTO = new ArrayList<>();
         List<DetailHashtag> listDetailHashtag = detailHashtagRepository.findAll();
         for (DetailHashtag detail : listDetailHashtag) {
             listDetailHashtagDTO.add(DetailHashTagMapper.convertToDetailHashTagDTO(detail));
+            // System.out.println("check count hashtag: " +
+            // listDetailHashtagDTO.get(0).getCountHashtagOfDetail());
         }
         // System.out.println(listDetailHashtagDTO.toString());
-        return ResponseEntity.ok(listDetailHashtagDTO);
+        reponseDTO.setMessage("Lấy dữ liệu HashTag thành công!");
+        reponseDTO.setStatusCode(200);
+        reponseDTO.setModel(listDetailHashtagDTO);
+        return ResponseEntity.ok(reponseDTO);
     }
 
     @GetMapping("/detailhashtag/{detaiHashTagText}")
