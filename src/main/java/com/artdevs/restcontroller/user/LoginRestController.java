@@ -1,11 +1,8 @@
 package com.artdevs.restcontroller.user;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-
-import java.io.Console;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -17,18 +14,21 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.artdevs.config.auth.AuthenticationRequest;
 import com.artdevs.config.auth.AuthenticationResponse;
 import com.artdevs.domain.entities.user.User;
+import com.artdevs.dto.ErrorResponseDTO;
+import com.artdevs.dto.MailInfo;
+import com.artdevs.dto.ReponseDTO;
 import com.artdevs.dto.CustomDTO.ChangePasswordFormDTO;
+import com.artdevs.dto.CustomDTO.VerificationDTO;
 import com.artdevs.service.AuthenticationService;
 import com.artdevs.service.JwtTokenProvider;
+import com.artdevs.service.MailerService;
 import com.artdevs.services.UserService;
-import com.artdevs.utils.PasswordEncryption;
 
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -38,7 +38,9 @@ public class LoginRestController {
 
 	@Autowired
 	UserService userservice;
-
+	
+	
+	@Autowired MailerService mailservice;
 	@Autowired
 	private AuthenticationService authenticationService;
 	@Autowired
@@ -125,11 +127,11 @@ public class LoginRestController {
 	}
 
 	@PostMapping(value = "/api/changepass")
-	public ResponseEntity<?> ChangePass(@RequestBody ChangePasswordFormDTO passwordForm) {
+	public ResponseEntity<ErrorResponseDTO> ChangePass(@RequestBody ChangePasswordFormDTO passwordForm) {
 	    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	    User user = userservice.findByEmail(auth.getName());
-	    
+	    ErrorResponseDTO statusReponse = new ErrorResponseDTO();
 	    // Lấy mật khẩu đã mã hóa từ cơ sở dữ liệu
 	    String hashedPasswordFromDatabase = user.getPassword();
 
@@ -141,19 +143,93 @@ public class LoginRestController {
 	            // Mật khẩu cũ đúng, bạn có thể thực hiện các bước thay đổi mật khẩu mới ở đây
 	            // ...
 	        	user.setPassword(new BCryptPasswordEncoder().encode(passwordForm.getNewPassword()));
+	        	
 	        	userservice.saveUser(user);
-	            return ResponseEntity.ok("Password changed successfully");
+	        	
+	        	statusReponse.setErrorCode(200);
+	        	statusReponse.setMessage("Đổi Mật Khẩu Thành Công!");
+	        	
+	           
 	        } else {
 	        	
 	            // Mật khẩu cũ không đúng
-	            System.out.println("doi mk khong thanh cong");
-	            return ResponseEntity.ok("Incorrect old password");
+	        	statusReponse.setErrorCode(400);
+	        	statusReponse.setMessage("Mật Khẩu Không Khớp!");
+	            
 	        }
 	    } catch (Exception e) {
 	        // Xử lý ngoại lệ khi so sánh mật khẩu
 	        e.printStackTrace();
-	        return ResponseEntity.ok("Exception");
+	        statusReponse.setErrorCode(500);
+        	statusReponse.setMessage("Lỗi Ngoại Lệ!");
+	       
 	    }
+	    return ResponseEntity.ok(statusReponse);
+	}
+	
+	@PostMapping(value = "/api/send-verify")
+	public ResponseEntity<ReponseDTO> sendverify(@RequestParam("Email") String Email) {
+	    ReponseDTO statusReponse = new ReponseDTO();
+	    System.out.println("check input" + Email);
+	    Random random = new Random();
+        int min = 100000;
+        int max = 999999;
+        int verificationCode = random.nextInt(max - min + 1) + min;
+//	    User user = userservice.findByEmail(Email);
+        User AccountForgotpass = userservice.findByEmail(Email);
+        System.out.println("check account" + AccountForgotpass);
+        if(AccountForgotpass != null) {
+        	 MailInfo mailSend = new MailInfo();
+     	    mailSend.setFrom("artdevk18@gmail.com");
+             mailSend.setTo(Email);
+             mailSend.setSubject("Verification Code for Password Change");
+             mailSend.setBody("Your verification code is: " + verificationCode);
+             
+             VerificationDTO data  = new VerificationDTO();
+             data.setEmail(Email);
+             data.setVerificationCode(verificationCode);
+             
+     	    try {
+     			mailservice.send(mailSend);
+     			statusReponse.setMessage("Gửi mã xác nhận thành công!");
+     			statusReponse.setModel(data);
+     			statusReponse.setStatusCode(200);
+     		} catch (MessagingException e) {
+     			// TODO Auto-generated catch block
+     			System.out.println(e);
+     			statusReponse.setMessage("Gửi mã xác nhận Không thành công!");
+
+     			statusReponse.setStatusCode(400);
+     			e.printStackTrace();
+     		}
+        }else {
+        	statusReponse.setMessage("Email Không Tồn Tại !");
+
+ 			statusReponse.setStatusCode(403);
+        }
+	   
+	   
+	    return ResponseEntity.ok(statusReponse);
+	}
+	
+	@PostMapping(value = "/api/forgotpassword")
+	public ResponseEntity<ErrorResponseDTO> Forgotpassword(@RequestParam("Email") String Email,@RequestParam("Newpassword") String Newpassword) {
+
+	    System.out.println("check input" + Email + "new Password" + Newpassword);
+	    
+	    User user = userservice.findByEmail(Email);
+	    ErrorResponseDTO statusReponsedto = new ErrorResponseDTO();
+	   if(user != null) {
+		   user.setPassword(new BCryptPasswordEncoder().encode(Newpassword));
+	    	userservice.saveUser(user);
+	    	statusReponsedto.setErrorCode(200);
+	    	statusReponsedto.setMessage("Cập Nhật Mật Khẩu Mới Thành Công!");
+	   }else {
+		   statusReponsedto.setErrorCode(400);
+	    	statusReponsedto.setMessage("Cập Nhật Mật Khẩu Mới Thất Bại!");
+	   }
+
+	    return ResponseEntity.ok(statusReponsedto);
 	}
 
 }
