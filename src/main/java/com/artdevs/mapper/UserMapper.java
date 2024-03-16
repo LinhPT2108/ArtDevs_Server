@@ -11,6 +11,7 @@ import com.artdevs.domain.entities.user.Picture;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.UserRegisterDTO;
 import com.artdevs.dto.CustomDTO.UserGetRelationDTO;
+import com.artdevs.dto.post.UserPostDTO;
 import com.artdevs.dto.user.MentorDTO;
 import com.artdevs.dto.user.UserDTO;
 import com.artdevs.repositories.user.SkillRepository;
@@ -90,21 +91,21 @@ public class UserMapper {
 	// skillrep.findByUser(userrep.getById(RegisterDTO.getUserId()));
 	// return listSkill;
 	// }
-	
+
 	public static final String getAvatar(User user, boolean positon) {
-		List<Picture> listPic = !user.getUserPicture().isEmpty() ?user.getUserPicture().stream()
-				.sorted((o1, o2) -> o2.getTime().compareTo(o1.getTime()))
-				.filter(t -> t.isPositionOfPicture() == positon).toList():null;
-		return listPic!=null  ? listPic.get(0).getImageUrl() : null;
+		List<Picture> listPic = !user.getUserPicture().isEmpty()
+				? user.getUserPicture().stream().sorted((o1, o2) -> o2.getTime().compareTo(o1.getTime()))
+						.filter(t -> t.isPositionOfPicture() == positon).toList()
+				: null;
+		return listPic != null ? listPic.get(0).getImageUrl() : null;
 	}
 
-	 public static UserGetRelationDTO UserConvertToUserGetDTO (User user) {
-		 
-		 
-		 UserGetRelationDTO result = modelMapper.map(user, UserGetRelationDTO.class);
-		 result.setProfilePicUrl(getAvatar(user,true));
-		 result.setFullname(user.getFirstName()+" " + user.getMiddleName() + " " + user.getLastName());
-		 return result;
-	 }
-	 
+	public static UserGetRelationDTO UserConvertToUserGetDTO(User user) {
+
+		UserGetRelationDTO result = modelMapper.map(user, UserGetRelationDTO.class);
+		result.setProfilePicUrl(getAvatar(user, true));
+		result.setFullname(user.getFirstName() + " " + user.getMiddleName() + " " + user.getLastName());
+		return result;
+	}
+
 }

@@ -60,17 +60,6 @@ public class DetailHashTagRestController {
 				detailHashTagService.saveDetailHashtag(DetailHashTagMapper.convertTodDetailHashtag(detailHashtagDTO)));
 	}
 
-	@GetMapping("/detailhashtag")
-	public ResponseEntity<List<DetailHashtagDTO>> getDetailHashTag() {
-		List<DetailHashtagDTO> listDetailHashtagDTO = new ArrayList<>();
-		List<DetailHashtag> listDetailHashtag = detailHashtagRepository.findAll();
-		for (DetailHashtag detail : listDetailHashtag) {
-			listDetailHashtagDTO.add(DetailHashTagMapper.convertToDetailHashTagDTO(detail));
-		}
-		// System.out.println(listDetailHashtagDTO.toString());
-		return ResponseEntity.ok(listDetailHashtagDTO);
-	}
-
 	@GetMapping("/detailhashtag/{detaiHashTagText}")
 	public ResponseEntity<List<ShareDTO>> getDetailHashTagText(
 			@PathVariable("detaiHashTagText") String detaiHashTagText, @RequestParam("page") Optional<Integer> p) {

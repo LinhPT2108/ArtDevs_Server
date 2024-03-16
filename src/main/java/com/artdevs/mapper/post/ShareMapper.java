@@ -18,23 +18,20 @@ public class ShareMapper {
 	public static ShareDTO convertToShareDTO(Share share, HashTagService hashtagSerivce, UserService userService,
 			LikesService likesService) {
 		ShareDTO shareDTO = modelMapper.map(share, ShareDTO.class);
-		shareDTO.setPostId(PostMapper.convertoGetDTO(share.getPostShareId(), hashtagSerivce, userService, likesService));
-		
-		// shareDTO.setFullname(share.getUserShareId().getFirstName()+" "+share.getUserShareId().getMiddleName()+" "+share.getUserShareId().getLastName() );
+		shareDTO.setPostId(
+				PostMapper.convertoGetDTO(share.getPostShareId(), hashtagSerivce, userService, likesService));
 
-		shareDTO.setUserPostDto(
-				new UserPostDTO(
-					    Global.safeTrim(share.getUserShareId().getUserId()),
-					    Global.safeTrim(share.getUserShareId().getUsername()),
-					    Global.safeTrim(UserMapper.getAvatar(share.getUserShareId(), true)),
-					    String.join(" ", 
-					    		Global.safeTrim(share.getUserShareId().getFirstName()), 
-					    		Global.safeTrim(share.getUserShareId().getMiddleName()), 
-					    		Global.safeTrim(share.getUserShareId().getLastName())
-					    )
-					)
-				);
-				
+		// shareDTO.setFullname(share.getUserShareId().getFirstName()+"
+		// "+share.getUserShareId().getMiddleName()+"
+		// "+share.getUserShareId().getLastName() );
+
+		shareDTO.setUserPostDto(new UserPostDTO(Global.safeTrim(share.getUserShareId().getUserId()),
+				Global.safeTrim(share.getUserShareId().getUsername()),
+				Global.safeTrim(UserMapper.getAvatar(share.getUserShareId(), true)),
+				String.join(" ", Global.safeTrim(share.getUserShareId().getFirstName()),
+						Global.safeTrim(share.getUserShareId().getMiddleName()),
+						Global.safeTrim(share.getUserShareId().getLastName()))));
+
 		shareDTO.setTypePost("share");
 		return shareDTO;
 	}
@@ -43,12 +40,12 @@ public class ShareMapper {
 		Share share = modelMapper.map(shareDTO, Share.class);
 		return share;
 	}
-	
-	public static ShareDTO convertToShareDTOByPost(PostToGetDTO post, HashTagService hashtagSerivce, UserService userService,
-			LikesService likesService) {
+
+	public static ShareDTO convertToShareDTOByPost(PostToGetDTO post, HashTagService hashtagSerivce,
+			UserService userService, LikesService likesService) {
 		ShareDTO shareDTO = new ShareDTO();
 		shareDTO.setPostId(post);
-		shareDTO.setFullname("");
+		shareDTO.setUserPostDto(post.getUserPost());
 		shareDTO.setTypePost("");
 		shareDTO.setContent("");
 		return shareDTO;

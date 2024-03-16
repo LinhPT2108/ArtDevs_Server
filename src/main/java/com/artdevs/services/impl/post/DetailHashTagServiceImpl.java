@@ -53,15 +53,14 @@ public class DetailHashTagServiceImpl implements DetailHashTagService {
     @Override
     public DetailHashtag findDetaiHashTagByName(String detailHashTagText) {
 
-        DetailHashtag result = detailHashtagRepository.findByHashtagText(detailHashTagText).get(0);
+        DetailHashtag result = detailHashtagRepository.findByHashtagText(detailHashTagText).get();
 
         return result;
     }
 
-	@Override
+    @Override
 	public Optional<List<DetailHashtag>> findByKeywordNonePage(String keyword) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		return detailHashtagRepository.findByKeywordNonPage(keyword);
 	}
 
 	@Override

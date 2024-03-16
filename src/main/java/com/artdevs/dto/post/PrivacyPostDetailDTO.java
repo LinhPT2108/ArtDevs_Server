@@ -13,4 +13,6 @@ public class PrivacyPostDetailDTO {
 	private Long Id;
 	private String namePrivacy;
 	private boolean status;
+	private String createDate;
+    private int privacyPostId;
 }
