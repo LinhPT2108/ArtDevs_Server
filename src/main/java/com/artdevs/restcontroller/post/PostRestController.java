@@ -144,7 +144,7 @@ public class PostRestController {
 					return !((Post) t).isDel() && ((Post) t).getPrivacyPostDetails().stream()
 							.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1);
 				} else {
-					return true; // Bạn có thể điều chỉnh điều kiện này tùy vào logic của bạn.
+					return true; 
 				}
 			}).map(t -> {
 				if (t instanceof Post) {

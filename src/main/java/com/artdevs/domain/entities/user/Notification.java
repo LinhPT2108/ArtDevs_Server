@@ -38,8 +38,10 @@ public class Notification {
 	private String type;
 	
 	@Column
-	@Nationalized
 	private String postId;
+	
+	@Column
+	private String shareId;
 	
 	@Column 
 	private boolean isRead = false;

@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ShareDTO {
 
-    private long id;
+    private String id;
 
     private String typePost;
     

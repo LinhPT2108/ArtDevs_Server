@@ -10,8 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.artdevs.domain.entities.user.Notification;
+import com.artdevs.domain.entities.user.User;
 import com.artdevs.repositories.user.NotificationRepository;
 import com.artdevs.services.NotificationService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class NotificationServiceImpl implements NotificationService{
@@ -37,15 +40,29 @@ public class NotificationServiceImpl implements NotificationService{
 	}
 
 	@Override
-	public int countNotificationUnReadByUserId(String userId) {
+	public long countNotificationUnReadByUserId(String userId) {
 		// TODO Auto-generated method stub
-		return 0;
+		return notificationRepository.countByReceiver_UserIdAndIsRead(userId, false);
 	}
 
 	@Override
 	public Notification findById(int id) {
-		// TODO Auto-generated method stub
 		return notificationRepository.findById(id).get();
+	}
+
+	@Transactional
+	@Override
+	public void deleteNotification(Notification notification)throws Exception {
+			notificationRepository.delete(notification);
+	}
+
+	@Override
+	public void updateAllNotificationReadTrueByUser(User user) throws Exception{
+		List<Notification> notifications = notificationRepository.findByReceiver(user);
+		for (Notification n : notifications) {
+			n.setRead(true);
+			notificationRepository.save(n);
+		}
 	}
 
 }

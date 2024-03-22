@@ -101,7 +101,7 @@ public class CommentRestController {
 	}
 
 	@PostMapping("/repcomment/{commentID}")
-	public ResponseEntity<ReplyCommentToGetDTO> postComment(@PathVariable("commentID") long commentID,
+	public ResponseEntity<ReplyCommentToGetDTO> postRepComment(@PathVariable("commentID") long commentID,
 			@RequestPart ReplyCommentToPostDTO repcommentDTO,
 			@RequestPart("listImageofComment") Optional<List<MultipartFile>> listImageofComment) {
 		Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
