@@ -43,6 +43,7 @@ public class AuthenticationService {
 		User user = userrep.findByEmail(authenticationRequest.getEmail()).get();
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
 				authenticationRequest.getPassword()));
+		
 
 		UserDTO userdto = UserMapper.UserConvertToUserDTO(user);
 
