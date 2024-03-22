@@ -101,6 +101,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public Optional<Page<Post>> findPostByUserAndIsDel(User user, boolean del, Pageable pageable) {
 		return postRepository.findByUserAndIsDel(user,del, pageable);
+	}
 // =======
 	public Optional<List<Post>> findPostByUserNonePage(User user) {
 		// TODO Auto-generated method stub
