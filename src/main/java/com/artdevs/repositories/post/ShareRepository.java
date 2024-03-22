@@ -1,5 +1,8 @@
 package com.artdevs.repositories.post;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,4 +18,5 @@ public interface ShareRepository extends JpaRepository<Share, Long> {
 			+ "WHERE r.userShareId = :user AND r.postShareId = :post ")
 	Share findShareByUserIDandPostID(@Param(value = "user") User user, 
 									 @Param(value = "post") Post post);
+	Optional<List<Share>> findByUserShareId(User userShareId);
 }

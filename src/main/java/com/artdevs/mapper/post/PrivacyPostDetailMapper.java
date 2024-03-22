@@ -10,8 +10,6 @@ public class PrivacyPostDetailMapper {
 
     public static PrivacyPostDetailDTO convertToPrivacyPostDetailDTO(PrivacyPostDetail privacyPostDetail) {
         PrivacyPostDetailDTO privacyPostDetailDTO = modelMapper.map(privacyPostDetail, PrivacyPostDetailDTO.class);
-        privacyPostDetailDTO.setPostId(privacyPostDetail.getPost().getPostId());
-        privacyPostDetailDTO.setPrivacyPostId(privacyPostDetail.getPrivacyPost().getId());
         return privacyPostDetailDTO;
     }
 

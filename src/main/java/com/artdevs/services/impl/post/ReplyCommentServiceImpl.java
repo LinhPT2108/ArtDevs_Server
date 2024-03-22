@@ -5,9 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.artdevs.domain.entities.post.PictureOfComment;
 import com.artdevs.domain.entities.post.ReplyComment;
 import com.artdevs.repositories.post.CommentRepository;
+import com.artdevs.repositories.post.PictureOfCommentRepository;
 import com.artdevs.repositories.post.ReplyCommentRepository;
+import com.artdevs.services.CloudinaryService;
+import com.artdevs.services.ImageOfCommentService;
 import com.artdevs.services.ReplyCommentService;
 
 @Service
@@ -17,6 +21,10 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
 	ReplyCommentRepository replyCommentRepository;
 	@Autowired
 	CommentRepository commentRepository;
+    @Autowired
+    CloudinaryService cloudinaryService;
+    @Autowired
+    PictureOfCommentRepository pictureOfCommentRepository;
 
 	@Override
 	public ReplyComment createReplyComment(ReplyComment replyComment) {
@@ -39,6 +47,16 @@ public class ReplyCommentServiceImpl implements ReplyCommentService {
 	@Override
 	public void deleteReplyComment(ReplyComment replyComment) {
 		try {
+			if(!replyComment.getListPictureOfComment().isEmpty()) {
+	    		for (PictureOfComment p : replyComment.getListPictureOfComment()) {
+	    			try {
+	    				pictureOfCommentRepository.delete(p);
+						cloudinaryService.deleteImage(p.getCloudinaryPublicId());
+					} catch (Exception e) {
+						System.out.println(e);
+					}				
+				}
+	    	}
 			replyCommentRepository.delete(replyComment);
 		} catch (Exception e) {
 			// TODO: handle exception

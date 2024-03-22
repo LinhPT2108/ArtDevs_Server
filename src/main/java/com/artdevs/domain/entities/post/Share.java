@@ -2,6 +2,8 @@ package com.artdevs.domain.entities.post;
 
 import java.util.Date;
 
+import org.hibernate.annotations.Nationalized;
+
 import com.artdevs.domain.entities.user.User;
 
 import jakarta.persistence.Column;
@@ -33,6 +35,10 @@ public class Share {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timeCreate;
+	
+	@Column
+	@Nationalized
+	private String content;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")

@@ -3,17 +3,21 @@ package com.artdevs.services;
 import java.util.List;
 
 import com.artdevs.domain.entities.user.Demand;
+import com.artdevs.domain.entities.user.ProgramingLanguage;
 import com.artdevs.domain.entities.user.User;
 
 public interface DemandService {
-    Demand findDemandById(Integer demandId);
+	Demand findDemandById(Integer demandId);
 
-    List<Demand> findAll();
+	List<Demand> findAll();
 
-    Demand saveDemand(Demand demand);
+	Demand saveDemand(Demand demand);
 
-    Demand updateDemand(Demand demand);
+	Demand updateDemand(Demand demand);
 
-    void deleteDemand(Demand demand);
-    List<Demand> findByUser(User user);
+	void deleteDemand(Demand demand);
+
+	List<Demand> findByUser(User user);
+
+	Demand findByUserAndLanguage(User user, ProgramingLanguage language);
 }

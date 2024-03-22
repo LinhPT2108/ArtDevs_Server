@@ -61,8 +61,8 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public Optional<Page<Post>> findPostByUser(User user, Pageable pageable) {
-		return postRepository.findByUser(user, pageable);
+	public Optional<Page<Post>> findByUserAndIsDel(User user,boolean del, Pageable pageable) {
+		return postRepository.findByUserAndIsDel(user,del, pageable);
 	}
 
 	@Override
@@ -90,6 +90,16 @@ public class PostServiceImpl implements PostService {
 	public Optional<List<Post>> findbyKeyword(String keyword) {
 		// TODO Auto-generated method stub
 		return postRepository.findbyKeywordNonePage(keyword);
+	}
+
+	@Override
+	public Optional<Page<Post>> findPostByUser(User user, Pageable pageable) {
+		return postRepository.findByUser(user, pageable);
+	}
+
+	@Override
+	public Optional<Page<Post>> findPostByUserAndIsDel(User user, boolean del, Pageable pageable) {
+		return postRepository.findByUserAndIsDel(user,del, pageable);
 	}
 
 }

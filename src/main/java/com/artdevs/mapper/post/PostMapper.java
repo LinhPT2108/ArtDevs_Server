@@ -10,10 +10,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.artdevs.domain.entities.post.Comment;
 import com.artdevs.domain.entities.post.HashTag;
 import com.artdevs.domain.entities.post.ImageOfPost;
+import com.artdevs.domain.entities.post.Likes;
 import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.post.PrivacyPostDetail;
 import com.artdevs.domain.entities.post.Report;
@@ -26,8 +29,9 @@ import com.artdevs.dto.post.PrivacyPostDetailDTO;
 import com.artdevs.dto.post.UserPostDTO;
 import com.artdevs.mapper.UserMapper;
 import com.artdevs.services.HashTagService;
+import com.artdevs.services.LikesService;
 import com.artdevs.services.UserService;
-import com.artdevs.utils.CustomContructor;
+import com.artdevs.utils.Global;
 
 public class PostMapper {
 
@@ -83,7 +87,7 @@ public class PostMapper {
 
 		PostDTO postdto = modelMapper.map(post, PostDTO.class);
 //		postdto.setListCommentPost(getComment(post));
-		postdto.setUserId(post.getUser().getUserId());
+//		postdto.setUserId(post.getUser().getUserId());
 //		postdto.setListHashtag(getHashtag(post, hashtagSerivce));
 //		postdto.setListImageofPost(getImage(post));
 //		postdto.setTotalLike(gettotalLike(post));
@@ -94,30 +98,59 @@ public class PostMapper {
 		return postdto;
 	}
 
-	public static PostToGetDTO convertoGetDTO(Post post, HashTagService hashtagSerivce) {
-
+	public static PostToGetDTO convertoGetDTO(Post post, HashTagService hashtagSerivce, UserService userService,
+			LikesService likesService) {
 		PostToGetDTO postdto = modelMapper.map(post, PostToGetDTO.class);
 //		postdto.setListCommentPost(getComment(post));
-		postdto.setUserPost(new UserPostDTO(post.getUser().getUserId(),post.getUser().getUsername(),UserMapper.getAvatar(post.getUser(), true),CustomContructor.getFullname(post.getUser())));
+
+		// main
+		// postdto.setUserPost(new
+		// UserPostDTO(post.getUser().getUserId(),post.getUser().getFirstName()+"
+		// "+post.getUser().getMiddleName()+"
+		// "+post.getUser().getLastName(),UserMapper.getAvatar(post.getUser(),true)));
+
+// origin/nguyentcpc04750
+		postdto.setUserPost(new UserPostDTO(Global.safeTrim(post.getUser().getUserId()),
+				Global.safeTrim(post.getUser().getUsername()),
+				Global.safeTrim(UserMapper.getAvatar(post.getUser(), true)),
+				String.join(" ", Global.safeTrim(post.getUser().getFirstName()),
+						Global.safeTrim(post.getUser().getMiddleName()),
+						Global.safeTrim(post.getUser().getLastName()))));
+
 		postdto.setListHashtag(getHashtag(post, hashtagSerivce));
 		postdto.setListImageofPost(getImage(post));
 		postdto.setTotalLike(gettotalLike(post));
 		postdto.setTotalComment(gettotalComment(post));
-//		postdto.setListReportPost(null);
 		postdto.setTotalShare(gettotalShare(post));
 		postdto.setPrivacyPostDetails(getListPrivacyPostDetails(post));
+		postdto.setLikeByUserLogged(isLikeByUserLogged(post.getPostId(), userService, likesService));
+		postdto.setTypePost("post");
 		return postdto;
+	}
+
+	private static boolean isLikeByUserLogged(String postId, UserService userService, LikesService likesService) {
+		Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
+		if (!authenticate.getName().equals("anonymousUser")) {
+			User userLogged = userService.findByEmail(authenticate.getName());
+			Likes likes = likesService.findByPostAndUserLogged(postId, userLogged);
+			if (likes != null) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private static List<PrivacyPostDetailDTO> getListPrivacyPostDetails(Post post) {
 		List<PrivacyPostDetail> privacyPosts = post.getPrivacyPostDetails();
-		List<PrivacyPostDetailDTO> privacyPostDetailDTOs = new ArrayList<>();
+		List<PrivacyPostDetailDTO> newPrivacyPosts = new ArrayList<>();
 		if (privacyPosts != null) {
 			for (PrivacyPostDetail p : privacyPosts) {
-				privacyPostDetailDTOs.add(PrivacyPostDetailMapper.convertToPrivacyPostDetailDTO(p));
+				if (p.isStatus()) {
+					newPrivacyPosts.add(PrivacyPostDetailMapper.convertToPrivacyPostDetailDTO(p));
+				}
 			}
 		}
-		return privacyPostDetailDTOs;
+		return newPrivacyPosts;
 	}
 
 	public static Post convertToPost(PostDTO postdto, UserService userservice) {
@@ -125,17 +158,15 @@ public class PostMapper {
 		Post post = modelMapper.map(postdto, Post.class);
 //		System.out.println( "post userid"+postdto.getUserId());
 		post.setPostId(postid);
-		post.setListLikePost(null);
-		post.setListSharePost(null);
-		post.setListCommentPost(null);
-		post.setListReportPost(null);
 //		post.setUser(setUser(postdto, userservice));
 		return post;
 	}
 
 	private static List<Comment> getComment(Post post) {
-		return post.getListCommentPost().stream().map(cmt -> new Comment(cmt.getId(), cmt.getContent(),
-				cmt.getTimeComment(), cmt.getUserReportId(), post, null, null)).collect(Collectors.toList());
+		return post
+				.getListCommentPost().stream().map(cmt -> new Comment(cmt.getId(), cmt.getContent(),
+						cmt.getTimeComment(), cmt.getUserReportId(), cmt.getUserReceive(), post, null, null))
+				.collect(Collectors.toList());
 	}
 
 	private static List<HashTagDTO> getHashtag(Post post, HashTagService hashtagSerivce) {
@@ -185,9 +216,8 @@ public class PostMapper {
 
 	}
 
-	private static User setUser(PostDTO postdto, UserService userservice) {
-		System.out.println(userservice.findUserById(postdto.getUserId()));
-		return userservice.findUserById(postdto.getUserId());
-	}
-
+//	private static User setUser(PostDTO postdto, UserService userservice) {
+//		System.out.println(userservice.findUserById(postdto.getUserId()));
+//		return userservice.findUserById(postdto.getUserId());
+//	}
 }

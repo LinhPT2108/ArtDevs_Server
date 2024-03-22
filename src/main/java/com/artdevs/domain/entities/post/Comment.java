@@ -42,10 +42,17 @@ public class Comment {
 	@Column
 	private Date timeComment;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private User userReportId;
 
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "userReceive")
+	private User userReceive;
+	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "postId")
 	private Post postCommentId;
@@ -57,4 +64,14 @@ public class Comment {
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "pictureOfCommentId")
 	private List<PictureOfComment> listPictureOfComment;
+
+	@Override
+	public String toString() {
+		return "Comment [id=" + id + ", content=" + content + ", timeComment=" + timeComment + ", userSend="
+				+ userReportId.getUserId() + ", userReceive=" + userReceive.getUserId() + ", postCommentId=" + postCommentId.getPostId()
+				+ ", listReplyCommentPost=" + listReplyCommentPost.size() + ", listPictureOfComment=" + listPictureOfComment.size()
+				+ "]";
+	}
+	
+	
 }

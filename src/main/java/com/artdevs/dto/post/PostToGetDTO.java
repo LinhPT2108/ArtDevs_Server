@@ -24,5 +24,7 @@ public class PostToGetDTO {
 	private List<ImageOfPostDTO> listImageofPost;
 	private List<PrivacyPostDetailDTO> privacyPostDetails;
 	private List<HashTagDTO> listHashtag;
+	private String typePost;
+	private boolean isLikeByUserLogged;
 	private boolean isDel;
 }
