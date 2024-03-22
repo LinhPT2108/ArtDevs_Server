@@ -1,13 +1,34 @@
 package com.artdevs.utils;
 
-public class Global { 
-	public static final String path_api= "/api";
+import java.util.Random;
+
+import com.fasterxml.jackson.databind.util.ArrayBuilders.LongBuilder;
+
+public class Global {
+	public static final String path_api = "/api";
 	public static final int size_page = 8;
+
 	public static final String safeTrim(String input) {
-	    if (input == null) {
-	        return ""; 
-	    } else {
-	        return input.trim(); 
-	    }
+		if (input == null) {
+			return "";
+		} else {
+			return input.trim();
+		}
 	}
+
+	public static  String CHAR_LIST = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	public static  int MIN_LENGTH = 8;
+	public static  int MAX_LENGTH = 10;
+
+	public static final String generateRandomCode() {
+		Random random = new Random();
+		int length = random.nextInt(MAX_LENGTH - MIN_LENGTH + 1) + MIN_LENGTH;
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < length; i++) {
+			int index = random.nextInt(CHAR_LIST.length());
+			sb.append(CHAR_LIST.charAt(index));
+		}
+		return sb.toString();
+	}
+	
 }

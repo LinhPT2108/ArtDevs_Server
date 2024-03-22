@@ -19,7 +19,10 @@ import com.artdevs.domain.entities.post.Share;
 import com.artdevs.dto.post.ShareDTO;
 import com.artdevs.mapper.post.ShareMapper;
 import com.artdevs.repositories.post.ShareRepository;
+import com.artdevs.services.HashTagService;
+import com.artdevs.services.LikesService;
 import com.artdevs.services.ShareService;
+import com.artdevs.services.UserService;
 import com.artdevs.utils.Global;
 
 @RestController
@@ -31,11 +34,18 @@ public class ShareRestController {
 
 	@Autowired
 	ShareRepository shareRepository;
+	@Autowired
+	HashTagService hashtagSerivce;
+	@Autowired
+	UserService userService;
+	@Autowired
+	LikesService likesService;
 
 	@PostMapping("/share/{postid}")
 	public ResponseEntity<?> addShare(@PathVariable("postid") String postid, @RequestParam("content") String content) {
 		try {
-			return ResponseEntity.ok(shareService.addShare(postid, content));
+			return ResponseEntity.ok(ShareMapper.convertToShareDTO(shareService.addShare(postid, content),
+					hashtagSerivce, userService, likesService));
 		} catch (Exception e) {
 			System.out.println(e);
 			return ResponseEntity.ok(false);

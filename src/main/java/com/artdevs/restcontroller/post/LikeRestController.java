@@ -55,19 +55,6 @@ public class LikeRestController {
 
 			User user = userService.findByEmail(auth.getName());
 			boolean responseLike = likeService.addLike(post, user);
-			if (responseLike) {
-				String fullname = String.join(" ", Global.safeTrim(user.getFirstName()),
-						Global.safeTrim(user.getMiddleName()), Global.safeTrim(user.getLastName()));
-				Notification notificationSave = new Notification();
-				notificationSave.setCreateDate(new Date());
-				notificationSave.setMessage(fullname + SUCCESSFUL_LIKE_POST_MESSAGE + "bạn");
-				notificationSave.setSender(user);
-				notificationSave.setReceiver(post.getUser());
-				notificationSave.setRead(false);
-				notificationSave.setType("post");
-				notificationSave.setPostId(postID);
-				notificationService.createNotification(notificationSave);
-			}
 			return ResponseEntity.ok(responseLike);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

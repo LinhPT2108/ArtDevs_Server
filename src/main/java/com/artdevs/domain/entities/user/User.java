@@ -114,7 +114,7 @@ public class User implements UserDetails {
 	private Role role;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private List<Picture> userPicture;
 
 	@JsonIgnore
