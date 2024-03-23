@@ -30,6 +30,8 @@ public interface UserRepository extends JpaRepository<User, String> {
 
 	List<User> findByRoleAndIsReadyAndIsOnline(Role role, Boolean Ready, Boolean online);
 
+	List<User> findByRoleAndIsReady(Role role, Boolean Ready);
+
 	Optional<User> findByEmailAndProvider(String email, String provider);
 
 	// Câu query dùng để truy vấn cho gợi ý bạn bè cùng demand

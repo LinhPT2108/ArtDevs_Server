@@ -47,7 +47,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Page<Comment> findpagecommentbyPostID(String postid, int pagenumber) {
-        return commentRepository.findPageByPostCommentId(postid, PageRequest.of(pagenumber, 4));
+        return commentRepository.findPageByPostCommentId(postid, PageRequest.of(pagenumber, Global.size_page));
     }
 
     @Override
