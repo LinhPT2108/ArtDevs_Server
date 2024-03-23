@@ -135,11 +135,11 @@ public class PostRestController {
 			System.out.println("Check End" + end);
 			System.out.println("Check start" + start);
 			System.out.println("Check ListSize" + listPostFriend.size());
-			if(start > end) {
+			if (start > end) {
 				start = end;
 			}
 			List<Object> sublist = listPostFriend.subList(start, end);
-			
+
 			Pageable pageable = PageRequest.of(currentPage, pageSize);
 			Page<Object> postPage = new PageImpl<>(sublist, pageable, listPostFriend.size());
 			return ResponseEntity.ok(postPage.get().filter(t -> {
@@ -147,11 +147,13 @@ public class PostRestController {
 					return !((Post) t).isDel() && ((Post) t).getPrivacyPostDetails().stream()
 							.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1);
 				} else {
-					return true; 
+					return true;
 				}
 			}).map(t -> {
 				if (t instanceof Post) {
-					return (Object) PostMapper.convertoGetDTO((Post) t, hashtagSerivce, userservice, likesService);
+					return (Object) ShareMapper.convertToShareDTOByPost(
+							PostMapper.convertoGetDTO((Post) t, hashtagSerivce, userservice, likesService),
+							hashtagSerivce, userservice, likesService);
 				} else {
 					return (Object) ShareMapper.convertToShareDTO((Share) t, hashtagSerivce, userservice, likesService);
 				}
@@ -232,13 +234,13 @@ public class PostRestController {
 		int end = Math.min((start + pageable.getPageSize()), listPostNewsFeed.size());
 		System.out.println("229: " + listPostNewsFeed.size());
 		for (Post post : listPostNewsFeed) {
-			if(!post.getUser().getUserId().equals(userLogged.getUserId())
-					&& !post.getPrivacyPostDetails().isEmpty()&& post.getUser().getRole().getId()!=1) {
-				System.out.println(post.toString());				
+			if (!post.getUser().getUserId().equals(userLogged.getUserId()) && !post.getPrivacyPostDetails().isEmpty()
+					&& post.getUser().getRole().getId() != 1) {
+				System.out.println(post.toString());
 			}
 		}
 // <<<<<<< HEAD
-		
+
 // 		List<PostToGetDTO> listPosts = listPostNewsFeed.stream()
 // 				.filter(t -> t.getUser().getRole().getId() == 2 && t.getUser().getUserId() != userLogged.getUserId()
 // 				&& !t.isDel()
@@ -246,7 +248,7 @@ public class PostRestController {
 // 						.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1))
 // 		.distinct().map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce, userservice, likesService))
 // 		.collect(Collectors.toList());
-		
+
 // 		return ResponseEntity.ok(listPosts.stream()
 // 				.map(t -> ShareMapper.convertToShareDTOByPost(t, hashtagSerivce, userservice, likesService))
 // 				.collect(Collectors.toList()));
@@ -258,7 +260,7 @@ public class PostRestController {
 			if (end >= ListSize) {
 				System.out.println("lon hon");
 				int EndTemp = listPostNewsFeed.size();
-				if(start>=ListSize) {
+				if (start >= ListSize) {
 					start = ListSize;
 				}
 				System.out.println(start);
@@ -271,8 +273,8 @@ public class PostRestController {
 										.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1))
 						.distinct().map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce, userservice, likesService))
 						.collect(Collectors.toList()).stream()
-				.map(t -> ShareMapper.convertToShareDTOByPost(t, hashtagSerivce, userservice, likesService))
-				.collect(Collectors.toList()));
+						.map(t -> ShareMapper.convertToShareDTOByPost(t, hashtagSerivce, userservice, likesService))
+						.collect(Collectors.toList()));
 			} else {
 				System.out.println("small");
 				Page<Post> postPage = new PageImpl<>(listPostNewsFeed.subList(start, end), pageable,
@@ -284,8 +286,8 @@ public class PostRestController {
 										.anyMatch(d -> d.isStatus() && d.getPrivacyPost().getId() == 1))
 						.distinct().map(t -> PostMapper.convertoGetDTO(t, hashtagSerivce, userservice, likesService))
 						.collect(Collectors.toList()).stream()
-				.map(t -> ShareMapper.convertToShareDTOByPost(t, hashtagSerivce, userservice, likesService))
-				.collect(Collectors.toList()));
+						.map(t -> ShareMapper.convertToShareDTOByPost(t, hashtagSerivce, userservice, likesService))
+						.collect(Collectors.toList()));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -326,11 +328,11 @@ public class PostRestController {
 			for (Post post : list.get()) {
 				listpost.add(PostMapper.convertoGetDTO(post, hashtagSerivce, userservice, likesService));
 			}
-			
+
 			List<ShareDTO> listposts = listpost.stream()
 					.map(t -> ShareMapper.convertToShareDTOByPost(t, hashtagSerivce, userservice, likesService))
 					.collect(Collectors.toList());
-			
+
 			List<Share> shares = shareService.findByUser(user).orElse(null);
 
 			List<Object> mergedList = new ArrayList<>();
@@ -357,12 +359,14 @@ public class PostRestController {
 			return ResponseEntity.ok(HttpStatus.SC_UNAUTHORIZED);
 		}
 	}
-	
+
 	@GetMapping("/post-by-mentor-logged/{mentorid}")
-	public ResponseEntity<?> getPostUserLogged(@PathVariable("mentorid") String mentorid,@RequestParam("page") Optional<Integer> p) {
+	public ResponseEntity<?> getPostUserLogged(@PathVariable("mentorid") String mentorid,
+			@RequestParam("page") Optional<Integer> p) {
 		User user = userservice.findUserById(mentorid);
 		if (user != null) {
-			// Pageable pageable = PageRequest.of(p.orElse(0), 7, Sort.by("time").descending());
+			// Pageable pageable = PageRequest.of(p.orElse(0), 7,
+			// Sort.by("time").descending());
 			Pageable pageable = PageRequest.of(p.orElse(0), Global.size_page, Sort.by("time").descending());
 			Optional<Page<Post>> list = postsv.findPostByUser(user, pageable);
 			List<PostToGetDTO> listpost = new ArrayList<>();
@@ -469,7 +473,9 @@ public class PostRestController {
 
 				postsave.setListHashtag(hashTags);
 			}
-			return ResponseEntity.ok(ShareMapper.convertToShareDTOByPost(PostMapper.convertoGetDTO(postsave, hashtagSerivce, userservice, likesService), hashtagSerivce, userservice, likesService));
+			return ResponseEntity.ok(ShareMapper.convertToShareDTOByPost(
+					PostMapper.convertoGetDTO(postsave, hashtagSerivce, userservice, likesService), hashtagSerivce,
+					userservice, likesService));
 		} catch (Exception e) {
 			System.out.println(e);
 			return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).build();
@@ -512,7 +518,7 @@ public class PostRestController {
 //			postsave.setListHashtag(hashTags);
 //		}
 //		return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce, userservice, likesService));
-		
+
 	@PutMapping("/update-post/{id}")
 	public ResponseEntity<?> putMethodName(@PathVariable("id") String id, @RequestPart("postDTO") PostDTO postdto,
 			@RequestPart("listImageofPost") Optional<List<MultipartFile>> listImageofPost) {
@@ -522,14 +528,14 @@ public class PostRestController {
 		}
 		try {
 			User user = userservice.findByEmail(authenticate.getName());
-			
+
 //			if (listImageofPost.isPresent()) {
 //				System.out.println(listImageofPost.get().size());
 //			} else {
 //				System.out.println("empty pic");
 //			}
 			Post postUpdate = postsv.findPostById(postdto.getPostId());
-			System.out.println("chekc 123123: "+privacyPostDetailService.findByPost(postUpdate).toString());
+			System.out.println("chekc 123123: " + privacyPostDetailService.findByPost(postUpdate).toString());
 			postUpdate.setPostId(postdto.getPostId());
 			postUpdate.setContent(postdto.getContent());
 			postUpdate.setUser(user);
@@ -539,8 +545,9 @@ public class PostRestController {
 			// update privacy detail
 			List<PrivacyPostDetail> privacyPostDetail = privacyPostDetailService.findByPost(postUpdate).stream()
 					.filter(t -> t.isStatus()).collect(Collectors.toList());
-			System.out.println("chekc 123123: "+privacyPostDetail.toString());
-			if (privacyPostDetail.size()>0&&privacyPostDetail.get(0).getPrivacyPost().getId() != postdto.getPrivacyPostDetails()) {
+			System.out.println("chekc 123123: " + privacyPostDetail.toString());
+			if (privacyPostDetail.size() > 0
+					&& privacyPostDetail.get(0).getPrivacyPost().getId() != postdto.getPrivacyPostDetails()) {
 				for (PrivacyPostDetail p : privacyPostDetail) {
 					p.setStatus(false);
 					privacyPostDetailService.savePrivacyPostDetail(p);
@@ -667,9 +674,11 @@ public class PostRestController {
 				hashtagSerivce.deleteHashTagByPost(postsave);
 			}
 			Post postReturn = postsv.findPostById(postsave.getPostId());
-			
-			System.out.println("size ht post: "+postReturn.getListHashtag().size());
-			return ResponseEntity.ok(ShareMapper.convertToShareDTOByPost(PostMapper.convertoGetDTO(postsave, hashtagSerivce, userservice, likesService), hashtagSerivce, userservice, likesService));
+
+			System.out.println("size ht post: " + postReturn.getListHashtag().size());
+			return ResponseEntity.ok(ShareMapper.convertToShareDTOByPost(
+					PostMapper.convertoGetDTO(postsave, hashtagSerivce, userservice, likesService), hashtagSerivce,
+					userservice, likesService));
 // =======
 // 			System.out.println("size ht post: " + postReturn.getListHashtag().size());
 // 			return ResponseEntity.ok(PostMapper.convertoGetDTO(postsave, hashtagSerivce, userservice, likesService));

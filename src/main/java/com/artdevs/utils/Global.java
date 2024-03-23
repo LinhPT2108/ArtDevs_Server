@@ -1,5 +1,6 @@
 package com.artdevs.utils;
 
+import java.util.Date;
 import java.util.Random;
 
 import com.fasterxml.jackson.databind.util.ArrayBuilders.LongBuilder;
@@ -17,8 +18,8 @@ public class Global {
 	}
 
 	public static  String CHAR_LIST = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-	public static  int MIN_LENGTH = 8;
-	public static  int MAX_LENGTH = 10;
+	public static  int MIN_LENGTH = 2;
+	public static  int MAX_LENGTH =4;   
 
 	public static final String generateRandomCode() {
 		Random random = new Random();
@@ -28,6 +29,7 @@ public class Global {
 			int index = random.nextInt(CHAR_LIST.length());
 			sb.append(CHAR_LIST.charAt(index));
 		}
+		sb.append(System.currentTimeMillis());
 		return sb.toString();
 	}
 	

@@ -34,7 +34,7 @@ public class ShareServiceImpl implements ShareService {
 	PostService postservice;
 
 	@Override
-	public Share findShareById(Long shareId) {
+	public Share findShareById(String shareId) {
 		Optional<Share> shareOptional = shareRepository.findById(shareId);
 		return shareOptional.orElse(null);
 	}

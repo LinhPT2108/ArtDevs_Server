@@ -19,6 +19,7 @@ import com.artdevs.domain.entities.post.ImageOfPost;
 import com.artdevs.domain.entities.post.Likes;
 import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.post.PrivacyPostDetail;
+import com.artdevs.domain.entities.post.ReplyComment;
 import com.artdevs.domain.entities.post.Report;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.dto.post.HashTagDTO;
@@ -212,7 +213,17 @@ public class PostMapper {
 	}
 
 	private static Long gettotalComment(Post post) {
-		return post.getListCommentPost() != null ? (long) post.getListCommentPost().size() : 0;
+		int total= 0;
+		if(post.getListCommentPost()!=null) {
+			List<Comment> comments = post.getListCommentPost();			
+			for (Comment c : comments) {
+				if(c.getListReplyCommentPost()!=null) {
+					total+=c.getListReplyCommentPost().size();
+				}
+			}
+		}
+		System.out.println(post.getListCommentPost().size());
+		return post.getListCommentPost() != null ? (long) post.getListCommentPost().size()+total : 0;
 
 	}
 
