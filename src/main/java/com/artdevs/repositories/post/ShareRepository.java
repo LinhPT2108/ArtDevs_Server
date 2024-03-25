@@ -13,7 +13,7 @@ import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.post.Share;
 import com.artdevs.domain.entities.user.User;
 @Repository
-public interface ShareRepository extends JpaRepository<Share, Long> {
+public interface ShareRepository extends JpaRepository<Share, String> {
 	@Query(value = "" + "SELECT r FROM Share AS r "
 			+ "WHERE r.userShareId = :user AND r.postShareId = :post ")
 	Share findShareByUserIDandPostID(@Param(value = "user") User user, 

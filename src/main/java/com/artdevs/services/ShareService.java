@@ -7,7 +7,7 @@ import com.artdevs.domain.entities.post.Share;
 import com.artdevs.domain.entities.user.User;
 
 public interface ShareService {
-    Share findShareById(Long shareId);
+    Share findShareById(String shareId);
 
     List<Share> findAll();
 
