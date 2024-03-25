@@ -3,6 +3,8 @@ package com.artdevs.dto.message;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,19 +16,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class MessageDTO {
-
-    private String message;
-
-    private String subject;
-
-    private Date timeMessage;
-
-    private int relationShipId;
-
-    private String formUserId;
-
-    private String toUserId;
-
-    private List<PictureOfMessageDTO> pictureOfMessages;
+public class MessageToPostDTO {
+//	 private MultipartFile[] pictureOfMessages;
+	 private String subject;
+	 private String message;
+	 private String formUserId;
+	 private String toUserId;
 }

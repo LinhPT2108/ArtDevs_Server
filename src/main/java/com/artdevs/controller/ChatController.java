@@ -1,7 +1,5 @@
 package com.artdevs.controller;
 
-import static com.artdevs.utils.ReponseMessageConstants.SUCCESSFUL_LIKE_POST_MESSAGE;
-
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +11,10 @@ import org.springframework.stereotype.Controller;
 
 import com.artdevs.domain.entities.user.Notification;
 import com.artdevs.domain.entities.user.User;
-import com.artdevs.dto.message.MessageDTO;
 import com.artdevs.dto.user.NotificationDTO;
 import com.artdevs.mapper.NotificationMapper;
 import com.artdevs.services.NotificationService;
 import com.artdevs.services.UserService;
-import com.artdevs.utils.Global;
 
 @Controller
 public class ChatController {
@@ -48,4 +44,10 @@ public class ChatController {
 
 		messagingTemplate.convertAndSendToUser(userId, "/notification", NotificationMapper.convertToGetDto(notificationSaveReturn));
 	}
+	
+//	@MessageMapping("/send-message/{userId}")
+//	public void sendMessageToUser(@Payload MessageToPostDTO messageToPostDTO, @DestinationVariable String userId) {
+//		System.out.println(messageToPostDTO.toString());
+//		messagingTemplate.convertAndSendToUser(userId, "/message", messageToPostDTO);
+//	}
 }

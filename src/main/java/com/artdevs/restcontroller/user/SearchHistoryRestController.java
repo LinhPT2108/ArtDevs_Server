@@ -60,7 +60,7 @@ public class SearchHistoryRestController {
 		List<Post> posts = new ArrayList<>();
 
 		String[] listKeyword = keyword.split(" ");
-
+ 
 		Pageable pageable = PageRequest.of(p.orElse(0), Global.size_page, Sort.by("time").descending());
 		for (String s : listKeyword) {
 			System.out.println(s);

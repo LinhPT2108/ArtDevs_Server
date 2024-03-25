@@ -232,13 +232,13 @@ public class PostRestController {
 		int start = (int) pageable.getOffset();
 		int ListSize = listPostNewsFeed.size();
 		int end = Math.min((start + pageable.getPageSize()), listPostNewsFeed.size());
-		System.out.println("229: " + listPostNewsFeed.size());
-		for (Post post : listPostNewsFeed) {
-			if (!post.getUser().getUserId().equals(userLogged.getUserId()) && !post.getPrivacyPostDetails().isEmpty()
-					&& post.getUser().getRole().getId() != 1) {
-				System.out.println(post.toString());
-			}
-		}
+//		System.out.println("229: " + listPostNewsFeed.size());
+//		for (Post post : listPostNewsFeed) {
+//			if (!post.getUser().getUserId().equals(userLogged.getUserId()) && !post.getPrivacyPostDetails().isEmpty()
+//					&& post.getUser().getRole().getId() != 1) {
+//				System.out.println(post.toString());
+//			}
+//		}
 // <<<<<<< HEAD
 
 // 		List<PostToGetDTO> listPosts = listPostNewsFeed.stream()
@@ -258,12 +258,12 @@ public class PostRestController {
 // 		System.out.println("Check ListSize" + ListSize);
 		try {
 			if (end >= ListSize) {
-				System.out.println("lon hon");
+//				System.out.println("lon hon");
 				int EndTemp = listPostNewsFeed.size();
 				if (start >= ListSize) {
 					start = ListSize;
 				}
-				System.out.println(start);
+//				System.out.println(start);
 				Page<Post> postPage = new PageImpl<>(listPostNewsFeed.subList(start, EndTemp), pageable,
 						listPostNewsFeed.size());
 				return ResponseEntity.ok(postPage.stream()
@@ -409,7 +409,7 @@ public class PostRestController {
 		}
 		try {
 			User user = userservice.findByEmail(authenticate.getName());
-			System.out.println(postdto.toString());
+//			System.out.println(postdto.toString());
 			if (listImageofPost.isPresent()) {
 				System.out.println(listImageofPost.get().size());
 			} else {

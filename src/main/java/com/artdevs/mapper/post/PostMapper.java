@@ -222,7 +222,6 @@ public class PostMapper {
 				}
 			}
 		}
-		System.out.println(post.getListCommentPost().size());
 		return post.getListCommentPost() != null ? (long) post.getListCommentPost().size()+total : 0;
 
 	}
