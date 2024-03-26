@@ -28,17 +28,16 @@ public interface UserService {
 	User updateUser(User user);
 
 	void deleteUser(User user);
-	
 
-    Optional<Page<User>> findUserByKeyword(String keyword, Pageable pageable);
-    
-    Optional<Page<User>> findMentorByKeyword(String keyword, Pageable pageable);
+	Optional<Page<User>> findUserByKeyword(String keyword, Pageable pageable);
+
+	Optional<Page<User>> findMentorByKeyword(String keyword, Pageable pageable);
 
 	List<User> findMentor();
-	
-	List<User> FindMentorIsReady();
-	
 
+	List<User> findUserDemand();
+
+	List<User> FindMentorIsReady();
 
 	Boolean SendMatchMentor(String mentorID);
 

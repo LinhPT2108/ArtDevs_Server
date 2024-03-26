@@ -1,5 +1,6 @@
 package com.artdevs.dto.user;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.annotations.Nationalized;
@@ -19,11 +20,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class UserDTO {
 	
 	private String userId;
@@ -38,13 +41,9 @@ public class UserDTO {
 
 	private String ward;
 
-	private boolean isCreadentialsNonExprired;
-
-	private boolean isDelete;
-
 	private String email;
-
-	private boolean isEnabled;
+	
+	private Date birthday;
 
 	private String firstName;
 
@@ -55,6 +54,8 @@ public class UserDTO {
 	private String isOnline;
 
 	private String password;
+	
+	private Integer Gender;
 
 	private String provider;
 

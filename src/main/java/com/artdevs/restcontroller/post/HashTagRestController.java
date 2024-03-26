@@ -24,9 +24,6 @@ public class HashTagRestController {
     @Autowired
     HashTagService hashTagService;
 
-    @Autowired
-    HashtagRepository hashtagRepository;
-
     @PostMapping("/hashtag")
     public ResponseEntity<HashTag> postHashTag(@RequestBody HashTagDTO hashTagDTO) {
         return ResponseEntity.ok(hashTagService.saveHashTag(HashTagMapper.convertToHashTag(hashTagDTO)));
@@ -35,7 +32,7 @@ public class HashTagRestController {
     @GetMapping("/hashtag")
     public ResponseEntity<List<HashTagDTO>> getHashTag() {
         List<HashTagDTO> listHashTagDTO = new ArrayList<>();
-        List<HashTag> lisHashTag = hashtagRepository.findAll();
+        List<HashTag> lisHashTag = hashTagService.findAll();
         for (HashTag hashTag : lisHashTag) {
             listHashTagDTO.add(HashTagMapper.convertToHashTagDTO(hashTag));
         }

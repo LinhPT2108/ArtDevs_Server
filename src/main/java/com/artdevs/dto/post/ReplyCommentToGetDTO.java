@@ -22,7 +22,9 @@ public class ReplyCommentToGetDTO {
 
     private Date timeComment;
 
-    private String UserID;
+    private UserPostDTO UserID;
+    
+    private UserPostDTO userReceiveDto;
 
     private Long commentID;
 }

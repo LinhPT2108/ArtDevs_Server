@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import com.artdevs.utils.Global;
 
 @RestController
 @RequestMapping(Global.path_api)
+@CrossOrigin("*")
 public class PrivacyPostRestController {
 	@Autowired
 	PrivacyPostDetailService privacyPostDetailService;
@@ -29,7 +31,7 @@ public class PrivacyPostRestController {
 	PrivacyPostService privacyPostService;
 	
 	@PutMapping("/update-privacy-post/{postId}")
-	public ResponseEntity<Boolean> putMethodName(@PathVariable("postId") String postId, @RequestParam("privacyPostId") String privacyPostId) {
+	public ResponseEntity<Boolean> putMethodName(@PathVariable("postId") String postId, @RequestParam("namePrivacy") String namePrivacy) {
 		try {
 			Post post = postService.findPostById(postId);
 			List<PrivacyPostDetail> privacyPostDetail = privacyPostDetailService.findByPost(post);
@@ -41,7 +43,7 @@ public class PrivacyPostRestController {
 			privacyPostDetailSave.setCreateDate(new Date());
 			privacyPostDetailSave.setPost(post);
 			privacyPostDetailSave.setStatus(true); 
-			privacyPostDetailSave.setPrivacyPost(privacyPostService.findById(Long.valueOf(privacyPostId)));
+			privacyPostDetailSave.setPrivacyPost(privacyPostService.findByNamePrivacy(namePrivacy));
 			privacyPostDetailService.savePrivacyPostDetail(privacyPostDetailSave);
 			return ResponseEntity.ok(true);
 		} catch (Exception e) {

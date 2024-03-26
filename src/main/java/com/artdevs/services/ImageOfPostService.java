@@ -14,6 +14,8 @@ public interface ImageOfPostService {
     ImageOfPost saveImageOfPost(String postId, MultipartFile file) throws Exception;
 
     ImageOfPost updateImageOfPost(ImageOfPost imageofpost);
+    
+    ImageOfPost findImageOfPostByUrl(String imageUrl);
 
     void deleteImageOfPost(ImageOfPost imageofpost);
 }

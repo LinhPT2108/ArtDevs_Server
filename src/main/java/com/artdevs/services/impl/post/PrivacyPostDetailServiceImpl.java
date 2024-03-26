@@ -1,6 +1,7 @@
 package com.artdevs.services.impl.post;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,11 @@ public class PrivacyPostDetailServiceImpl implements PrivacyPostDetailService{
 	public PrivacyPostDetail savePrivacyPostDetail(PrivacyPostDetail privacyPostDetail) {
 		// TODO Auto-generated method stub
 		return privacyPostDetailRespository.save(privacyPostDetail);
+	}
+
+	@Override
+	public Optional<PrivacyPostDetail> findStatusAndPost(boolean status, Post post) {
+		return privacyPostDetailRespository.findByStatusAndPost(status, post);
 	}
 
 }

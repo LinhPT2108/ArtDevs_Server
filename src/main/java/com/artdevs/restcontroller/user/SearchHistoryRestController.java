@@ -27,6 +27,7 @@ import com.artdevs.mapper.post.DetailHashTagMapper;
 import com.artdevs.mapper.post.PostMapper;
 import com.artdevs.services.DetailHashTagService;
 import com.artdevs.services.HashTagService;
+import com.artdevs.services.LikesService;
 import com.artdevs.services.PostService;
 import com.artdevs.services.SearchHistoryService;
 import com.artdevs.services.UserService;
@@ -49,6 +50,9 @@ public class SearchHistoryRestController {
 
 	@Autowired
 	DetailHashTagService detailHashTagService;
+	
+	@Autowired
+	LikesService likesService;
 
 	@GetMapping("/post")
 	public ResponseEntity<?> getPostByKeyword(@RequestParam String keyword, @RequestParam("page") Optional<Integer> p) {
@@ -56,7 +60,7 @@ public class SearchHistoryRestController {
 		List<Post> posts = new ArrayList<>();
 
 		String[] listKeyword = keyword.split(" ");
-
+ 
 		Pageable pageable = PageRequest.of(p.orElse(0), Global.size_page, Sort.by("time").descending());
 		for (String s : listKeyword) {
 			System.out.println(s);
@@ -69,7 +73,7 @@ public class SearchHistoryRestController {
 		SearchHistory SearchHistorySave = searchHistoryService.saveSearchHistory(keyword);
 		List<PostToGetDTO> postToGetDTOs = new ArrayList<>();
 		for (Post post : posts) {
-			postToGetDTOs.add(PostMapper.convertoGetDTO(post, hashTagService));
+			postToGetDTOs.add(PostMapper.convertoGetDTO(post, hashTagService, userService, likesService));
 		}
 		if (SearchHistorySave != null) {
 			return ResponseEntity.ok(postToGetDTOs);

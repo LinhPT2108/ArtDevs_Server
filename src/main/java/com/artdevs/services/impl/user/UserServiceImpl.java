@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
 		User userlogin = findByEmail(auth.getName());
 		List<User> result = new ArrayList<>();
 		Role role = rolerepository.findById(3).get();
-		List<User> listmentor = userRepository.findByRole(role);
+		List<User> listmentor = userRepository.findByRoleAndIsReady(role, false);
 		List<ProgramingLanguage> demandOfUserLogin = new ArrayList<>();
 
 		for (Demand demand : userlogin.getUserDemand()) {

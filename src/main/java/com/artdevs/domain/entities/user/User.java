@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.artdevs.domain.entities.message.Message;
 import com.artdevs.domain.entities.message.RelationShip;
 import com.artdevs.domain.entities.post.Comment;
+import com.artdevs.domain.entities.post.DetailHashtag;
 import com.artdevs.domain.entities.post.Likes;
 import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.post.Report;
@@ -120,9 +121,13 @@ public class User implements UserDetails {
 	private Role role;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private List<Picture> userPicture;
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "userCreate")
+	private List<DetailHashtag> userDetailHashtag;
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Log> userLog;
@@ -242,14 +247,13 @@ public class User implements UserDetails {
 		return true;
 	}
 
-	public User(String userId, String email, String firstName, String provider, String profilePicUrl, String username,
+	public User(String userId, String email, String firstName, String provider, String username,
 			Role role) {
 		super();
 		this.userId = userId;
 		this.email = email;
 		this.firstName = firstName;
 		this.provider = provider;
-		
 		this.username = username;
 		this.role = role;
 	}

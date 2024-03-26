@@ -24,14 +24,6 @@ public class RelationShipDTO {
 
     private Date timeRelation;
 
-//    private String relationShipActionUser;
-//
-//    private String relationShipUserOneId;
-//
-//    private String relatioShipUserTwoId;
-
-//    private List<MessageDTO> listRelationMessage;
-
     private UserGetRelationDTO userAction;
 
     private String UserID1;

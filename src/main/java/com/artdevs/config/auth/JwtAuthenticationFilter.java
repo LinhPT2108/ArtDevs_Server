@@ -5,11 +5,12 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,6 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,36 +37,37 @@ import lombok.RequiredArgsConstructor;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private static final String secret_key = "123";
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		String authorizationHeader = request.getHeader(AUTHORIZATION);
 		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
 			try {
-				
+
 				String token = authorizationHeader.substring("Bearer ".length());
-				System.out.println("token: "+ token);
+				System.out.println("token: " + token);
 				Algorithm algorithm = Algorithm.HMAC256(secret_key.getBytes());
 				JWTVerifier verifier = JWT.require(algorithm).build();
 				DecodedJWT decodedJWT = verifier.verify(token);
 				String username = decodedJWT.getSubject();
-				String[] roles = null;
+//				String[] roles = null;
 				System.out.println(decodedJWT.getClaim("role").toString());
-				if (decodedJWT.getClaim("role") != null) {
-				    roles = new String[] {decodedJWT.getClaim("role").toString().replace("\"", "")};
-				} else {
-				    roles = new String[]{"ROLE_DEFAULT"};
-				}
-				Collection<GrantedAuthority> authorities = new ArrayList<>();
-				Arrays.stream(roles).forEach(role -> {
-					authorities.add(new SimpleGrantedAuthority(role));
-				});
-				UsernamePasswordAuthenticationToken uToken = new UsernamePasswordAuthenticationToken(username,
-						null,authorities);
+
+				Claim roleClaim = decodedJWT.getClaim("role");
+				Set<String> roles = (roleClaim != null) ? Collections.singleton(roleClaim.asString().replace("\"", ""))
+						: Collections.singleton("ROLE_DEFAULT");
+
+				Collection<GrantedAuthority> authorities = roles.stream().map(SimpleGrantedAuthority::new)
+						.collect(Collectors.toList());
+
+				UsernamePasswordAuthenticationToken uToken = new UsernamePasswordAuthenticationToken(username, null,
+						authorities);
 				SecurityContextHolder.getContext().setAuthentication(uToken);
 				filterChain.doFilter(request, response);
-				System.out.println("ra k: "+decodedJWT.getExpiresAt());
-				
+
+				System.out.println("ra k: " + decodedJWT.getExpiresAt());
+
 			} catch (Exception e) {
 				response.setHeader("error", e.getMessage());
 				response.setStatus(FORBIDDEN.value());
@@ -73,7 +76,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				response.setContentType(APPLICATION_JSON_VALUE);
 				new ObjectMapper().writeValue(response.getOutputStream(), error);
 				System.out.println("Lỗi không");
-				System.out.println(e);
+				System.out.println(">93: "+e);
 			}
 		} else {
 			filterChain.doFilter(request, response);

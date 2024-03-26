@@ -15,6 +15,6 @@ import com.artdevs.domain.entities.user.User;
 public interface SkillRepository extends JpaRepository<Skill, Integer> {
 	@Query("SELECT c FROM Skill c WHERE c.language.LanguageName = :languageName")
 	Skill findByLanguageName(String languageName);
-
+	
 	List<Skill> findByUser(User user);
 }

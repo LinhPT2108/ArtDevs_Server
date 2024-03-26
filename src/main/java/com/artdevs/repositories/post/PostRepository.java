@@ -14,7 +14,9 @@ import com.artdevs.domain.entities.post.Post;
 import com.artdevs.domain.entities.user.User;
 @Repository
 public interface PostRepository extends JpaRepository<Post, String> {
+	Optional<Page<Post>> findByUserAndIsDel(User user, boolean del, Pageable pageable);
 	Optional<Page<Post>> findByUser(User user, Pageable pageable);
+	Optional<List<Post>> findByUser(User user);
 	
 	@Query("SELECT p FROM Post p WHERE p.content LIKE %:keyword%")
 	Optional<Page<Post>> findbyKeyword(@Param("keyword") String keyword, Pageable pageable);

@@ -64,7 +64,7 @@ public final class ReponseMessageConstants {
     public static final String SUCCESSFUL_CREATE_MESSAGE_MESSAGE = "Message created successfully.";
 
     // Like Messages
-    public static final String SUCCESSFUL_LIKE_POST_MESSAGE = "You liked a post!";
+    public static final String SUCCESSFUL_LIKE_POST_MESSAGE = " đã thích bài viết của ";
     
     // Error Share
     public static final String FAILURE_SAVING_SHARE_POST = "Post was already shared from you!";
