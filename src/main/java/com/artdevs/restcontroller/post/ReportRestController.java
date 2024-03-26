@@ -34,10 +34,10 @@ public class ReportRestController {
     
     @Autowired PostService postservice;
     
-    @PostMapping("/report")
-    public ResponseEntity<Report> postReport(@RequestBody ReportDTO reportDTO) {
-        return ResponseEntity.ok(reportService.saveReport(ReportMapper.convertToReport(reportDTO,userserivce,postservice)));
-    }
+//    @PostMapping("/report")
+//    public ResponseEntity<Report> postReport(@RequestBody ReportDTO reportDTO) {
+//        return ResponseEntity.ok(reportService.saveReport(ReportMapper.convertToReport(reportDTO,userserivce,postservice)));
+//    }
 
     @GetMapping("/report")
     public ResponseEntity<List<ReportDTO>> getReport() {

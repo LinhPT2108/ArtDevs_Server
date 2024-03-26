@@ -1,5 +1,7 @@
 package com.artdevs.dto.post;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,10 +16,13 @@ public class ReportDTO {
     private int id;
 
     private String reportDetail;
+    
+    private String ReportPostId;
 
+    private String ReportUserId;
 
+    private String UserIdActionReport;
 
-    private String username;
-
-    private String postId;
+    private Date TimeReport;
+    
 }

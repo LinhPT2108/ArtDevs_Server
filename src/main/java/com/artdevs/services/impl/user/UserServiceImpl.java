@@ -2,7 +2,6 @@ package com.artdevs.services.impl.user;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
 import com.artdevs.domain.entities.message.RelationShip;
@@ -21,8 +23,6 @@ import com.artdevs.domain.entities.user.Skill;
 import com.artdevs.domain.entities.user.TransitionInfo;
 import com.artdevs.domain.entities.user.User;
 import com.artdevs.domain.entities.user.Wallet;
-import com.artdevs.dto.CustomDTO.UserGetRelationDTO;
-import com.artdevs.dto.user.MentorDTO;
 import com.artdevs.repositories.message.RelationshipRepository;
 import com.artdevs.repositories.user.RoleRepository;
 import com.artdevs.repositories.user.TransitioninfoRepository;
@@ -32,7 +32,7 @@ import com.artdevs.services.WalletService;
 
 @Service
 public class UserServiceImpl implements UserService {
-
+	@Autowired UserDetailsService userdetailsevice;
 	// private final UserRepository userRepository;
 	@Autowired WalletService wallectservice;
 	
@@ -45,6 +45,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired RelationshipRepository relationrepository;
 
 	@Autowired TransitioninfoRepository traninfoservice;
+	
+	
 	
 	@Override
 	public User findUserById(String userId) {
@@ -374,5 +376,65 @@ public class UserServiceImpl implements UserService {
 		return userRepository.searchMentorByKeyword(keyword, pageable);
 	}
 
+	@Override
+	public long coutUser() {
+		// TODO Auto-generated method stub
+		
+		return userRepository.countUsers();
+	}
 
+	@Override
+	public long coutMentor() {
+		// TODO Auto-generated method stub
+		return userRepository.countMentors();
+	}
+	
+	@Override
+	public long coutUserNew() {
+		// TODO Auto-generated method stub
+		
+		return userRepository.countUsers();
+	}
+	
+	@Override
+	public long coutMentorNew() {
+		// TODO Auto-generated method stub
+		return userRepository.countMentors();
+	}
+
+	@Override
+	public List<User> getNewMentor(Date Starttime) {
+		// TODO Auto-generated method stub
+		return userRepository.getMentorWithinRange(Starttime, new Date());
+	}
+
+	@Override
+	public List<User> getNewUser(Date Starttime) {
+		// TODO Auto-generated method stub
+		return userRepository.getUserWithinRange(Starttime, new Date());
+	}
+	
+	@Override
+	public List<User> getUserReport1() {
+		// TODO Auto-generated method stub
+		return userRepository.userFristReport();
+	}
+	
+	@Override
+	public List<User> getUserReport2() {
+		// TODO Auto-generated method stub
+		return userRepository.userSecondReport();
+	}
+
+	@Override
+	public List<User> getUserBand() {
+		// TODO Auto-generated method stub
+		return userRepository.findByAccountNonLocked(false);
+	}
+
+
+
+
+	
+	
 }

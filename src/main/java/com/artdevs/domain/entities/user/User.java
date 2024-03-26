@@ -44,7 +44,8 @@ import lombok.Setter;
 @Setter
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class User implements UserDetails {
-
+	
+	
 	@Id
 	private String userId;
 
@@ -52,7 +53,7 @@ public class User implements UserDetails {
 	@Column
 	private String address;
 
-	
+	private boolean accountNonLocked;
 
 	@Nationalized
 	@Column
@@ -99,7 +100,9 @@ public class User implements UserDetails {
 	@Column 
 	private Boolean isReady;
 	
-
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column
+	private Date createDate;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
@@ -218,7 +221,7 @@ public class User implements UserDetails {
 	@Override
 	public boolean isAccountNonLocked() {
 		// TODO Auto-generated method stub
-		return true;
+		return accountNonLocked;
 	}
 
 	@Override

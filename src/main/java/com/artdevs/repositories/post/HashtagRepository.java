@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.artdevs.domain.entities.post.HashTag;
 @Repository
 public interface HashtagRepository extends JpaRepository<HashTag, Integer> {
-
+	
 }

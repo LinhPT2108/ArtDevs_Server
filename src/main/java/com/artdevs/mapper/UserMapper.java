@@ -1,5 +1,6 @@
 package com.artdevs.mapper;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,8 +14,8 @@ import com.artdevs.dto.UserRegisterDTO;
 import com.artdevs.dto.CustomDTO.UserGetRelationDTO;
 import com.artdevs.dto.user.MentorDTO;
 import com.artdevs.dto.user.UserDTO;
+import com.artdevs.dto.user.UserUpdateDTO;
 import com.artdevs.repositories.user.SkillRepository;
-import com.artdevs.utils.CustomContructor;
 
 public class UserMapper {
 
@@ -37,6 +38,17 @@ public class UserMapper {
 		user.setRole(userDTO.getRole());
 		return user;
 	}
+	
+	public static User UserUpdateDTOconvertToUser(UserUpdateDTO userupdateDTO) {
+		User user = modelMapper.map(userupdateDTO, User.class);
+		return user;
+	}
+	
+	public static UserUpdateDTO UserconvertToUpdateDTO(User user) {
+		UserUpdateDTO userupdateDTO = modelMapper.map(user, UserUpdateDTO.class);
+		userupdateDTO.setUserPictureAvatar(getAvatar(user, true));
+		return userupdateDTO;
+	}
 
 	public static UserDTO UserRegisterConvertToUserDTO(UserRegisterDTO RegisterDTO) {
 		UserDTO userDTO = modelMapper.map(RegisterDTO, UserDTO.class);
@@ -57,6 +69,7 @@ public class UserMapper {
 		User user = modelMapper.map(RegisterDTO, User.class);
 		user.setUserSkill(null);
 		user.setUserDemand(null);
+		user.setCreateDate(new Date());
 		return user;
 	}
 

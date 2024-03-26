@@ -1,19 +1,22 @@
 package com.artdevs.services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
 import com.artdevs.domain.entities.message.RelationShip;
-import com.artdevs.domain.entities.user.TransitionInfo;
 import com.artdevs.domain.entities.user.User;
-import com.google.protobuf.Option;
 
 @Service
 public interface UserService {
+	
+	
+	
 	User findUserById(String userId);
 
 	User findByEmail(String email);
@@ -48,5 +51,25 @@ public interface UserService {
 	Boolean CancelSendMatchMentor(String userid);
 
 	List<User> findSuitableFriend();
+	
+	long coutUser();
+	
+	long coutMentor();
+	
+
+	
+	List<User> getNewMentor(Date Starttime);
+
+	
+
+	List<User> getNewUser(Date Starttime);
+
+	long coutUserNew();
+
+	long coutMentorNew();
+
+	List<User> getUserReport1();
+	List<User> getUserReport2();
+	List<User> getUserBand();
 
 }

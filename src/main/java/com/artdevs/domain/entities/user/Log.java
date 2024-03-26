@@ -31,12 +31,6 @@ public class Log {
 	@Column
 	private String action;
 
-	@Column
-	private String method;
-
-	@Column
-	private String tableName;
-
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date timeLog;

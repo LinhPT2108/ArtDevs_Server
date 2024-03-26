@@ -1,5 +1,6 @@
 package com.artdevs.repositories.user;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,5 +30,33 @@ public interface UserRepository extends JpaRepository<User, String> {
 	List<User> findByRoleAndIsReadyAndIsOnline(Role role,Boolean Ready,Boolean online);
 
 	Optional<User> findByEmailAndProvider(String email, String provider);
+	
+	@Query("SELECT COUNT(p) FROM User p WHERE p.role.id =2")
+	Long countUsers();
+	
+	@Query("SELECT COUNT(p) FROM User p WHERE p.role.id = 2 AND p.createDate BETWEEN :startTime AND :endTime")
+	Long countUsersWithinRange(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
+	
+	@Query("SELECT p FROM User p WHERE p.role.id = 2 AND p.createDate BETWEEN :startTime AND :endTime")
+	List<User> getUserWithinRange(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
+
+	@Query("SELECT COUNT(p) FROM User p WHERE p.role.id =3")
+	Long countMentors();
+	
+	@Query("SELECT COUNT(p) FROM User p WHERE p.role.id = 3 AND p.createDate BETWEEN :startTime AND :endTime")
+	Long countMentorWithinRange(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
+	
+	@Query("SELECT p FROM User p WHERE p.role.id = 3 AND p.createDate BETWEEN :startTime AND :endTime")
+	List<User> getMentorWithinRange(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
+	
+	
+	@Query("SELECT r.postReportId.user FROM Report r GROUP BY r.postReportId.user HAVING COUNT(r.postReportId) = 1")
+	List<User> userFristReport();
+	
+	@Query("SELECT r.postReportId.user FROM Report r GROUP BY r.postReportId.user HAVING COUNT(r.postReportId) = 2")
+	List<User> userSecondReport();
+	
+	List<User> findByAccountNonLocked(boolean accountNonLocked);
+
 	
 }

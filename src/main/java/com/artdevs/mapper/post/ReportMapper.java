@@ -20,19 +20,21 @@ public class ReportMapper {
 
     public static ReportDTO convertToReprotDTO(Report report) {
         ReportDTO reportDTO = modelMapper.map(report, ReportDTO.class);
-        reportDTO.setPostId(report.getPostReportId().getPostId());
-        reportDTO.setUsername(report.getUserReportId().getUsername());
+       reportDTO.setReportPostId(report.getPostReportId().getPostId());
+       reportDTO.setReportUserId(report.getPostReportId().getUser().getUserId());
+       reportDTO.setUserIdActionReport(report.getUserReportId().getUserId());
+       reportDTO.setTimeReport(report.getTimeCreate());
         return reportDTO;
     }
 
-    public static Report convertToReport(ReportDTO reportDTO,UserService userservice,PostService postservice) {
-        Report report = modelMapper.map(reportDTO, Report.class);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userservice.findByEmail(auth.getName());
-        Post post = postservice.findPostById(reportDTO.getPostId());
-        report.setUserReportId(user);
-        report.setPostReportId(post);
-        report.setTimeCreate(new Date());
-        return report;
-    }
+//    public static Report convertToReport(ReportDTO reportDTO,UserService userservice,PostService postservice) {
+//        Report report = modelMapper.map(reportDTO, Report.class);
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        User user = userservice.findByEmail(auth.getName());
+//        Post post = postservice.findPostById(reportDTO.getPostId());
+//        report.setUserReportId(user);
+//        report.setPostReportId(post);
+//        report.setTimeCreate(new Date());
+//        return report;
+//    }
 }

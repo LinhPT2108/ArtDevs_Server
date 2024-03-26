@@ -291,6 +291,6 @@ public class UserRestController {
 
 	@GetMapping("/test")
 	public ResponseEntity<?> testAPI(){
-		return ResponseEntity.ok(relationresp.findRelationshipWithFriendWithStatus("Aa124", "Aa123", 2));
+		return ResponseEntity.ok(userRepository.userFristReport());
 	}
 }
